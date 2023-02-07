@@ -1,3 +1,5 @@
+import { Button } from "@mui/material";
+
 export default function Home() {
-  return <>Home</>;
+  return <Button variant="contained">Home</Button>;
 }
