@@ -1,6 +1,23 @@
-import { Grid, Typography } from "@mui/material";
+import { Button, Grid, Typography } from "@mui/material";
+import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 
 export default function DocumentSummarizer() {
+  const handleGetPdf = (event: any) => {
+    const pdfFile = event.target.files[0];
+
+    const formData = new FormData();
+    formData.append("pdfFile", pdfFile);
+
+    fetch("/api/extract-file", {
+      method: "post",
+      body: formData,
+    })
+      .then((response) => {
+        return response.text();
+      })
+      .then((text) => console.log(text));
+  };
+
   return (
     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
       <Grid item xs={12} sm={6}>
@@ -14,6 +31,17 @@ export default function DocumentSummarizer() {
         >
           Original Document
         </Typography>
+        <div>
+          <Button
+            variant="contained"
+            component="label"
+            startIcon={<PictureAsPdfIcon />}
+            color="info"
+          >
+            Upload PDF
+            <input hidden accept="*" type="file" onChange={handleGetPdf} />
+          </Button>
+        </div>
         <div>
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut
