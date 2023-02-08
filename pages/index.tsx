@@ -1,20 +1,21 @@
-import { Warning as WarningIcon } from "@mui/icons-material";
 import { Container } from "@mui/system";
-import { Warning } from "../components/Home/styles";
 import Faq from "../components/Faq";
 import DocumentSummarizer from "../components/DocumentSummarizer";
+import TextInfo from "../components/TextInfo";
+import Contact from "../components/Contact";
 
 export default function Home() {
   return (
     <>
       <Container sx={{ my: 3 }}>
-        <Warning>
-          <WarningIcon />
-          This document summary is not legal advice or legally binding in any
-          way. You should consult a lawyer.
-        </Warning>
+        <TextInfo
+          text="This document summary is not legal advice or legally binding in any
+        way. You should consult a lawyer."
+          type="warning"
+        />
         <DocumentSummarizer />
         <Faq />
+        <Contact />
       </Container>
     </>
   );
