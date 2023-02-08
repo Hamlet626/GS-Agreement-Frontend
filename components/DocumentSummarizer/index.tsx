@@ -2,10 +2,11 @@ import { Button, Grid, Typography } from "@mui/material";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import axios from "axios";
 import { useState } from "react";
+import { OriginalDocument } from "./styles";
+import { Box } from "@mui/system";
 
 export default function DocumentSummarizer() {
-  const [htmlFromPdf, setHtmlFromPdf] = useState(null);
-
+  const [htmlFromPdf, setHtmlFromPdf] = useState();
   const handleGetPdf = async (event: any) => {
     const pdfFile = event.target.files[0];
 
@@ -33,18 +34,21 @@ export default function DocumentSummarizer() {
         >
           Original Document
         </Typography>
-        <div>
-          <Button
-            variant="contained"
-            component="label"
-            startIcon={<PictureAsPdfIcon />}
-            color="info"
-          >
-            Upload PDF
-            <input hidden accept="*" type="file" onChange={handleGetPdf} />
-          </Button>
-          <p>{htmlFromPdf}</p>
-        </div>
+        <Box sx={{ my: 3 }}>
+          {!htmlFromPdf ? (
+            <Button
+              variant="contained"
+              component="label"
+              startIcon={<PictureAsPdfIcon />}
+              color="info"
+            >
+              Upload PDF
+              <input hidden accept="*" type="file" onChange={handleGetPdf} />
+            </Button>
+          ) : (
+            <OriginalDocument disabled value={htmlFromPdf} />
+          )}
+        </Box>
       </Grid>
       <Grid item xs={12} sm={6}>
         <Typography
@@ -57,14 +61,16 @@ export default function DocumentSummarizer() {
         >
           Summarized Doc
         </Typography>
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut
-          vulputate mauris.
-        </p>
-        <p>
-          Integer blandit, mauris sed scelerisque cursus, leo enim accumsan
-          nulla, non sollicitudin metus massa non arcu.
-        </p>
+        <Box sx={{ my: 3 }}>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut
+            vulputate mauris.
+          </p>
+          <p>
+            Integer blandit, mauris sed scelerisque cursus, leo enim accumsan
+            nulla, non sollicitudin metus massa non arcu.
+          </p>
+        </Box>
       </Grid>
     </Grid>
   );
