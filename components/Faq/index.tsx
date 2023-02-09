@@ -16,9 +16,7 @@ export default function Faq() {
 
   return (
     <>
-      <Typography variant="h4" sx={{ mt: 3, mb: 2 }}>
-        Frequently Asked Questions
-      </Typography>
+      <Typography variant="h2">Frequently Asked Questions</Typography>
       <Accordion
         expanded={expanded === "panel1"}
         onChange={handleChange("panel1")}

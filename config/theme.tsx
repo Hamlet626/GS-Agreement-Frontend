@@ -36,6 +36,23 @@ const theme = createTheme({
         }),
       },
     },
+    MuiTab: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          ...{
+            color: theme.palette.secondary.main,
+            backgroundColor: theme.palette.primary.light,
+            fontSize: "1rem",
+            padding: "1rem",
+            margin: "0 1px",
+            "&:focus, &:active": {
+              backgroundColor: theme.palette.primary.main,
+              color: theme.palette.primary.light,
+            },
+          },
+        }),
+      },
+    },
   },
 });
 export default theme;
