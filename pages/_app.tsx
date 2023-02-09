@@ -10,6 +10,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { Provider as ReduxProvider } from "react-redux";
 import store from "../store";
+import Loader from "../components/Loader";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -28,6 +29,7 @@ export default function MyApp(props: MyAppProps) {
         </Head>
         <ThemeProvider theme={theme}>
           <CssBaseline />
+          <Loader />
           <Header />
           <Component {...pageProps} />
           <Footer />
