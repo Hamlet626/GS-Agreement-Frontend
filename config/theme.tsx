@@ -13,5 +13,29 @@ const theme = createTheme({
       main: red.A400,
     },
   },
+  components: {
+    MuiTypography: {
+      styleOverrides: {
+        root: ({ ownerState, theme }) => ({
+          ...(ownerState.variant === "h2" && {
+            fontWeight: 700,
+            fontSize: "25px",
+            lineHeight: "1.167",
+            textTransform: "uppercase",
+            textAlign: "center",
+            marginBottom: "0.35em",
+
+            "&::after": {
+              content: "''",
+              width: "55px",
+              display: "block",
+              margin: "8px auto 0",
+              borderBottom: `6px solid ${theme.palette.primary.main}`,
+            },
+          }),
+        }),
+      },
+    },
+  },
 });
 export default theme;

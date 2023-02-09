@@ -9,4 +9,5 @@ export const LoaderWrapper = styled("div", {
   justifyContent: "center",
   backgroundColor: "#ffffff80",
   inset: 0,
+  zIndex: 2,
 });

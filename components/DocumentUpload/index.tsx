@@ -1,10 +1,11 @@
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import axios from "axios";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { setPdfDocument } from "../../store/pdfDocument";
 import { setLoading, unsetLoading } from "../../store/loaderStatus";
+import { Wrapper } from "./styles";
 
 export default function DocumentUpload() {
   const dispatch = useDispatch();
@@ -18,31 +19,33 @@ export default function DocumentUpload() {
       const formData = new FormData();
       formData.append("pdfFile", pdfFile);
 
-      const {
-        data: { text },
-      } = await axios.post("/api/extract-html-from-pdf", formData, {
-        headers: { "content-type": "multipart/form-data" },
-      });
-      dispatch(setPdfDocument(text));
-      router.push("/summarized");
+      await axios
+        .post("/api/extract-html-from-pdf", formData, {
+          headers: { "content-type": "multipart/form-data" },
+        })
+        .then(({ data: { text } }) => dispatch(setPdfDocument(text)))
+        .then(() => router.push("/summarized"))
+        .then(() => dispatch(unsetLoading()));
     } catch (error) {
       console.error(error);
-    } finally {
-      setTimeout(() => {
-        dispatch(unsetLoading());
-      }, 3000);
+      dispatch(unsetLoading());
     }
   };
 
   return (
-    <Button
-      variant="contained"
-      component="label"
-      startIcon={<PictureAsPdfIcon />}
-      color="info"
-    >
-      Upload PDF
-      <input hidden accept="*" type="file" onChange={handleUploadPdf} />
-    </Button>
+    <Wrapper>
+      <Typography variant="h2" align="center">
+        Upload a Document
+      </Typography>
+      <Button
+        variant="contained"
+        component="label"
+        startIcon={<PictureAsPdfIcon />}
+        color="info"
+      >
+        Upload PDF
+        <input hidden accept="*" type="file" onChange={handleUploadPdf} />
+      </Button>
+    </Wrapper>
   );
 }

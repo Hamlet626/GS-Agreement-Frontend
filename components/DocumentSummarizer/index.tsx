@@ -1,20 +1,24 @@
 import { Grid, Typography } from "@mui/material";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { OriginalDocument } from "./styles";
 import { Box } from "@mui/system";
 import { useSelector } from "react-redux";
 import { selectPdfDocumennt } from "../../store/pdfDocument";
+import { useRouter } from "next/router";
 
 export default function DocumentSummarizer() {
   const { document: pdfDocument } = useSelector(selectPdfDocumennt);
   const originalDocumentRef = useRef(null);
+  const router = useRouter();
 
   const handleSelectText = (event: any) => {
     console.log(event);
     console.log(document.getSelection()?.toString());
   };
 
-  console.log(pdfDocument);
+  useEffect(() => {
+    !pdfDocument && router.push("/");
+  }, [pdfDocument, router]);
 
   return (
     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
