@@ -8,6 +8,8 @@ import theme from "../config/theme";
 import createEmotionCache from "../config/createEmotionCache";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { Provider as ReduxProvider } from "react-redux";
+import store from "../store";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -18,17 +20,19 @@ interface MyAppProps extends AppProps {
 export default function MyApp(props: MyAppProps) {
   const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
   return (
-    <CacheProvider value={emotionCache}>
-      <Head>
-        <title>Patriot Conceptions</title>
-        <meta name="viewport" content="initial-scale=1, width=device-width" />
-      </Head>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <Header />
-        <Component {...pageProps} />
-        <Footer />
-      </ThemeProvider>
-    </CacheProvider>
+    <ReduxProvider store={store}>
+      <CacheProvider value={emotionCache}>
+        <Head>
+          <title>Patriot Conceptions</title>
+          <meta name="viewport" content="initial-scale=1, width=device-width" />
+        </Head>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Header />
+          <Component {...pageProps} />
+          <Footer />
+        </ThemeProvider>
+      </CacheProvider>
+    </ReduxProvider>
   );
 }

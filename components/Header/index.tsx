@@ -9,10 +9,20 @@ export default function Header() {
       <Container>
         <Content>
           <Image src="/logo.png" width={80} height={80} alt="Logo" />
-          <Typography variant="h4" component="h1" color="secondary">
+          <Typography
+            variant="h4"
+            component="h1"
+            color="secondary"
+            textAlign="center"
+          >
             Patriot Conceptions
           </Typography>
-          <Typography variant="subtitle1" gutterBottom color="secondary">
+          <Typography
+            variant="subtitle1"
+            gutterBottom
+            color="secondary"
+            textAlign="center"
+          >
             Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           </Typography>
         </Content>

@@ -26,16 +26,16 @@ apiRoute.use(upload.single("pdfFile"));
 
 apiRoute.post((req: any, res: NextApiResponse) => {
   try {
-    // pdfParse(req.file.path).then((result) => {
-    //   res.status(200).json(result);
-    // });
-
-    const pdfExtract = new PDFExtract();
-    const options = {}; /* see below */
-    pdfExtract.extract(req.file.path, options, (err, data) => {
-      if (err) return console.log(err);
-      res.status(200).json(data);
+    pdfParse(req.file.path).then((result) => {
+      res.status(200).json(result);
     });
+
+    // const pdfExtract = new PDFExtract();
+    // const options = {}; /* see below */
+    // pdfExtract.extract(req.file.path, options, (err, data) => {
+    //   if (err) return console.log(err);
+    //   res.status(200).json(data);
+    // });
   } catch (error: any) {
     res.status(500).end({
       message: "An unexpected error occurred please try again later",
