@@ -1,13 +1,15 @@
 import { Button, Grid, Typography } from "@mui/material";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import axios from "axios";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { OriginalDocument } from "./styles";
 import { Box } from "@mui/system";
 
 export default function DocumentSummarizer() {
   const [htmlFromPdf, setHtmlFromPdf] = useState();
-  const handleGetPdf = async (event: any) => {
+  const originalDocumentRef = useRef(null);
+
+  const handleUploadPdf = async (event: any) => {
     const pdfFile = event.target.files[0];
 
     const formData = new FormData();
@@ -19,6 +21,11 @@ export default function DocumentSummarizer() {
       headers: { "content-type": "multipart/form-data" },
     });
     setHtmlFromPdf(text);
+  };
+
+  const handleSelectText = (event: any) => {
+    console.log(event);
+    console.log(document.getSelection()?.toString());
   };
 
   return (
@@ -43,10 +50,16 @@ export default function DocumentSummarizer() {
               color="info"
             >
               Upload PDF
-              <input hidden accept="*" type="file" onChange={handleGetPdf} />
+              <input hidden accept="*" type="file" onChange={handleUploadPdf} />
             </Button>
           ) : (
-            <OriginalDocument disabled value={htmlFromPdf} />
+            <div onMouseUp={handleSelectText}>
+              <OriginalDocument
+                ref={originalDocumentRef}
+                disabled
+                value={htmlFromPdf}
+              />
+            </div>
           )}
         </Box>
       </Grid>
