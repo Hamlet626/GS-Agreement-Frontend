@@ -1,7 +1,7 @@
 import { Container } from "@mui/material";
 import DocumentSummarizer from "../components/DocumentSummarizer";
 import TextInfo from "../components/TextInfo";
-import Tabs from "../components/Tabs";
+import DocumentTabs from "../components/DocumentTabs";
 
 export default function Summarized() {
   return (
@@ -11,7 +11,7 @@ export default function Summarized() {
         way. You should consult a lawyer."
         type="warning"
       />
-      <Tabs />
+      <DocumentTabs />
       <DocumentSummarizer />
     </Container>
   );

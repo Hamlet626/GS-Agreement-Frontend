@@ -3,7 +3,7 @@ import axios from "axios";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { setPdfDocument } from "../../store/pdfDocument";
+import { setPdfDocument, setPdfDocumentTitles } from "../../store/pdfDocument";
 import { setLoading, unsetLoading } from "../../store/loaderStatus";
 import { Wrapper } from "./styles";
 
@@ -23,7 +23,10 @@ export default function DocumentUpload() {
         .post("/api/extract-html-from-pdf", formData, {
           headers: { "content-type": "multipart/form-data" },
         })
-        .then(({ data: { text } }) => dispatch(setPdfDocument(text)))
+        .then(({ data: { text, titles } }) => {
+          dispatch(setPdfDocument(text));
+          dispatch(setPdfDocumentTitles(titles));
+        })
         .then(() => router.push("/summarized"))
         .then(() => dispatch(unsetLoading()));
     } catch (error) {

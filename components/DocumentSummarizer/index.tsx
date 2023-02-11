@@ -7,7 +7,7 @@ import { selectPdfDocumennt } from "../../store/pdfDocument";
 import { useRouter } from "next/router";
 
 export default function DocumentSummarizer() {
-  const { document: pdfDocument } = useSelector(selectPdfDocumennt);
+  const pdfDocument = useSelector(selectPdfDocumennt);
   const originalDocumentRef = useRef(null);
   const router = useRouter();
 

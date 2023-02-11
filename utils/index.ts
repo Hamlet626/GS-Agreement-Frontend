@@ -22,6 +22,8 @@ export const getTitlesFromPdf = (c: any) => {
         16 && stringLine === stringLine.toUpperCase()
   );
 
+  titles = titles.map((title) => title.replaceAll("  ", ""));
+
   return { titles };
 };
 

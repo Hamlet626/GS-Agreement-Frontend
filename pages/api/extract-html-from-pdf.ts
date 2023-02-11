@@ -28,6 +28,7 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
   try {
     const { titles }: any = await processPDF2(req.file.path);
     const { text } = await PdfParse(req.file.path);
+
     res.status(200).json({ titles, text });
   } catch (error: any) {
     res.status(500).end({
