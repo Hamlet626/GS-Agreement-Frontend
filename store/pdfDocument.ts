@@ -3,10 +3,12 @@ import { RootState } from "./index";
 
 interface IpdfDocument {
   document: string;
+  titles: string[];
 }
 
 const initialState: IpdfDocument = {
   document: "",
+  titles: [],
 };
 
 export const slice = createSlice({
@@ -16,13 +18,19 @@ export const slice = createSlice({
     setPdfDocument: (state, action) => {
       state.document = action.payload;
     },
-    removePdfDocument: (state) => {
-      state.document = "";
+    setPdfDocumentTitles: (state, action) => {
+      state.titles = action.payload;
+    },
+    resetPdfDocument: (state) => {
+      state = initialState;
     },
   },
 });
 
-export const selectPdfDocumennt = (state: RootState) => state.pdfDocument;
+export const selectPdfDocumennt = (state: RootState) =>
+  state.pdfDocument.document;
+export const selectPdfTitles = (state: RootState) => state.pdfDocument.titles;
 
-export const { setPdfDocument, removePdfDocument } = slice.actions;
+export const { setPdfDocument, resetPdfDocument, setPdfDocumentTitles } =
+  slice.actions;
 export default slice.reducer;

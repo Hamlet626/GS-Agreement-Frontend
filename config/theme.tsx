@@ -42,8 +42,8 @@ const theme = createTheme({
           ...{
             color: theme.palette.secondary.main,
             backgroundColor: theme.palette.primary.light,
-            fontSize: "1rem",
-            padding: "1rem",
+            fontSize: "0.75rem",
+            fontWeight: 600,
             margin: "0 1px",
             "&:focus, &:active": {
               backgroundColor: theme.palette.primary.main,
