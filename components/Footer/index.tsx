@@ -10,6 +10,7 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 const iconStyle = {
   width: 48,
@@ -26,6 +27,8 @@ const iconStyle = {
 };
 
 export default function AppFooter() {
+  const router = useRouter();
+
   return (
     <Typography
       component="footer"
@@ -34,7 +37,14 @@ export default function AppFooter() {
       <Container sx={{ my: 8, display: "flex" }}>
         <Grid container spacing={5}>
           <Grid item xs={12} sm={4}>
-            <Image src="/logo.png" width={80} height={80} alt="Logo" />
+            <Image
+              src="/logo.png"
+              width={80}
+              height={80}
+              alt="Logo"
+              onClick={() => router.push("/")}
+              style={{ cursor: "pointer" }}
+            />
             <Grid item>
               <Typography sx={{ my: 2 }}>
                 {"© "}

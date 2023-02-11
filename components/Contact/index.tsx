@@ -4,9 +4,7 @@ import React from "react";
 export default function Contact() {
   return (
     <>
-      <Typography variant="h4" sx={{ mt: 5, mb: 2 }}>
-        Contact Us
-      </Typography>
+      <Typography variant="h2">Contact Us</Typography>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
         <Grid item xs={12} sm={6}>
           <TextField fullWidth required id="firstName" label="First Name" />

@@ -1,25 +1,24 @@
-import { Button, Grid, Typography } from "@mui/material";
-import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-import axios from "axios";
-import { useState } from "react";
+import { Grid, Typography } from "@mui/material";
+import { useEffect, useRef } from "react";
 import { OriginalDocument } from "./styles";
 import { Box } from "@mui/system";
+import { useSelector } from "react-redux";
+import { selectPdfDocumennt } from "../../store/pdfDocument";
+import { useRouter } from "next/router";
 
 export default function DocumentSummarizer() {
-  const [htmlFromPdf, setHtmlFromPdf] = useState();
-  const handleGetPdf = async (event: any) => {
-    const pdfFile = event.target.files[0];
+  const { document: pdfDocument } = useSelector(selectPdfDocumennt);
+  const originalDocumentRef = useRef(null);
+  const router = useRouter();
 
-    const formData = new FormData();
-    formData.append("pdfFile", pdfFile);
-
-    const {
-      data: { text },
-    } = await axios.post("/api/extract-html-from-pdf", formData, {
-      headers: { "content-type": "multipart/form-data" },
-    });
-    setHtmlFromPdf(text);
+  const handleSelectText = (event: any) => {
+    console.log(event);
+    console.log(document.getSelection()?.toString());
   };
+
+  useEffect(() => {
+    !pdfDocument && router.push("/");
+  }, [pdfDocument, router]);
 
   return (
     <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
@@ -35,18 +34,14 @@ export default function DocumentSummarizer() {
           Original Document
         </Typography>
         <Box sx={{ my: 3 }}>
-          {!htmlFromPdf ? (
-            <Button
-              variant="contained"
-              component="label"
-              startIcon={<PictureAsPdfIcon />}
-              color="info"
-            >
-              Upload PDF
-              <input hidden accept="*" type="file" onChange={handleGetPdf} />
-            </Button>
-          ) : (
-            <OriginalDocument disabled value={htmlFromPdf} />
+          {pdfDocument && (
+            <div onMouseUp={handleSelectText}>
+              <OriginalDocument
+                ref={originalDocumentRef}
+                disabled
+                value={pdfDocument}
+              />
+            </div>
           )}
         </Box>
       </Grid>
