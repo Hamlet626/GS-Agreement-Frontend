@@ -1,8 +1,8 @@
 import nextConnect from "next-connect";
 import multer from "multer";
-import pdfParse from "pdf-parse";
 import type { NextApiResponse } from "next";
-import { PDFExtract } from "pdf.js-extract";
+import { processPDF2 } from "../../utils";
+import PdfParse from "pdf-parse";
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -24,18 +24,11 @@ const apiRoute = nextConnect({
 
 apiRoute.use(upload.single("pdfFile"));
 
-apiRoute.post((req: any, res: NextApiResponse) => {
+apiRoute.post(async (req: any, res: NextApiResponse) => {
   try {
-    pdfParse(req.file.path).then((result) => {
-      res.status(200).json(result);
-    });
-
-    // const pdfExtract = new PDFExtract();
-    // const options = {}; /* see below */
-    // pdfExtract.extract(req.file.path, options, (err, data) => {
-    //   if (err) return console.log(err);
-    //   res.status(200).json(data);
-    // });
+    const { titles }: any = await processPDF2(req.file.path);
+    const { text } = await PdfParse(req.file.path);
+    res.status(200).json({ titles, text });
   } catch (error: any) {
     res.status(500).end({
       message: "An unexpected error occurred please try again later",
