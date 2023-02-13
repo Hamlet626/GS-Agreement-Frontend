@@ -11,11 +11,6 @@ export default function DocumentSummarizer() {
   const originalDocumentRef = useRef(null);
   const router = useRouter();
 
-  const handleSelectText = (event: any) => {
-    console.log(event);
-    console.log(document.getSelection()?.toString());
-  };
-
   useEffect(() => {
     !pdfDocument && router.push("/");
   }, [pdfDocument, router]);
@@ -35,13 +30,10 @@ export default function DocumentSummarizer() {
         </Typography>
         <Box sx={{ my: 3 }}>
           {pdfDocument && (
-            <div onMouseUp={handleSelectText}>
-              <OriginalDocument
-                ref={originalDocumentRef}
-                disabled
-                value={pdfDocument}
-              />
-            </div>
+            <OriginalDocument
+              ref={originalDocumentRef}
+              dangerouslySetInnerHTML={{ __html: pdfDocument }}
+            />
           )}
         </Box>
       </Grid>

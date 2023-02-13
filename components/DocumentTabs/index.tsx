@@ -15,20 +15,9 @@ export default function DocumentTabs() {
 
   const handleChangeTab = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
-    console.log(pdfTitles[newValue]);
+    window.location.href = `#${pdfTitles[newValue]}`;
+    window.scrollBy(0, -90);
   };
-
-  // const findAndScrollToText = (text: string) => {
-  //   const searchText = new RegExp(text, "gi");
-  //   const matches = Array.from(document.body.innerText.matchAll(searchText));
-  //   if (matches.length > 0 && document.body.childNodes[0]) {
-  //     const { x, y } =
-  //       matches[0].index > 0
-  //         ? document.body.childNodes[0]?.splitText(matches[0].index)
-  //         : { x: 0, y: 0 };
-  //     window.scrollTo({ top: y, left: x, behavior: "smooth" });
-  //   }
-  // };
 
   const triggerStickOnHeader = () => {
     if (
@@ -48,8 +37,6 @@ export default function DocumentTabs() {
       document.removeEventListener("scroll", triggerStickOnHeader);
     };
   }, []);
-
-  console.log(stickyOnHeader);
 
   return (
     <Wrapper ref={tabRef}>

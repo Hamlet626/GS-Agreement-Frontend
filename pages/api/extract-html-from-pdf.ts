@@ -29,7 +29,15 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
     const { titles }: any = await processPDF2(req.file.path);
     const { text } = await PdfParse(req.file.path);
 
-    res.status(200).json({ titles, text });
+    let html = text.replaceAll("  ", "");
+
+    titles.forEach((title: string) => {
+      html = html.replace(title, `<b id='${title}'>${title}</b>`);
+    });
+
+    html = html.replace(/\n/g, "</br>");
+
+    res.status(200).json({ titles, text: html });
   } catch (error: any) {
     res.status(500).end({
       message: "An unexpected error occurred please try again later",
