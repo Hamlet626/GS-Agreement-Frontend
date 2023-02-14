@@ -18,3 +18,9 @@ export const DocumentWrapper = styled("div", {
 });
 
 export const DocumentTitle = styled("strong", {});
+
+export const TooltipButtonsWrapper = styled("div", {
+  display: "flex",
+  flexDirection: "column",
+  gap: "1rem",
+});
