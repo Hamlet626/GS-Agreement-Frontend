@@ -2,35 +2,34 @@ import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./index";
 
 interface IpdfDocument {
-  document: string;
-  titles: string[];
+  sections: ISection[];
+}
+
+interface ISection {
+  section: {
+    title: string;
+    text: string;
+  };
 }
 
 const initialState: IpdfDocument = {
-  document: "",
-  titles: [],
+  sections: [],
 };
 
 export const slice = createSlice({
   name: "pdfDocument",
   initialState,
   reducers: {
-    setPdfDocument: (state, action) => {
-      state.document = action.payload;
+    setSections: (state, action) => {
+      state.sections = action.payload;
     },
-    setPdfDocumentTitles: (state, action) => {
-      state.titles = action.payload;
-    },
-    resetPdfDocument: (state) => {
+    resetSection: (state) => {
       state = initialState;
     },
   },
 });
 
-export const selectPdfDocumennt = (state: RootState) =>
-  state.pdfDocument.document;
-export const selectPdfTitles = (state: RootState) => state.pdfDocument.titles;
+export const selectSection = (state: RootState) => state.pdfDocument.sections;
 
-export const { setPdfDocument, resetPdfDocument, setPdfDocumentTitles } =
-  slice.actions;
+export const { setSections, resetSection } = slice.actions;
 export default slice.reducer;

@@ -5,17 +5,17 @@ import React, { useEffect, useRef, useState } from "react";
 import { Typography } from "@mui/material";
 import { TabsWrapper, Wrapper } from "./styles";
 import { useSelector } from "react-redux";
-import { selectPdfTitles } from "../../store/pdfDocument";
+import { selectSection } from "../../store/pdfDocument";
 
 export default function DocumentTabs() {
   const [value, setValue] = React.useState(0);
   const [stickyOnHeader, setStickyOnHeader] = useState(false);
-  const pdfTitles = useSelector(selectPdfTitles);
+  const documentSections = useSelector(selectSection);
   const tabRef = useRef(null);
 
   const handleChangeTab = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
-    window.location.href = `#${pdfTitles[newValue]}`;
+    window.location.href = `#${newValue}`;
     window.scrollBy(0, -90);
   };
 
@@ -51,11 +51,11 @@ export default function DocumentTabs() {
         sx={{ my: 2 }}
         sticked={stickyOnHeader}
       >
-        {pdfTitles.map((title, index) => (
+        {documentSections.map(({ section: { title } }, index) => (
           <Tooltip title={title} key={index}>
             <Tab
               label={
-                title.length >= 15 ? `${title.trim().slice(0, 15)}...` : title
+                title?.length >= 15 ? `${title.trim().slice(0, 15)}...` : title
               }
             />
           </Tooltip>
