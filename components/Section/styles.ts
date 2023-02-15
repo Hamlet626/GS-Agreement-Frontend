@@ -1,13 +1,16 @@
-import { TextareaAutosize } from "@mui/material";
 import { styled } from "@stitches/react";
+import TextareaAutosize from "@mui/base/TextareaAutosize";
 
-export const DocumentText = styled(TextareaAutosize, {
+export const DocumentTextArea = styled(TextareaAutosize, {
   width: "100%",
-  padding: "0",
-  border: "none",
-  backgroundColor: "transparent",
   fontSize: "14px",
   resize: "none",
+  paddingBlock: "1rem",
+  padding: "1rem",
+  borderRadius: "8px",
+  "&:focus, &:active": {
+    borderColor: "#dea27a",
+  },
 });
 
 export const DocumentWrapper = styled("div", {
@@ -19,8 +22,10 @@ export const DocumentWrapper = styled("div", {
 
 export const DocumentTitle = styled("strong", {});
 
-export const TooltipButtonsWrapper = styled("div", {
+export const SectionHeader = styled("div", {
   display: "flex",
-  flexDirection: "column",
+  alignItems: "center",
   gap: "1rem",
+  justifyContent: "space-between",
+  padding: "0.5rem 0",
 });

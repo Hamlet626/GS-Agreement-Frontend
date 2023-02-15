@@ -51,7 +51,7 @@ export default function DocumentTabs() {
         sx={{ my: 2 }}
         sticked={stickyOnHeader}
       >
-        {documentSections.map(({ section: { title } }, index) => (
+        {documentSections.map(({ title }, index) => (
           <Tooltip title={title} key={index}>
             <Tab
               label={

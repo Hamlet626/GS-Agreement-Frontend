@@ -3,6 +3,8 @@ import { Box } from "@mui/system";
 import { useSelector } from "react-redux";
 import { selectSection } from "../../store/pdfDocument";
 import Section from "../Section";
+import { Transcription } from "./styles";
+import { useRef } from "react";
 
 export default function DocumentSummarizer() {
   const pdfSections = useSelector(selectSection);
@@ -22,7 +24,7 @@ export default function DocumentSummarizer() {
         </Typography>
         <Box sx={{ my: 3 }}>
           {pdfSections?.length > 0 &&
-            pdfSections.map(({ section: { title, text } }, index) => (
+            pdfSections.map(({ title, text }, index) => (
               <Section key={title} title={title} text={text} index={index} />
             ))}
         </Box>
@@ -38,15 +40,18 @@ export default function DocumentSummarizer() {
         >
           Summarized Doc
         </Typography>
-        <Box sx={{ my: 3 }}>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut
-            vulputate mauris.
-          </p>
-          <p>
-            Integer blandit, mauris sed scelerisque cursus, leo enim accumsan
-            nulla, non sollicitudin metus massa non arcu.
-          </p>
+        <Box sx={{ my: 3, position: "relative" }}>
+          {pdfSections?.length > 0 &&
+            pdfSections.map(({ transcriptions }) =>
+              transcriptions.map(({ text, yPosition }, index) => (
+                <Transcription
+                  key={index}
+                  css={{ "--top-position": `${Number(yPosition) - 490}px` }}
+                >
+                  {text}
+                </Transcription>
+              ))
+            )}
         </Box>
       </Grid>
     </Grid>
