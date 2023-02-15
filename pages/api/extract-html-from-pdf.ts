@@ -33,15 +33,14 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
 
     for (let i = 0; i < titles.length; i++) {
       sections.push({
-        section: {
-          title: titles[i],
-          text: text
-            .replaceAll("  ", "")
-            .split(titles[i])
-            .pop()
-            .split(titles[i + 1])[0]
-            .replace(/(?<!\n)\n(?!\n)/g, ""),
-        },
+        title: titles[i],
+        text: text
+          .replaceAll("  ", "")
+          .split(titles[i])
+          .pop()
+          .split(titles[i + 1])[0]
+          .replace(/(?<!\n)\n(?!\n)/g, ""),
+        transcriptions: [],
       });
     }
 

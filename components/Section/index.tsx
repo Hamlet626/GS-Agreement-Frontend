@@ -15,6 +15,7 @@ import { setLoading, unsetLoading } from "../../store/loaderStatus";
 import axios from "axios";
 import { Zoom } from "@mui/material";
 import styled from "@emotion/styled";
+import { setTranscription } from "../../store/pdfDocument";
 
 interface SectionProps {
   title: string;
@@ -40,10 +41,9 @@ export default function Section({ title, text, index }: SectionProps) {
   const dispatch = useDispatch();
 
   const handleGetTranscription = async (
-    { clientY }: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    { pageY }: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     paragraph: string
   ) => {
-    console.log(clientY);
     try {
       dispatch(setLoading());
 
@@ -56,7 +56,12 @@ export default function Section({ title, text, index }: SectionProps) {
             },
           }) => {
             console.log(choices[0].text);
-            // dispatch(setTranscriptions(data));
+            dispatch(
+              setTranscription({
+                position: index,
+                transcription: { yPosition: pageY, text: choices[0].text },
+              })
+            );
           }
         )
         .then(() => dispatch(unsetLoading()));
