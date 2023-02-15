@@ -27,9 +27,25 @@ apiRoute.use(upload.single("pdfFile"));
 apiRoute.post(async (req: any, res: NextApiResponse) => {
   try {
     const { titles }: any = await processPDF2(req.file.path);
-    const { text } = await PdfParse(req.file.path);
+    const { text }: any = await PdfParse(req.file.path);
 
-    res.status(200).json({ titles, text });
+    let sections = [];
+
+    for (let i = 0; i < titles.length; i++) {
+      sections.push({
+        section: {
+          title: titles[i],
+          text: text
+            .replaceAll("  ", "")
+            .split(titles[i])
+            .pop()
+            .split(titles[i + 1])[0]
+            .replace(/(?<!\n)\n(?!\n)/g, ""),
+        },
+      });
+    }
+
+    res.status(200).json({ sections });
   } catch (error: any) {
     res.status(500).end({
       message: "An unexpected error occurred please try again later",
