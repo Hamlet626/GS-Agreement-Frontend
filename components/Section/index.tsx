@@ -1,9 +1,9 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   DocumentTextArea,
   DocumentTitle,
-  DocumentWrapper,
   SectionHeader,
+  Transcription,
 } from "./styles";
 import Button from "@mui/material/Button";
 import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
@@ -13,14 +13,19 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import { useDispatch } from "react-redux";
 import { setLoading, unsetLoading } from "../../store/loaderStatus";
 import axios from "axios";
-import { Zoom } from "@mui/material";
+import { Card, CardContent, Grid, Zoom } from "@mui/material";
 import styled from "@emotion/styled";
-import { setTranscription } from "../../store/pdfDocument";
+
+type ITranscription = {
+  transcriptionText: string;
+  originalParagraph: string;
+};
 
 interface SectionProps {
   title: string;
   text: string;
   index: number;
+  transcriptions?: ITranscription[];
 }
 
 const SectionTooltip = styled(({ className, ...props }: TooltipProps) => (
@@ -37,31 +42,29 @@ const SectionTooltip = styled(({ className, ...props }: TooltipProps) => (
 export default function Section({ title, text, index }: SectionProps) {
   const [editModeOn, setEditModeOn] = useState(false);
   const [newSectionText, setNewSectionText] = useState(text);
-  const sectionRef = useRef(null);
+  const [transcriptions, setTranscriptions] = useState<ITranscription[]>([]);
+
   const dispatch = useDispatch();
 
-  const handleGetTranscription = async (
-    { pageY }: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    paragraph: string
-  ) => {
+  const handleGetTranscription = async (paragraph: string) => {
     try {
       dispatch(setLoading());
 
       await axios
-        .post("/api/generate-transcription", { text: `${title} ${paragraph}` })
+        .post("/api/generate-transcription", { text: paragraph })
         .then(
           ({
             data: {
               result: { choices },
             },
           }) => {
-            console.log(choices[0].text);
-            dispatch(
-              setTranscription({
-                position: index,
-                transcription: { yPosition: pageY, text: choices[0].text },
-              })
-            );
+            setTranscriptions([
+              ...transcriptions,
+              {
+                transcriptionText: choices[0].text,
+                originalParagraph: paragraph,
+              },
+            ]);
           }
         )
         .then(() => dispatch(unsetLoading()));
@@ -72,7 +75,6 @@ export default function Section({ title, text, index }: SectionProps) {
   };
 
   const handleSaveChanges = () => {
-    sectionRef.current;
     setEditModeOn(false);
   };
 
@@ -80,60 +82,95 @@ export default function Section({ title, text, index }: SectionProps) {
     return newSectionText.split("\n\n");
   }, [newSectionText]);
 
+  //If the paragraph change, remove the transcription
+  useEffect(() => {
+    transcriptions.forEach(
+      (singleTranscription, index) =>
+        !sectionParagraph.includes(singleTranscription.originalParagraph) &&
+        transcriptions.splice(index, 1)
+    );
+  }, [sectionParagraph, transcriptions]);
+
   return (
-    <DocumentWrapper key={title}>
-      <SectionHeader>
-        <DocumentTitle>
-          <b id={index.toString()}>{title}</b>
-        </DocumentTitle>
-        <Button
-          variant="outlined"
-          startIcon={<ModeEditIcon />}
-          onClick={() =>
-            editModeOn ? handleSaveChanges() : setEditModeOn(true)
-          }
-        >
-          {editModeOn ? "Save" : "Edit"}
-        </Button>
-      </SectionHeader>
-      {editModeOn ? (
-        <DocumentTextArea
-          ref={sectionRef}
-          disabled={!editModeOn}
-          value={newSectionText}
-          onChange={(event) => setNewSectionText(event.target.value)}
-          className={textFieldClasses.root}
-        />
-      ) : (
-        <div>
-          {sectionParagraph?.map((paragraph, index) => (
-            <SectionTooltip
-              title={
-                !editModeOn && (
-                  <Button
-                    variant="outlined"
-                    fullWidth
-                    startIcon={<AutoFixHighIcon />}
-                    onClick={(event) =>
-                      handleGetTranscription(event, paragraph)
-                    }
-                  >
-                    Transcription
-                  </Button>
-                )
-              }
-              TransitionComponent={Zoom}
-              TransitionProps={{ timeout: 200 }}
-              leaveDelay={300}
-              placement="right"
-              disableFocusListener={editModeOn}
-              key={index}
-            >
-              <p>{paragraph}</p>
-            </SectionTooltip>
-          ))}
-        </div>
-      )}
-    </DocumentWrapper>
+    <Card key={title}>
+      <CardContent>
+        <SectionHeader>
+          <DocumentTitle>
+            <b id={index.toString()}>{title}</b>
+          </DocumentTitle>
+          <Button
+            variant={editModeOn ? "contained" : "outlined"}
+            color={editModeOn ? "info" : "primary"}
+            startIcon={<ModeEditIcon />}
+            onClick={() =>
+              editModeOn ? handleSaveChanges() : setEditModeOn(true)
+            }
+          >
+            {editModeOn ? "Save" : "Edit"}
+          </Button>
+        </SectionHeader>
+        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+          {editModeOn ? (
+            <>
+              <Grid item xs={12} sm={6}>
+                <DocumentTextArea
+                  disabled={!editModeOn}
+                  value={newSectionText}
+                  onChange={(event) => setNewSectionText(event.target.value)}
+                  className={textFieldClasses.root}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                {transcriptions?.map(({ transcriptionText }, index) => (
+                  <Transcription key={index}>{transcriptionText}</Transcription>
+                ))}
+              </Grid>
+            </>
+          ) : (
+            <>
+              {sectionParagraph?.map((paragraph, index) => (
+                <>
+                  <Grid item xs={12} sm={6}>
+                    <SectionTooltip
+                      title={
+                        !editModeOn && (
+                          <Button
+                            variant="outlined"
+                            fullWidth
+                            startIcon={<AutoFixHighIcon />}
+                            onClick={() => handleGetTranscription(paragraph)}
+                          >
+                            Transcription
+                          </Button>
+                        )
+                      }
+                      TransitionComponent={Zoom}
+                      TransitionProps={{ timeout: 200 }}
+                      leaveDelay={300}
+                      placement="right"
+                      disableFocusListener={editModeOn}
+                      key={index}
+                    >
+                      <p>{paragraph}</p>
+                    </SectionTooltip>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    {transcriptions?.map(
+                      ({ originalParagraph, transcriptionText }, index) =>
+                        originalParagraph === paragraph && (
+                          <Transcription key={index}>
+                            {transcriptionText}
+                          </Transcription>
+                        )
+                    )}
+                  </Grid>
+                </>
+              ))}
+            </>
+          )}
+        </Grid>
+      </CardContent>
+    </Card>
   );
 }
