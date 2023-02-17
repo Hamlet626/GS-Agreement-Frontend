@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import pdfDocument from "./pdfDocument";
 import loaderStatus from "./loaderStatus";
+import modal from "./modal";
 
 import { setupListeners } from "@reduxjs/toolkit/query";
 import thunk from "redux-thunk";
@@ -8,6 +9,7 @@ import thunk from "redux-thunk";
 const reducer = combineReducers({
   pdfDocument,
   loaderStatus,
+  modal,
 });
 const store = configureStore({
   reducer,

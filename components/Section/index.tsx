@@ -15,6 +15,7 @@ import { setLoading, unsetLoading } from "../../store/loaderStatus";
 import axios from "axios";
 import { Card, CardContent, Grid, Zoom } from "@mui/material";
 import styled from "@emotion/styled";
+import { mountModal } from "../../store/modal";
 
 type ITranscription = {
   transcriptionText: string;
@@ -68,9 +69,18 @@ export default function Section({ title, text, index }: SectionProps) {
           }
         )
         .then(() => dispatch(unsetLoading()));
-    } catch (error) {
+    } catch (error: any) {
       console.error(error);
       dispatch(unsetLoading());
+      dispatch(
+        mountModal({
+          status: true,
+          title: "An error happend",
+          message:
+            error.response.data.error.message ||
+            "Unfortunately, an error happened, please try again.",
+        })
+      );
     }
   };
 

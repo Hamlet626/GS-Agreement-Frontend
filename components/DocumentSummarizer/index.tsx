@@ -13,13 +13,7 @@ export default function DocumentSummarizer() {
         <SectionsWrapper>
           {pdfSections?.length > 0 &&
             pdfSections.map(({ title, text }, index) => (
-              <Section
-                key={title}
-                title={title}
-                text={text}
-                index={index}
-                // transcriptions={transcriptions}
-              />
+              <Section key={title} title={title} text={text} index={index} />
             ))}
         </SectionsWrapper>
       </Grid>
