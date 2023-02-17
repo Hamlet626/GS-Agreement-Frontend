@@ -1,12 +1,8 @@
 import { styled } from "@stitches/react";
 
-export const Transcription = styled("div", {
+export const SectionsWrapper = styled("div", {
   display: "flex",
   flexDirection: "column",
-  fontSize: "14px",
+  gap: "1rem",
   padding: "1rem 0",
-  position: "absolute",
-  left: 0,
-  right: 0,
-  top: "var(--top-position)",
 });

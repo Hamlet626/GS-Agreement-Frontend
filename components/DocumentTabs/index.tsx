@@ -16,7 +16,7 @@ export default function DocumentTabs() {
   const handleChangeTab = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
     window.location.href = `#${newValue}`;
-    window.scrollBy(0, -90);
+    window.scrollBy(0, -120);
   };
 
   const triggerStickOnHeader = () => {

@@ -8,12 +8,6 @@ interface IpdfDocument {
 type ISection = {
   title: string;
   text: string;
-  transcriptions: ITranscription[];
-};
-
-type ITranscription = {
-  yPosition: string;
-  text: string;
 };
 
 const initialState: IpdfDocument = {
@@ -27,12 +21,6 @@ export const slice = createSlice({
     setSections: (state, action) => {
       state.sections = action.payload;
     },
-    setTranscription: (state, action) => {
-      state.sections[action.payload.position].transcriptions = [
-        ...state.sections[action.payload.position].transcriptions,
-        action.payload.transcription,
-      ];
-    },
     resetSection: (state) => {
       state = initialState;
     },
@@ -41,5 +29,5 @@ export const slice = createSlice({
 
 export const selectSection = (state: RootState) => state.pdfDocument.sections;
 
-export const { setSections, setTranscription, resetSection } = slice.actions;
+export const { setSections, resetSection } = slice.actions;
 export default slice.reducer;
