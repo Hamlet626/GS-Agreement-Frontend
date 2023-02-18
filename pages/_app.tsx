@@ -11,6 +11,7 @@ import Footer from "../components/Footer";
 import { Provider as ReduxProvider } from "react-redux";
 import store from "../store";
 import Loader from "../components/Loader";
+import Modal from "../components/Modal";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -30,6 +31,7 @@ export default function MyApp(props: MyAppProps) {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Loader />
+          <Modal />
           <Header />
           <Component {...pageProps} />
           <Footer />

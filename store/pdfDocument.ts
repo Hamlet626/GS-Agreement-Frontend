@@ -22,7 +22,7 @@ export const slice = createSlice({
       state.sections = action.payload;
     },
     resetSection: (state) => {
-      state = initialState;
+      state.sections = [];
     },
   },
 });

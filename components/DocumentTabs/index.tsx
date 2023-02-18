@@ -22,7 +22,7 @@ export default function DocumentTabs() {
   const triggerStickOnHeader = () => {
     if (
       window.scrollY >=
-      tabRef.current.offsetTop + tabRef.current.clientHeight
+      tabRef?.current?.offsetTop + tabRef?.current?.clientHeight
     ) {
       setStickyOnHeader(true);
     } else {
