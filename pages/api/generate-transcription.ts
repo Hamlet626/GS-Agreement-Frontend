@@ -32,8 +32,9 @@ apiRoute.post(async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const completion = await openai.createCompletion({
       model: "text-davinci-003",
-      prompt: `Explain this cited paragraph form a legal contract agreement to a 1st-grade student understandable text explicitly, better to include some real life circumstances: \n\n
-      ${req.body.text}`,
+      prompt: `Explain this cited paragraph form a legal contract agreement to a philistine by simple words.
+      Citation: ${req.body.text}`,
+
       temperature: 0.1,
       max_tokens: 4000,
     });

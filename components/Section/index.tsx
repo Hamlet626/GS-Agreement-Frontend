@@ -2,20 +2,20 @@ import React, { useEffect, useMemo, useState } from "react";
 import {
   DocumentTextArea,
   DocumentTitle,
+  Paragraph,
   SectionHeader,
+  SectionParagraphRow,
   Transcription,
 } from "./styles";
 import Button from "@mui/material/Button";
-import Tooltip, { TooltipProps, tooltipClasses } from "@mui/material/Tooltip";
 import { textFieldClasses } from "@mui/material/TextField";
-import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
 import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import { useDispatch } from "react-redux";
 import { setLoading, unsetLoading } from "../../store/loaderStatus";
 import axios from "axios";
 import { Card, CardContent, Grid, Zoom } from "@mui/material";
-import styled from "@emotion/styled";
 import { mountModal } from "../../store/modal";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
 
 type ITranscription = {
   transcriptionText: string;
@@ -29,17 +29,6 @@ interface SectionProps {
   transcriptions?: ITranscription[];
 }
 
-const SectionTooltip = styled(({ className, ...props }: TooltipProps) => (
-  <Tooltip {...props} classes={{ popper: className }} />
-))(() => ({
-  [`& .${tooltipClasses.tooltip}`]: {
-    backgroundColor: "#ffffff",
-    color: "#0c273a",
-    boxShadow: "0 0 10px #0c273a50",
-    maxWidth: 220,
-    padding: "0.5rem",
-  },
-}));
 export default function Section({ title, text, index }: SectionProps) {
   const [editModeOn, setEditModeOn] = useState(false);
   const [newSectionText, setNewSectionText] = useState(text);
@@ -105,9 +94,7 @@ export default function Section({ title, text, index }: SectionProps) {
     <Card key={title}>
       <CardContent>
         <SectionHeader>
-          <DocumentTitle>
-            <b id={index.toString()}>{title}</b>
-          </DocumentTitle>
+          <DocumentTitle id={index.toString()}>{title}</DocumentTitle>
           <Button
             variant={editModeOn ? "contained" : "outlined"}
             color={editModeOn ? "info" : "primary"}
@@ -119,67 +106,90 @@ export default function Section({ title, text, index }: SectionProps) {
             {editModeOn ? "Save" : "Edit"}
           </Button>
         </SectionHeader>
-        <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-          {editModeOn ? (
-            <>
-              <Grid item xs={12} sm={6}>
-                <DocumentTextArea
-                  disabled={!editModeOn}
-                  value={newSectionText}
-                  onChange={(event) => setNewSectionText(event.target.value)}
-                  className={textFieldClasses.root}
-                />
-              </Grid>
+        {editModeOn ? (
+          <Grid
+            container
+            rowSpacing={3}
+            columnSpacing={{ xs: 1, sm: 2, md: 3 }}
+          >
+            <Grid item xs={12} sm={6}>
+              <DocumentTextArea
+                disabled={!editModeOn}
+                value={newSectionText}
+                onChange={(event) => setNewSectionText(event.target.value)}
+                className={textFieldClasses.root}
+              />
+            </Grid>
 
-              <Grid item xs={12} sm={6}>
-                {transcriptions?.map(({ transcriptionText }, index) => (
-                  <Transcription key={index}>{transcriptionText}</Transcription>
-                ))}
-              </Grid>
-            </>
-          ) : (
-            <>
-              {sectionParagraph?.map((paragraph, index) => (
-                <>
-                  <Grid item xs={12} sm={6}>
-                    <SectionTooltip
-                      title={
-                        !editModeOn && (
-                          <Button
-                            variant="outlined"
-                            fullWidth
-                            startIcon={<AutoFixHighIcon />}
-                            onClick={() => handleGetTranscription(paragraph)}
-                          >
-                            Transcription
-                          </Button>
-                        )
-                      }
-                      TransitionComponent={Zoom}
-                      TransitionProps={{ timeout: 200 }}
-                      leaveDelay={300}
-                      placement="right"
-                      disableFocusListener={editModeOn}
-                      key={index}
-                    >
-                      <p>{paragraph}</p>
-                    </SectionTooltip>
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    {transcriptions?.map(
-                      ({ originalParagraph, transcriptionText }, index) =>
-                        originalParagraph === paragraph && (
-                          <Transcription key={index}>
-                            {transcriptionText}
-                          </Transcription>
-                        )
-                    )}
-                  </Grid>
-                </>
+            <Grid item xs={12} sm={6}>
+              {transcriptions?.map(({ transcriptionText }, index) => (
+                <Transcription key={index}>{transcriptionText}</Transcription>
               ))}
-            </>
-          )}
-        </Grid>
+            </Grid>
+          </Grid>
+        ) : (
+          <>
+            {sectionParagraph?.map((paragraph, index) => (
+              <SectionParagraphRow
+                container
+                rowSpacing={3}
+                alignItems="center"
+                key={index}
+              >
+                <Grid
+                  item
+                  xs={12}
+                  sm={5}
+                  style={{
+                    paddingTop: 0,
+                  }}
+                >
+                  <Paragraph>{paragraph}</Paragraph>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={2}
+                  style={{
+                    paddingTop: 0,
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                    <Button
+                      variant="contained"
+                      color="success"
+                      size="small"
+                      startIcon={<AddCircleIcon />}
+                      style={{
+                        fontSize: "12px",
+                      }}
+                      onClick={() => handleGetTranscription(paragraph)}
+                    >
+                      Transcription
+                    </Button>
+                  </div>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={5}
+                  style={{
+                    paddingTop: 0,
+                  }}
+                >
+                  {transcriptions?.map(
+                    ({ originalParagraph, transcriptionText }, index) =>
+                      originalParagraph === paragraph && (
+                        <Transcription key={index}>
+                          {transcriptionText}
+                        </Transcription>
+                      )
+                  )}
+                </Grid>
+              </SectionParagraphRow>
+            ))}
+          </>
+        )}
       </CardContent>
     </Card>
   );
