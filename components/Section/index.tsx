@@ -13,9 +13,9 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import { useDispatch } from "react-redux";
 import { setLoading, unsetLoading } from "../../store/loaderStatus";
 import axios from "axios";
-import { Card, CardContent, Grid, Zoom } from "@mui/material";
+import { Box, Card, CardContent, Grid } from "@mui/material";
 import { mountModal } from "../../store/modal";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
+import TextSnippetIcon from "@mui/icons-material/TextSnippet";
 
 type ITranscription = {
   transcriptionText: string;
@@ -154,20 +154,28 @@ export default function Section({ title, text, index }: SectionProps) {
                     paddingTop: 0,
                   }}
                 >
-                  <div style={{ display: "flex", justifyContent: "center" }}>
+                  <Box
+                    sx={(theme) => ({
+                      display: "flex",
+                      justifyContent: "center",
+                      [theme.breakpoints.down("sm")]: {
+                        marginBottom: "1rem",
+                      },
+                    })}
+                  >
                     <Button
                       variant="contained"
                       color="success"
                       size="small"
-                      startIcon={<AddCircleIcon />}
+                      startIcon={<TextSnippetIcon />}
                       style={{
                         fontSize: "12px",
                       }}
                       onClick={() => handleGetTranscription(paragraph)}
                     >
-                      Transcription
+                      Summarize
                     </Button>
-                  </div>
+                  </Box>
                 </Grid>
                 <Grid
                   item
