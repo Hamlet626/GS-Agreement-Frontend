@@ -5,7 +5,7 @@ interface IpdfDocument {
   sections: ISection[];
 }
 
-type ISection = {
+export type ISection = {
   title: string;
   text: string;
 };
