@@ -32,6 +32,7 @@
     "pdf2json": "^3.0.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-draft-wysiwyg": "^1.15.0",
     "react-hook-form": "^7.40.0",
     "react-icons": "^4.7.1",
     "react-redux": "^8.0.5",
@@ -39,6 +40,7 @@
   },
   "devDependencies": {
     "@types/multer": "^1.4.7",
-    "@types/pdf-parse": "^1.1.1"
+    "@types/pdf-parse": "^1.1.1",
+    "@types/react-draft-wysiwyg": "^1.13.4"
   }
 }
