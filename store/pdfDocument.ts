@@ -20,6 +20,7 @@ export const slice = createSlice({
   reducers: {
     setSections: (state, action) => {
       state.sections = action.payload;
+      localStorage.setItem("pdfSections", JSON.stringify(action.payload));
     },
     resetSection: (state) => {
       state.sections = [];
