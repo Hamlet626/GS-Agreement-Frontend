@@ -48,13 +48,26 @@ export default function Section({ title, text, index }: SectionProps) {
               result: { choices },
             },
           }) => {
-            setTranscriptions([
-              ...transcriptions,
-              {
-                transcriptionText: choices[0].text,
-                originalParagraph: paragraph,
-              },
-            ]);
+            let alreadyHas = false;
+
+            transcriptions?.forEach(({ originalParagraph }, index) => {
+              if (originalParagraph === paragraph) {
+                let newTranscriptions = [...transcriptions];
+                newTranscriptions[index].transcriptionText = choices[0].text;
+                setTranscriptions(newTranscriptions);
+                alreadyHas = true;
+              }
+            });
+
+            if (!alreadyHas) {
+              setTranscriptions([
+                ...transcriptions,
+                {
+                  transcriptionText: choices[0].text,
+                  originalParagraph: paragraph,
+                },
+              ]);
+            }
           }
         )
         .then(() => dispatch(unsetLoading()));
