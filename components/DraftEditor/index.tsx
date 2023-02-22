@@ -23,9 +23,11 @@ export default function DraftEditor() {
       if (inlineStyleRanges[0]?.style === "BOLD") {
         sections.push({ title: text, text: "" });
       } else {
-        sections[sections.length - 1].text = sections[
-          sections.length - 1
-        ]?.text.concat("", text);
+        sections.length > 0
+          ? (sections[sections.length - 1].text = sections[
+              sections.length - 1
+            ]?.text.concat("", text))
+          : sections.push({ title: text.slice(0, 16), text: text });
       }
     });
 

@@ -2,6 +2,12 @@ import { styled } from "@stitches/react";
 import TextareaAutosize from "@mui/base/TextareaAutosize";
 import { Grid } from "@mui/material";
 
+export const SectionsWrapper = styled("div", {
+  display: "flex",
+  flexDirection: "column",
+  gap: "2.5rem",
+});
+
 export const DocumentTextArea = styled(TextareaAutosize, {
   width: "100%",
   fontSize: "16px",
@@ -21,7 +27,6 @@ export const SectionHeader = styled("div", {
   alignItems: "center",
   gap: "1rem",
   justifyContent: "space-between",
-  paddingBottom: "3rem",
 });
 
 export const Transcription = styled("p", {
@@ -31,7 +36,7 @@ export const Transcription = styled("p", {
 });
 
 export const SectionParagraphRow = styled(Grid, {
-  marginBottom: "3rem",
+  marginBottom: "1rem",
   backgroundColor: "#dea27a08",
   borderRadius: "8px",
   boxSizing: "border-box",

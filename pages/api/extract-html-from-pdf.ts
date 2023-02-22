@@ -35,12 +35,13 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
       sections.push({
         title: titles[i],
         text: text
-          .replaceAll("  ", "")
+          .replaceAll(/\s{3,}/g, "")
           .split(titles[i])
           .pop()
           .split(titles[i + 1])[0]
           .replace(/(?<!\n)\n(?!\n)/g, "")
-          .replace(/^\n\n/, ""),
+          .replace(/^\n\n/, "")
+          .replace(/\n+$/, ""),
         transcriptions: [],
       });
     }
