@@ -42,4 +42,5 @@ export const Paragraph = styled("p", {
   fontSize: "14px",
   padding: "1rem",
   overflowWrap: "break-word",
+  textAlign: "justify",
 });

@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Container } from "@mui/material";
 import DocumentSummarizer from "../components/DocumentSummarizer";
 import TextInfo from "../components/TextInfo";
 import DocumentTabs from "../components/DocumentTabs";
-import { useSelector } from "react-redux";
-import { selectSection } from "../store/pdfDocument";
+import { useDispatch, useSelector } from "react-redux";
+import { selectSection, setSections } from "../store/pdfDocument";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 
@@ -11,10 +12,17 @@ export default function Summarized() {
   const router = useRouter();
 
   const pdfSections = useSelector(selectSection);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    !pdfSections && router.push("/");
-  }, [pdfSections, router]);
+    const localStoragePdfSection = localStorage.getItem("pdfSections");
+
+    if (localStoragePdfSection) {
+      dispatch(setSections(JSON.parse(localStoragePdfSection || "")));
+    } else if (!localStoragePdfSection && !pdfSections) {
+      router.push("/");
+    }
+  }, []);
 
   return (
     <Container sx={{ my: 3 }}>

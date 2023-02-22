@@ -39,7 +39,8 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
           .split(titles[i])
           .pop()
           .split(titles[i + 1])[0]
-          .replace(/(?<!\n)\n(?!\n)/g, ""),
+          .replace(/(?<!\n)\n(?!\n)/g, "")
+          .replace(/^\n\n/, ""),
         transcriptions: [],
       });
     }
