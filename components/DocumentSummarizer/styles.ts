@@ -1,6 +1,6 @@
 import { styled } from "@stitches/react";
 
-export const SectionsWrapper = styled("div", {
+export const SectionsListWrapper = styled("div", {
   display: "flex",
   flexDirection: "column",
   gap: "1rem",
