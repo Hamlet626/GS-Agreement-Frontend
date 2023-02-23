@@ -1,7 +1,7 @@
 import nextConnect from "next-connect";
 import multer from "multer";
 import type { NextApiResponse } from "next";
-import { processPDF2 } from "../../utils";
+import { processPDF2 } from "../../utils/processPdf";
 import PdfParse from "pdf-parse";
 import AWS from "aws-sdk";
 import { readFileSync } from "fs";

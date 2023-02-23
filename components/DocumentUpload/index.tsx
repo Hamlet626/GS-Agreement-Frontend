@@ -20,7 +20,7 @@ export default function DocumentUpload() {
       formData.append("pdfFile", pdfFile);
 
       await axios
-        .post("/api/extract-html-from-pdf", formData, {
+        .post("/api/pdf-to-html", formData, {
           headers: { "content-type": "multipart/form-data" },
         })
         .then(({ data: { sections } }) => {
