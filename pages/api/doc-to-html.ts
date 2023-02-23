@@ -1,10 +1,9 @@
 import nextConnect from "next-connect";
 import multer from "multer";
 import type { NextApiResponse } from "next";
-import { processPDF2 } from "../../utils/processPdf";
-import PdfParse from "pdf-parse";
-import AWS from "aws-sdk";
-import { readFileSync } from "fs";
+// import { s3Upload } from "../../utils/s3Upload";
+import mammoth from "mammoth";
+import jsdom from "jsdom";
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -24,56 +23,56 @@ const apiRoute = nextConnect({
   },
 });
 
-apiRoute.use(upload.single("pdfFile"));
-
-// Store PDF File in S3 Bucket
-AWS.config.update({
-  accessKeyId: process.env.AWS_ACCESS_ID,
-  secretAccessKey: process.env.AWS_SECRET_KEY,
-});
-
-const s3 = new AWS.S3();
+apiRoute.use(upload.single("documentFile"));
 
 apiRoute.post(async (req: any, res: NextApiResponse) => {
-  const fileName = `${new Date().getTime()}_${req.file.originalname}`;
-  const fileContent = readFileSync(req.file.path);
-
+  const { JSDOM } = jsdom;
   try {
-    const params = {
-      Bucket: process.env.AWS_S3_BUCKET || "",
-      Key: fileName,
-      Body: fileContent,
-    };
+    let titles: any = [];
+    let sections: any = [];
 
-    s3.upload(params, (err: any, data: { Location: any }) => {
-      if (err) {
-        console.error(err);
-      } else {
-        console.log(`File uploaded successfully. File URL: ${data.Location}`);
-      }
-    });
+    await mammoth
+      .convertToHtml({ path: req.file.path })
+      .then(function ({ value }) {
+        const dom = new JSDOM(value);
+        const strongTags: NodeListOf<HTMLElement> =
+          dom.window.document.querySelectorAll("strong");
 
-    const { titles }: any = await processPDF2(req.file.path);
-    const { text }: any = await PdfParse(req.file.path);
+        for (let i = 0; i < strongTags.length; i++) {
+          let title = strongTags[i].textContent?.replaceAll(/\s{3,}/g, "");
+          if (title === title?.toUpperCase()) {
+            titles.push(title);
+          }
+        }
+        // console.log(doc);
+        res.status(200).json({ sections, titles });
 
-    let sections = [];
-
-    for (let i = 0; i < titles.length; i++) {
-      sections.push({
-        title: titles[i],
-        text: text
-          .replaceAll(/\s{3,}/g, "")
-          .split(titles[i])
-          .pop()
-          .split(titles[i + 1])[0]
-          .replace(/(?<!\n)\n(?!\n)/g, "")
-          .replace(/^\n\n/, "")
-          .replace(/\n+$/, ""),
-        transcriptions: [],
+        console.log(strongTags);
       });
-    }
 
-    res.status(200).json({ sections });
+    // await mammoth
+    //   .extractRawText({ path: req.file.path })
+    //   .then(function (result) {
+    //     var text: any = result.value;
+
+    //     for (let i = 0; i < titles.length; i++) {
+    //       sections.push({
+    //         title: titles[i],
+    //         text: text
+    //           .replaceAll(/\s{3,}/g, "")
+    //           .split(titles[i])
+    //           .pop()
+    //           .split(titles[i + 1])[0]
+    //           .replace(/(?<!\n)\n(?!\n)/g, "")
+    //           .replace(/^\n\n/, "")
+    //           .replace(/\n+$/, ""),
+    //         transcriptions: [],
+    //       });
+    //     }
+    //   });
+
+    // Store Doc File in S3 Bucket
+    // s3Upload(req.file.path, req.file.originalname);
   } catch (error: any) {
     res.status(500).end({
       message: "An unexpected error occurred please try again later",

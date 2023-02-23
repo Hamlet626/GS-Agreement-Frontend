@@ -23,9 +23,7 @@ const apiRoute = nextConnect({
   },
 });
 
-apiRoute.use(upload.single("pdfFile"));
-
-// Store PDF File in S3 Bucket
+apiRoute.use(upload.single("documentFile"));
 
 apiRoute.post(async (req: any, res: NextApiResponse) => {
   try {
@@ -50,6 +48,7 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
     }
 
     res.status(200).json({ sections });
+    // Store PDF File in S3 Bucket
     s3Upload(req.file.path, req.file.originalname);
   } catch (error: any) {
     res.status(500).end({
