@@ -28,28 +28,31 @@ apiRoute.use(upload.single("documentFile"));
 apiRoute.post(async (req: any, res: NextApiResponse) => {
   try {
     const { titles }: any = await processPDF2(req.file.path);
-    const { text }: any = await PdfParse(req.file.path);
+    const { text: pdfParseText }: any = await PdfParse(req.file.path);
 
     let sections = [];
 
     for (let i = 0; i < titles.length; i++) {
       sections.push({
         title: titles[i],
-        text: text
-          .replaceAll(/\s{3,}/g, "")
+        text: pdfParseText
+          .replaceAll(/ {2}/g, "")
           .split(titles[i])
           .pop()
           .split(titles[i + 1])[0]
           .replace(/(?<!\n)\n(?!\n)/g, "")
-          .replace(/^\n\n/, "")
+          .replace(/^\n\n(?!$)/, "")
           .replace(/\n+$/, ""),
         transcriptions: [],
       });
     }
 
-    res.status(200).json({ sections });
+    res.status(200).json({ sections, pdfParseText });
+   
     // Store PDF File in S3 Bucket
-    s3Upload(req.file.path, req.file.originalname);
+    if(process.env.REACT_APP_ENV === 'production'){
+      s3Upload(req.file.path, req.file.originalname);
+    }
   } catch (error: any) {
     res.status(500).end({
       message: "An unexpected error occurred please try again later",
