@@ -51,10 +51,10 @@ export default function DocumentUpload() {
         startIcon={<PictureAsPdfIcon />}
         color="info"
       >
-        Upload PDF
+        Upload Document
         <input
           hidden
-          accept="application/pdf, .doc, .docx"
+          accept="application/pdf, .docx"
           type="file"
           onChange={handleUploadPdf}
         />

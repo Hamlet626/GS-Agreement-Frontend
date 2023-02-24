@@ -1,7 +1,6 @@
 import PDFParser from "pdf2json";
 import mammoth from 'mammoth';
 import * as cheerio from 'cheerio';
-import fs from "fs";
 
 export const getTitlesFromPdf = (c: any) => {
   let titles: string[] = [];
@@ -21,7 +20,7 @@ export const getTitlesFromPdf = (c: any) => {
   });
   titles = titles.filter(
     (stringLine) =>
-      stringLine.split(" ").filter((stringLine) => stringLine !== "").length <
+      stringLine.split(" ").filter((stringLineItem) => stringLineItem !== "").length <
         16 && stringLine === stringLine.toUpperCase() && /[a-z]/i.test(stringLine)
   );
 
