@@ -1,10 +1,9 @@
 import nextConnect from "next-connect";
 import multer from "multer";
 import type { NextApiResponse } from "next";
-import { processPDF2 } from "../../utils";
+import { processPDF2 } from "../../utils/processPdf";
 import PdfParse from "pdf-parse";
-import AWS from "aws-sdk";
-import { readFileSync } from "fs";
+import { s3Upload } from "../../utils/s3Upload";
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -24,35 +23,10 @@ const apiRoute = nextConnect({
   },
 });
 
-apiRoute.use(upload.single("pdfFile"));
-
-// Store PDF File in S3 Bucket
-AWS.config.update({
-  accessKeyId: process.env.AWS_ACCESS_ID,
-  secretAccessKey: process.env.AWS_SECRET_KEY,
-});
-
-const s3 = new AWS.S3();
+apiRoute.use(upload.single("documentFile"));
 
 apiRoute.post(async (req: any, res: NextApiResponse) => {
-  const fileName = `${new Date().getTime()}_${req.file.originalname}`;
-  const fileContent = readFileSync(req.file.path);
-
   try {
-    const params = {
-      Bucket: process.env.AWS_S3_BUCKET || "",
-      Key: fileName,
-      Body: fileContent,
-    };
-
-    s3.upload(params, (err: any, data: { Location: any }) => {
-      if (err) {
-        console.error(err);
-      } else {
-        console.log(`File uploaded successfully. File URL: ${data.Location}`);
-      }
-    });
-
     const { titles }: any = await processPDF2(req.file.path);
     const { text }: any = await PdfParse(req.file.path);
 
@@ -74,6 +48,8 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
     }
 
     res.status(200).json({ sections });
+    // Store PDF File in S3 Bucket
+    s3Upload(req.file.path, req.file.originalname);
   } catch (error: any) {
     res.status(500).end({
       message: "An unexpected error occurred please try again later",

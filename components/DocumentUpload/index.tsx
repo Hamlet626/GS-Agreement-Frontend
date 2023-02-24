@@ -14,15 +14,21 @@ export default function DocumentUpload() {
   const handleUploadPdf = async (event: any) => {
     try {
       dispatch(setLoading());
-      const pdfFile = event.target.files[0];
+      const documentFile = event.target.files[0];
 
       const formData = new FormData();
-      formData.append("pdfFile", pdfFile);
+      formData.append("documentFile", documentFile);
 
       await axios
-        .post("/api/extract-html-from-pdf", formData, {
-          headers: { "content-type": "multipart/form-data" },
-        })
+        .post(
+          documentFile.type === "application/pdf"
+            ? "/api/pdf-to-html"
+            : "/api/doc-to-html",
+          formData,
+          {
+            headers: { "content-type": "multipart/form-data" },
+          }
+        )
         .then(({ data: { sections } }) => {
           dispatch(setSections(sections));
         })
@@ -46,7 +52,12 @@ export default function DocumentUpload() {
         color="info"
       >
         Upload PDF
-        <input hidden accept="*" type="file" onChange={handleUploadPdf} />
+        <input
+          hidden
+          accept="application/pdf, .doc, .docx"
+          type="file"
+          onChange={handleUploadPdf}
+        />
       </Button>
     </Wrapper>
   );
