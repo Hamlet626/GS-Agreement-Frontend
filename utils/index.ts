@@ -19,7 +19,7 @@ export const getTitlesFromPdf = (c: any) => {
   titles = titles.filter(
     (stringLine) =>
       stringLine.split(" ").filter((stringLine) => stringLine !== "").length <
-        16 && stringLine === stringLine.toUpperCase()
+        16 && stringLine === stringLine.toUpperCase() && /[a-z]/i.test(stringLine)
   );
 
   titles = titles.map((title) => title.replaceAll("  ", ""));
