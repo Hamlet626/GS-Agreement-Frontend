@@ -17,6 +17,7 @@ import axios from "axios";
 import { Box, Grid } from "@mui/material";
 import { mountModal } from "../../store/modal";
 import TextSnippetIcon from "@mui/icons-material/TextSnippet";
+import {addSave, removeSave} from "../../store/saveButton";
 
 type ITranscription = {
   transcriptionText: string;
@@ -88,7 +89,12 @@ export default function Section({ title, text, index }: SectionProps) {
   };
 
   const handleSaveChanges = () => {
+    dispatch(removeSave());
     setEditModeOn(false);
+  };
+  const handleEdit = () => {
+    setEditModeOn(true);
+    dispatch(addSave(()=>setEditModeOn(false)));
   };
 
   const sectionParagraph = useMemo(() => {
@@ -109,11 +115,11 @@ export default function Section({ title, text, index }: SectionProps) {
       <SectionHeader>
         <DocumentTitle id={index.toString()}>{title}</DocumentTitle>
         <Button
-          variant={editModeOn ? "contained" : "outlined"}
-          color={editModeOn ? "info" : "primary"}
-          startIcon={<ModeEditIcon />}
-          onClick={() =>
-            editModeOn ? handleSaveChanges() : setEditModeOn(true)
+          variant={editModeOn ? "outlined" : "text"}
+          color="secondary"//{editModeOn ? "secondary" : "primary"}
+          startIcon={!editModeOn&&<ModeEditIcon />}
+          onClick={
+            editModeOn ? handleSaveChanges : handleEdit
           }
         >
           {editModeOn ? "Save" : "Edit"}
@@ -152,6 +158,7 @@ export default function Section({ title, text, index }: SectionProps) {
                 style={{
                   paddingTop: 0,
                 }}
+                onClick={handleEdit}
               >
                 <Paragraph>{paragraph}</Paragraph>
               </Grid>
@@ -175,7 +182,6 @@ export default function Section({ title, text, index }: SectionProps) {
                   <Button
                     variant="contained"
                     color="success"
-                    size="small"
                     startIcon={<TextSnippetIcon />}
                     style={{
                       fontSize: "12px",

@@ -36,6 +36,15 @@ const theme = createTheme({
         }),
       },
     },
+    MuiButton:{
+      styleOverrides: {
+        root:({ ownerState }) => ({
+          ...(ownerState.variant === 'contained' && {
+                size: 'large'
+              }),
+        }),
+      }
+    },
     MuiTab: {
       styleOverrides: {
         root: ({ theme }) => ({

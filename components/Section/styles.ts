@@ -1,6 +1,6 @@
 import { styled } from "@stitches/react";
 import TextareaAutosize from "@mui/base/TextareaAutosize";
-import { Grid } from "@mui/material";
+import {Card, Grid} from "@mui/material";
 
 export const SectionsWrapper = styled("div", {
   display: "flex",
@@ -35,7 +35,7 @@ export const Transcription = styled("p", {
   padding: "1rem",
 });
 
-export const SectionParagraphRow = styled(Grid, {
+export const SectionParagraphRow = styled(Grid,{
   marginBottom: "1rem",
   backgroundColor: "#dea27a08",
   borderRadius: "8px",
