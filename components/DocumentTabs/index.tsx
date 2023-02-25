@@ -76,6 +76,7 @@ export default function DocumentTabs() {
       {saveCallback? <Grid direction={"row"}>
         {tabs}
         <Button variant={"contained"} color={"info"} onClick={clickSave}>
+          Save
         </Button>
       </Grid>:tabs}
     </Wrapper>
