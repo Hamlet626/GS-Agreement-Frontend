@@ -2,7 +2,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import pdfDocument from "./pdfDocument";
 import loaderStatus from "./loaderStatus";
 import modal from "./modal";
-import saveButton from "./saveButton";
+import saveSection from "./saveSection";
 
 import { setupListeners } from "@reduxjs/toolkit/query";
 import thunk from "redux-thunk";
@@ -11,7 +11,7 @@ const reducer = combineReducers({
   pdfDocument,
   loaderStatus,
   modal,
-  saveButton
+  saveSection
 });
 const store = configureStore({
   reducer,
