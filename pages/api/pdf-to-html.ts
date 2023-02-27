@@ -48,11 +48,11 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
       });
     }
 
-    res.status(200).json({ sections, pdfParseText });
+    res.status(200).json({ sections });
    
     // Store PDF File in S3 Bucket
     if(process.env.REACT_APP_ENV === 'production'){
-      s3Upload(req.file.path, req.file.originalname);
+      await s3Upload(req.file.path, req.file.originalname);
     }
     unlinkSync(req.file.path);
 
