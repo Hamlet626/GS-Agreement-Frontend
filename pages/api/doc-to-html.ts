@@ -75,7 +75,7 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
 
     // Store Doc File in S3 Bucket
     if(process.env.REACT_APP_ENV === 'production'){
-      s3Upload(req.file.path, req.file.originalname);
+      await s3Upload(req.file.path, req.file.originalname);
     }
     unlinkSync(req.file.path);
   } catch (error: any) {
