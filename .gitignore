@@ -15,6 +15,7 @@
 /.next/
 /out/
 public/uploads/
+tmp/
 
 # production
 /build
