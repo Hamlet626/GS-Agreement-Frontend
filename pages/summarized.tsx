@@ -7,6 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { selectSection, setSections } from "../store/pdfDocument";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
+import { setLoading } from "../store/loaderStatus";
+import { unsetLoading } from "../store/loaderStatus";
+import ButtonSaveAllSections from "../components/ButtonSaveAllSections";
 
 export default function Summarized() {
   const router = useRouter();
@@ -15,13 +18,19 @@ export default function Summarized() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const localStoragePdfSection = localStorage.getItem("pdfSections");
-
-    if (localStoragePdfSection) {
-      dispatch(setSections(JSON.parse(localStoragePdfSection || "")));
-    } else if (!localStoragePdfSection && !pdfSections) {
-      router.push("/");
-    }
+    dispatch(setLoading());
+    Promise.resolve("pdfSections")
+      .then((data) => localStorage.getItem(data))
+      .then((localStoragePdfSection) => {
+        if (localStoragePdfSection) {
+          dispatch(setSections(JSON.parse(localStoragePdfSection || "")));
+        } else if (!localStoragePdfSection && !pdfSections) {
+          router.push("/");
+        }
+      })
+      .then(() => {
+        dispatch(unsetLoading());
+      });
   }, []);
 
   return (
@@ -33,6 +42,7 @@ export default function Summarized() {
       />
       <DocumentTabs />
       <DocumentSummarizer />
+      <ButtonSaveAllSections />
     </Container>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import {
   DocumentTextArea,
   DocumentTitle,
@@ -17,7 +17,7 @@ import axios from "axios";
 import { Box, Grid } from "@mui/material";
 import { mountModal } from "../../store/modal";
 import TextSnippetIcon from "@mui/icons-material/TextSnippet";
-import {addSave, removeSave} from "../../store/saveButton";
+import {pushCallback, removeCallbackById} from "../../store/saveSection";
 
 type ITranscription = {
   transcriptionText: string;
@@ -35,6 +35,8 @@ export default function Section({ title, text, index }: SectionProps) {
   const [editModeOn, setEditModeOn] = useState(false);
   const [newSectionText, setNewSectionText] = useState(text);
   const [transcriptions, setTranscriptions] = useState<ITranscription[]>([]);
+
+  const textEditorRef = useRef(null)
 
   const dispatch = useDispatch();
 
@@ -89,12 +91,12 @@ export default function Section({ title, text, index }: SectionProps) {
   };
 
   const handleSaveChanges = () => {
-    dispatch(removeSave());
+    dispatch(removeCallbackById({ id: index }));
     setEditModeOn(false);
   };
   const handleEdit = () => {
     setEditModeOn(true);
-    dispatch(addSave(()=>setEditModeOn(false)));
+    dispatch(pushCallback({ callback: ()=>setEditModeOn(false), id: index }));
   };
 
   const sectionParagraph = useMemo(() => {
@@ -129,7 +131,7 @@ export default function Section({ title, text, index }: SectionProps) {
         <Grid container rowSpacing={3} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
           <Grid item xs={12} sm={6}>
             <DocumentTextArea
-              disabled={!editModeOn}
+              ref={textEditorRef}
               value={newSectionText}
               onChange={(event) => setNewSectionText(event.target.value)}
               className={textFieldClasses.root}
