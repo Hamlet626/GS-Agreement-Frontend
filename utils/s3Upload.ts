@@ -2,8 +2,8 @@ import { readFileSync } from "fs";
 import AWS from "aws-sdk";
 
 AWS.config.update({
-  accessKeyId: process.env.AWS_ACCESS_ID,
-  secretAccessKey: process.env.AWS_SECRET_KEY,
+  accessKeyId: process.env.NEXT_AWS_ACCESS_ID,
+  secretAccessKey: process.env.NEXT_AWS_SECRET_KEY,
 });
 
 const s3 = new AWS.S3();
@@ -13,7 +13,7 @@ export const s3Upload = (filePath: string, fileOriginalname: string) => {
   const fileContent = readFileSync(filePath);
 
   const params = {
-    Bucket: process.env.AWS_S3_BUCKET || "",
+    Bucket: process.env.NEXT_AWS_S3_BUCKET || "",
     Key: fileName,
     Body: fileContent,
   };
