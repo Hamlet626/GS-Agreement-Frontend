@@ -20,8 +20,8 @@ export const s3Upload = async (filePath: string, fileOriginalname: string) => {
       Key: fileName,
       Body: fileContent,
     });
-    const response = await s3.send(command);
-    console.log(`File uploaded successfully. ${response}`);
+    await s3.send(command);
+    console.log('File uploaded successfully.');
   } catch (err) {
     console.error(`Error uploading file to S3: ${err}`);
   }
