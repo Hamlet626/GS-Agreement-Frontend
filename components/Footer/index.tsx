@@ -51,6 +51,7 @@ export default function AppFooter() {
                 <Link
                   color="inherit"
                   href="https://www.patriotconceptions.com/"
+                  target="_blank"
                 >
                   Patriot Conceptions
                 </Link>{" "}
@@ -114,7 +115,13 @@ export default function AppFooter() {
                 <Link color="secondary">Terms Of Service</Link>
               </Box>
               <Box component="li" sx={{ py: 0.5 }}>
-                <Link color="secondary">Privacy Policy</Link>
+                <Link
+                  color="secondary"
+                  href="https://www.patriotconceptions.com/privacy-notice"
+                  target="_blank"
+                >
+                  Privacy Policy
+                </Link>
               </Box>
             </Box>
           </Grid>

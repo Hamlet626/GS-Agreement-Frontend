@@ -4,6 +4,7 @@ import type { NextApiResponse } from "next";
 import { s3Upload } from "../../utils/s3Upload";
 import mammoth from "mammoth";
 import jsdom from "jsdom";
+import { unlinkSync } from "fs";
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -76,6 +77,7 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
     if(process.env.REACT_APP_ENV === 'production'){
       s3Upload(req.file.path, req.file.originalname);
     }
+    unlinkSync(req.file.path);
   } catch (error: any) {
     res.status(500).end({
       message: "An unexpected error occurred please try again later",
