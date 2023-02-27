@@ -8,7 +8,7 @@ import { unlinkSync } from "fs";
 
 const upload = multer({
   storage: multer.diskStorage({
-    destination: "./public/uploads",
+    destination: "/tmp",
     filename: (req, file, cb) => cb(null, file.originalname),
   }),
 });
