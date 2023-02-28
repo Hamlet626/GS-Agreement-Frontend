@@ -10,7 +10,7 @@ export const SectionsWrapper = styled("div", {
 
 export const DocumentTextArea = styled(TextareaAutosize, {
   width: "100%",
-  fontSize: "16px",
+  fontSize: "14px",
   resize: "none",
   paddingBlock: "1rem",
   padding: "1rem",
@@ -48,4 +48,8 @@ export const Paragraph = styled("p", {
   padding: "1rem",
   overflowWrap: "break-word",
   textAlign: "justify",
+  backgroundColor: '#dea27a50',
+  margin: '0',
+  borderRadius: '8px 0 0 8px',
+  cursor: 'pointer'
 });
