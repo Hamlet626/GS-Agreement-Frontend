@@ -20,7 +20,11 @@ export default function DraftEditor() {
     let sections: ISection[] = [];
 
     editorBlocks.forEach(({ text, inlineStyleRanges }: any) => {
-      if (inlineStyleRanges[0]?.style === "BOLD") {
+      const isBold = inlineStyleRanges?.some(
+        ({ style }: any) => style === "BOLD"
+      );
+
+      if (isBold) {
         sections.push({ title: text, text: "" });
       } else {
         sections.length > 0
@@ -42,7 +46,7 @@ export default function DraftEditor() {
       </Typography>
       <DraftEditorRoot>
         <Editor
-          onChange={({ blocks }) => setEditorBlocks(blocks)}
+          onContentStateChange={({ blocks }) => setEditorBlocks(blocks)}
           toolbar={{
             inline: {
               options: ["bold"],
