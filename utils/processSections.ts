@@ -10,12 +10,15 @@ export const processSections=(titles:string[],rawText:string)=>{
         if(i!==titles.length) {
             let matchIndexes = Array.from(rawText.matchAll(new RegExp(titles[i], 'g'))).map((e) => e.index);
             let title2;
+            ///if(couldn't find original title)
             if (matchIndexes.length === 0) {
                 title2 = titles[i].replace(/^[^a-zA-Z]+|[^a-zA-Z]+$/g, "");
                 matchIndexes = Array.from(rawText.matchAll(new RegExp(title2, 'g'))).map((e) => e.index);
 
                 // console.log(title2);
                 // console.log(matchIndexes);
+
+                ///if(couldn't find title without leading/ending [^a-z])
                 if (matchIndexes.length === 0) {
                     titles.splice(i, 1);
                     continue;
@@ -36,6 +39,7 @@ export const processSections=(titles:string[],rawText:string)=>{
         });
         i++;
     }
+    /// remove first section(which without a title) if it's empty.
     if(!/[a-z]/i.test(sections[0].text))sections.splice(0,1);
     return sections;
 }
