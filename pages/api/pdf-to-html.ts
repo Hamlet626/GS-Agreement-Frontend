@@ -5,6 +5,7 @@ import { processPDF2 } from "../../utils/processPdf";
 import PdfParse from "pdf-parse";
 import { s3Upload } from "../../utils/s3Upload";
 import { unlinkSync } from "fs";
+import {processSections} from "../../utils/processSections";
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -31,22 +32,7 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
     const { titles }: any = await processPDF2(req.file.path);
     const { text: pdfParseText }: any = await PdfParse(req.file.path);
 
-    let sections = [];
-
-    for (let i = 0; i < titles.length; i++) {
-      sections.push({
-        title: titles[i],
-        text: pdfParseText
-          .replaceAll(/ {2}/g, "")
-          .split(titles[i])
-          .pop()
-          .split(titles[i + 1])[0]
-          .replace(/(?<!\n)\n(?!\n)/g, "")
-          .replace(/^\n\n(?!$)/, "")
-          .replace(/\n+$/, ""),
-        transcriptions: [],
-      });
-    }
+    let sections = processSections(titles,pdfParseText);
 
     res.status(200).json({ sections });
    

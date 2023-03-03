@@ -5,6 +5,7 @@ import { s3Upload } from "../../utils/s3Upload";
 import mammoth from "mammoth";
 import jsdom from "jsdom";
 import { unlinkSync } from "fs";
+import {processSections} from "../../utils/processSections";
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -29,47 +30,23 @@ apiRoute.use(upload.single("documentFile"));
 apiRoute.post(async (req: any, res: NextApiResponse) => {
   const { JSDOM } = jsdom;
   try {
-    let titles: any = [];
-    let sections: any = [];
-
-    await mammoth
+    let titles: any = await mammoth
       .convertToHtml({ path: req.file.path })
       .then(function ({ value }) {
         const dom = new JSDOM(value);
         const strongTags: NodeListOf<HTMLElement> =
           dom.window.document.querySelectorAll("strong");
 
-        for (let i = 0; i < strongTags.length; i++) {
-          let title = strongTags[i].textContent?.replaceAll(/\s{3,}/g, "").replace(/\t/g, "");
-          if (title &&
-            title === title?.toUpperCase() &&
-            title.split(" ").filter((titleItem) => titleItem !== "").length < 16 &&
-            /[a-z]/i.test(title)) { 
-              titles.push(title);
-          }
-        }
+        return Array.from(strongTags).map((t)=>t.textContent);
       });
 
-    await mammoth
+    let rawText: any = await mammoth
       .extractRawText({ path: req.file.path })
       .then(function (result) {
-        let text: any = result.value;
-
-        for (let i = 0; i < titles.length; i++) {
-          sections.push({
-            title: titles[i],
-            text: text
-              .replaceAll(/\s{3,}/g, "")
-              .split(titles[i])
-              .pop()
-              .split(titles[i + 1])[0]
-              .replace(/(?<!\n)\n(?!\n)/g, "")
-              .replace(/^\n\n(?!$)/, "")
-              .replace(/\n+$/, ""),
-            transcriptions: [],
-          });
-        }
+        return result.value;
       });
+
+    let sections: any = processSections(titles,rawText);
       
     res.status(200).json({ sections });
 

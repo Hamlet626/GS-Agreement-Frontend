@@ -5,26 +5,28 @@ import * as cheerio from 'cheerio';
 export const getTitlesFromPdf = (c: any) => {
   let titles: string[] = [];
   let text = "";
+  // let i=0;
   c["Pages"].forEach((page: any) => {
     let cache = "";
     page["Texts"].forEach((vt: any) => {
       if (vt["R"][0]["TS"][2] && vt["R"][0]["TS"][1] > 13)
         cache = cache + decodeURIComponent(vt["R"][0]["T"]);
       else if (cache) {
+          // if(cache.includes("ABORTION, MISCARRIAGE, AND SELECTIVE TERMINATION"))console.log(i);
         titles.push(cache);
         cache = "";
       }
+      ///todo: uncomment for showing some pdf titles following Bold texts from previous section,
+      ///todo: which thus would be counted as one LONG title, then wouldn't be verified.
+      // if(i>1019&&i<1022){
+      //     console.log(JSON.stringify(vt["R"][0]));
+      //     console.log(cache);
+      //   }
       text = text + decodeURIComponent(vt["R"][0]["T"]);
+      // i++;
     });
     if (cache) titles.push(cache);
   });
-  titles = titles.filter(
-    (stringLine) =>
-      stringLine.split(" ").filter((stringLineItem) => stringLineItem !== "").length <
-        16 && stringLine === stringLine.toUpperCase() && /[a-z]/i.test(stringLine)
-  );
-
-  titles = titles.map((title) => title.replaceAll("  ", ""));
 
   return { titles };
 };

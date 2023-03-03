@@ -147,6 +147,7 @@ export default function Section({ title, text, index }: SectionProps) {
       ) : (
         <>
           {sectionParagraph?.map((paragraph, index) => (
+              /[a-z]/i.test(paragraph)&&
             <SectionParagraphRow
               container
               rowSpacing={3}
