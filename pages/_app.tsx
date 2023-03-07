@@ -12,6 +12,7 @@ import store from "../store";
 import Loader from "../components/Loader";
 import Modal from "../components/Modal";
 import { materialTheme } from "../config/theme";
+import { Box, Container } from "@mui/material";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -32,9 +33,13 @@ export default function MyApp(props: MyAppProps) {
           <CssBaseline />
           <Loader />
           <Modal />
+          <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh'}}>
           <Header />
-          <Component {...pageProps} />
+          <Container sx={{ my: 3, flexGrow: 1 }}>
+            <Component {...pageProps} />
+          </Container>
           <Footer />
+          </Box>
         </MaterialThemeProvider>
       </CacheProvider>
     </ReduxProvider>
