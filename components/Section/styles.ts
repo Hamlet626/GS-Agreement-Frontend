@@ -41,7 +41,7 @@ export const SectionParagraphRow = styled(Grid, {
   backgroundColor: `${theme.colors.$primaryMain}08`,
   borderRadius: "8px",
   boxSizing: "border-box",
-  border: `1px solid ${theme.colors.$primaryMain}08`,
+  border: `1px solid ${theme.colors.$primaryMain}`,
 });
 
 export const Paragraph = styled("p", {
