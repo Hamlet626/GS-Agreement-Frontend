@@ -13,6 +13,8 @@ import Loader from "../components/Loader";
 import Modal from "../components/Modal";
 import { materialTheme } from "../config/theme";
 import { Box, Container } from "@mui/material";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -25,22 +27,33 @@ export default function MyApp(props: MyAppProps) {
   return (
     <ReduxProvider store={store}>
       <CacheProvider value={emotionCache}>
-        <Head>
-          <title>Patriot Conceptions</title>
-          <meta name="viewport" content="initial-scale=1, width=device-width" />
-        </Head>
-        <MaterialThemeProvider theme={materialTheme}>
-          <CssBaseline />
-          <Loader />
-          <Modal />
-          <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh'}}>
-          <Header />
-          <Container sx={{ my: 3, flexGrow: 1 }}>
-            <Component {...pageProps} />
-          </Container>
-          <Footer />
-          </Box>
-        </MaterialThemeProvider>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <Head>
+            <title>Patriot Conceptions</title>
+            <meta
+              name="viewport"
+              content="initial-scale=1, width=device-width"
+            />
+          </Head>
+          <MaterialThemeProvider theme={materialTheme}>
+            <CssBaseline />
+            <Loader />
+            <Modal />
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                minHeight: "100vh",
+              }}
+            >
+              <Header />
+              <Container sx={{ my: 3, flexGrow: 1 }}>
+                <Component {...pageProps} />
+              </Container>
+              <Footer />
+            </Box>
+          </MaterialThemeProvider>
+        </LocalizationProvider>
       </CacheProvider>
     </ReduxProvider>
   );

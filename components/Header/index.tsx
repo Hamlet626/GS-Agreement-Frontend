@@ -2,17 +2,16 @@ import * as React from "react";
 import { Container } from "@mui/system";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import {
-  AppBar,
-  Box,
-  Button,
-  Toolbar,
-} from "@mui/material";
+import { AppBar, Box, Button, Toolbar } from "@mui/material";
 import { Navbar } from "./styles";
+import { theme } from "../../config/theme";
 
 export default function Header() {
   const router = useRouter();
-  const navItems = [{ text: 'Contract', href: '/'}, { text: 'SBP', href: '/sbp'}]
+  const navItems = [
+    { text: "Contract", href: "/" },
+    { text: "SBP", href: "/sbp" },
+  ];
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -29,8 +28,14 @@ export default function Header() {
             />
             <Navbar>
               {navItems.map(({ text, href }) => (
-                <Button color="secondary" variant="text" key={href} onClick={() => router.push(href)}>{text}</Button>
-            
+                <Button
+                  sx={{ color: theme.colors.$white }}
+                  variant="text"
+                  key={href}
+                  onClick={() => router.push(href)}
+                >
+                  {text}
+                </Button>
               ))}
             </Navbar>
           </Toolbar>
