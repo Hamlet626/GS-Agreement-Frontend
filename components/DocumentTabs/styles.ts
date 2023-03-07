@@ -1,5 +1,7 @@
 import { Box, Tabs } from "@mui/material";
 import { styled } from "@stitches/react";
+import { theme } from "../../config/theme";
+
 
 export const Wrapper = styled(Box, {
   paddingTop: "2rem",
@@ -14,10 +16,10 @@ export const TabsWrapper = styled(Tabs, {
         top: 0,
         right: 0,
         left: 0,
-        backgroundColor: "#ffffff",
+        backgroundColor: theme.colors.$white,
         margin: 0,
         padding: "1rem 0",
-        boxShadow: "0 0 10px #0c273a50",
+        boxShadow: `0 0 10px ${theme.colors.$secondaryMain}50`,
       },
     },
   },

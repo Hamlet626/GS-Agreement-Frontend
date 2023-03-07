@@ -1,16 +1,28 @@
 import { createTheme } from "@mui/material/styles";
 import { red } from "@mui/material/colors";
-const theme = createTheme({
+
+export const theme = {
+  colors: {
+    $primaryMain: "#dea27a",
+    $primaryLight: "#fff7f2",
+    $secondaryMain: "#0c273a",
+    $error: red.A400,
+    $warning: "#664d03",
+    $white: "#ffffff",
+  }
+}
+
+export const materialTheme = createTheme({
   palette: {
     primary: {
-      main: "#dea27a",
-      light: "#fff7f2",
+      main: theme.colors.$primaryMain,
+      light: theme.colors.$primaryLight,
     },
     secondary: {
-      main: "#0c273a",
+      main: theme.colors.$secondaryMain,
     },
     error: {
-      main: red.A400,
+      main: theme.colors.$error,
     },
   },
   components: {
@@ -36,14 +48,14 @@ const theme = createTheme({
         }),
       },
     },
-    MuiButton:{
+    MuiButton: {
       styleOverrides: {
-        root:({ ownerState }) => ({
-          ...(ownerState.variant === 'contained' && {
-                size: 'large'
-              }),
+        root: ({ ownerState }) => ({
+          ...(ownerState.variant === "contained" && {
+            size: "large",
+          }),
         }),
-      }
+      },
     },
     MuiTab: {
       styleOverrides: {
@@ -64,4 +76,3 @@ const theme = createTheme({
     },
   },
 });
-export default theme;

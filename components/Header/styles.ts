@@ -1,7 +1,8 @@
 import { styled } from "@stitches/react";
+import { theme } from "../../config/theme";
 
 export const Wrapper = styled("div", {
-  background: "linear-gradient(135deg, #dea27a, #fff7f2)",
+  background: `linear-gradient(135deg, ${theme.colors.$primaryMain}, ${theme.colors.$primaryLight})`,
   minHeight: "200px",
   padding: "1rem",
   display: "flex",
