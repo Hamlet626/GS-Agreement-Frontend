@@ -1,6 +1,17 @@
-import { Box, Button, Tab, Tabs, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Tab,
+  Tabs,
+  Typography,
+} from "@mui/material";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import CloseIcon from "@mui/icons-material/Close";
+import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading, unsetLoading } from "../store/loaderStatus";
 import axios from "axios";
@@ -100,10 +111,12 @@ export default function Sbp() {
         <>
           <Box
             sx={{
-              my: 6,
+              py: 6,
               display: "flex",
               flexDirection: "column",
               gap: "2rem",
+              maxWidth: "600px",
+              margin: "0 auto",
             }}
           >
             {fields?.map(({ id, label, name }: IField) => (
@@ -142,7 +155,6 @@ export default function Sbp() {
               bgcolor: "background.paper",
               display: "flex",
               gap: "1rem",
-              my: 4,
             }}
           >
             <Tabs
@@ -150,7 +162,7 @@ export default function Sbp() {
               value={paymentTab}
               onChange={handleChangePaymentTab}
               aria-label="Vertical tabs example"
-              sx={{ minWidth: '100px'}}
+              sx={{ minWidth: "100px" }}
             >
               <Tab label="January" />
               <Tab label="February" />
@@ -168,7 +180,47 @@ export default function Sbp() {
                 border: `1px solid ${theme.colors.$primaryMain}`,
               }}
             >
-              <Typography>Item One</Typography>
+              <List dense>
+                <ListItem>
+                  <ListItemIcon>
+                    <InsertInvitationIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      <>
+                        Fee Jan 1st:
+                        <strong style={{ marginLeft: "12px" }}>$90</strong>
+                      </>
+                    }
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <InsertInvitationIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      <>
+                        Fee Jan 15th:
+                        <strong style={{ marginLeft: "12px" }}>$100</strong>
+                      </>
+                    }
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <InsertInvitationIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      <>
+                        Fee Jan 30th:
+                        <strong style={{ marginLeft: "12px" }}>$250</strong>
+                      </>
+                    }
+                  />
+                </ListItem>
+              </List>
             </Box>
           </Box>
         </>
