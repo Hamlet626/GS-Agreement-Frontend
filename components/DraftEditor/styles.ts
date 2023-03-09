@@ -50,7 +50,6 @@ export const Wrapper = styled("div", {
   display: "flex",
   flexDirection: "column",
   gap: "1rem",
-  padding: "2rem 0",
 });
 
 export const ButtonWrapper = styled("div", {

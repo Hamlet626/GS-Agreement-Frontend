@@ -47,7 +47,7 @@ export default function MyApp(props: MyAppProps) {
               }}
             >
               <Header />
-              <Container sx={{ my: 3, flexGrow: 1 }}>
+              <Container sx={{ my: 6, flexGrow: 1 }}>
                 <Component {...pageProps} />
               </Container>
               <Footer />

@@ -10,18 +10,18 @@ export default function Header() {
   const router = useRouter();
   const navItems = [
     { text: "Contract", href: "/" },
-    { text: "SBP", href: "/sbp" },
+    { text: "SBP", href: "/sbp-upload" },
   ];
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box>
       <AppBar position="static">
         <Container>
           <Toolbar disableGutters>
             <Image
               src="/logo.png"
-              width={55}
-              height={55}
+              width={50}
+              height={50}
               alt="Logo"
               onClick={() => router.push("/")}
               style={{ cursor: "pointer" }}
