@@ -3,7 +3,7 @@ import pdfDocument from "./pdfDocument";
 import loaderStatus from "./loaderStatus";
 import modal from "./modal";
 import saveSection from "./saveSection";
-import sbpFields from "./sbpFields";
+import sbpData from "./sbpData";
 
 import { setupListeners } from "@reduxjs/toolkit/query";
 import thunk from "redux-thunk";
@@ -13,7 +13,7 @@ const reducer = combineReducers({
   loaderStatus,
   modal,
   saveSection,
-  sbpFields
+  sbpData
 });
 const store = configureStore({
   reducer,

@@ -10,7 +10,7 @@ export default function Header() {
   const router = useRouter();
   const navItems = [
     { text: "Contract", href: "/" },
-    { text: "SBP", href: "/sbp-upload" },
+    { text: "SBP", href: "/sbp" },
   ];
 
   return (

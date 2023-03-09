@@ -21,17 +21,19 @@ const apiRoute = nextConnect({
   },
 });
 
-apiRoute.use(upload.single("sbpFile"));
+apiRoute.use(upload.single("sbpDocumentFile"));
 
 apiRoute.post(async (req: any, res: NextApiResponse) => {
   try {
     const fakeSbpFields = [
-      { label: "Transfer Date", value: '2022-04-17)', id: '1' },
-      { label: "Contract sign date", value: '2022-04-17)', id: '2' },
-      { label: "Medication date", value: '2022-04-17)', id: '3' },
+      { label: "Transfer Date", name: "transfer_date", id: "1" },
+      { label: "Contract sign date", name: "contract_sign_date", id: "2" },
+      { label: "Medication date", name: "medication_date", id: "3" },
     ];
 
-    res.status(200).json({ sbpFields: fakeSbpFields });
+    res
+      .status(200)
+      .json({ sbpFields: fakeSbpFields, sbpFileName: req.file.originalname });
 
     unlinkSync(req.file.path);
   } catch (error: any) {
