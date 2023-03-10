@@ -5,6 +5,7 @@ import { unlinkSync } from "fs";
 import { openaiConfig } from "../../../utils/openAiConfiguration";
 import openAiChat from "../../../utils/openAiChat";
 import PdfParse from "pdf-parse";
+import {processPDF2} from "../../../utils/processPdf";
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -44,7 +45,7 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
   }
 
   try {
-    const { text: sbpDocText }: any = await PdfParse(req.file.path);
+    const { text: sbpDocText }: any = await processPDF2(req.file.path);//await PdfParse(req.file.path);
 
     const chatInitialData = [
       {
@@ -58,7 +59,7 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
           {"date":["transfer date","xx date"],"boolean":["multiple fetuses"]}
           
           Note that omit keys directly about payment date, instead provide date or boolean that could infer payment occurrence or date or amount.
-          Following document: \${sbpDocText}
+          Following document: ${sbpDocText}
           `,
       },
     ];
