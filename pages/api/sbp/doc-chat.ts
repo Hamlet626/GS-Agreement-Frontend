@@ -51,16 +51,18 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
       {
         role: "system",
         content:
-          "You are a helpful contract document analyst for the file below:",
+          `You are a helpful contract document analyst for the file below:
+          
+          ${sbpDocText}`,
       },
       {
         role: "user",
         content: `Based on the payments criteria, what are premises/prerequisites which could infer or determine amount or date of any payment? Put those premises into "date"/"yes or no(boolean)" two categories and provide me a JSON for those premises information, for example:
-          {"date":["transfer date","xx date"],"boolean":["multiple fetuses"]}
-          
-          Note that omit keys directly about payment date, instead provide date or boolean that could infer payment occurrence or date or amount.
-          Following document: ${sbpDocText}
-          `,
+        {"date":["transfer date","xx date"],"boolean":["multiple fetuses"]}
+        
+        Note that omit keys directly about payment date, instead provide date or boolean that could infer payment occurrence or date or amount.
+        
+        JSON answers:`,
       },
     ];
 

@@ -28,7 +28,7 @@ export const getTitlesFromPdf = (c: any) => {
     if (cache) titles.push(cache);
   });
 
-  return { titles };
+  return { titles,text };
 };
 
 export const processPDF2 = async (filePath: string) => {
