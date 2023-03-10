@@ -7,6 +7,7 @@ import {
   ListItemText,
   Tab,
   Tabs,
+  TextField,
   Typography,
 } from "@mui/material";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
@@ -17,9 +18,10 @@ import { setLoading, unsetLoading } from "../store/loaderStatus";
 import axios from "axios";
 import {
   IField,
+  pushSbpChatChoice,
   resetSbpData,
   selectSbpData,
-  setSbpData,
+  setSbpFileData,
 } from "../store/sbpData";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useState } from "react";
@@ -48,11 +50,12 @@ export default function Sbp() {
       formData.append("sbpDocumentFile", sbpDocumentFile);
 
       await axios
-        .post("/api/generate-sbp-fields", formData, {
+        .post("/api/sbp/doc-chat", formData, {
           headers: { "content-type": "multipart/form-data" },
         })
-        .then(({ data: { sbpFields, sbpFileName } }) => {
-          dispatch(setSbpData({ fields: sbpFields, sbpFileName }));
+        .then(({ data: { sbpFields, sbpFileName, sbpChatChoices } }) => {
+          dispatch(setSbpFileData({ fields: sbpFields, sbpFileName }));
+          dispatch(pushSbpChatChoice({ choices: sbpChatChoices }));
         })
         .then(() => dispatch(unsetLoading()));
     } catch (error) {
@@ -129,7 +132,7 @@ export default function Sbp() {
                   justifyContent: "space-between",
                 }}
               >
-                <Typography variant="h6">{label}</Typography>
+                <Typography>{label}</Typography>
                 <DatePicker
                   onChange={(newValue) =>
                     setFieldsData((prev) => {
@@ -139,6 +142,16 @@ export default function Sbp() {
                 />
               </Box>
             ))}
+            <TextField
+              onChange={({ target: { value } }) =>
+                setFieldsData((prev) => {
+                  return { ...prev, comments: value };
+                })
+              }
+              label="Comments"
+              multiline
+              rows={4}
+            />
             <Button
               variant="contained"
               component="label"
@@ -180,6 +193,9 @@ export default function Sbp() {
                 border: `1px solid ${theme.colors.$primaryMain}`,
               }}
             >
+              <Typography variant="h6">
+                January Fee <strong style={{ marginLeft: "12px" }}>$440</strong>
+              </Typography>
               <List dense>
                 <ListItem>
                   <ListItemIcon>

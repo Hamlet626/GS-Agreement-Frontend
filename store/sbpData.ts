@@ -4,6 +4,7 @@ import { RootState } from "./index";
 interface IsbpData {
   fields: IField[];
   sbpFileName: string;
+  sbpChat: any[];
 }
 
 export type IField = {
@@ -16,24 +17,29 @@ export type IField = {
 const initialState: IsbpData = {
   fields: [],
   sbpFileName: "",
+  sbpChat: [],
 };
 
 export const slice = createSlice({
   name: "sbpData",
   initialState,
   reducers: {
-    setSbpData: (state, { payload: { fields, sbpFileName}}) => {
+    setSbpFileData: (state, { payload: { fields, sbpFileName } }) => {
       state.fields = fields;
       state.sbpFileName = sbpFileName;
     },
+    pushSbpChatChoice: (state, { payload: { choices } }) => {
+      state.sbpChat = [...state.sbpChat, ...choices]
+    },
     resetSbpData: (state) => {
-      state.fields = [];
-      state.sbpFileName = "";
+      state.fields = initialState.fields;
+      state.sbpFileName = initialState.sbpFileName;
+      state.sbpChat = initialState.sbpChat;
     },
   },
 });
 
 export const selectSbpData = (state: RootState) => state.sbpData;
 
-export const { setSbpData, resetSbpData } = slice.actions;
+export const { setSbpFileData, pushSbpChatChoice, resetSbpData } = slice.actions;
 export default slice.reducer;
