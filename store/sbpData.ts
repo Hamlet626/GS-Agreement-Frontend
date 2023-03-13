@@ -2,22 +2,28 @@ import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./index";
 
 interface IsbpData {
-  fields: IField[];
+  fields?: IField;
   sbpFileName: string;
   sbpChat: any[];
+  sbpPaymentTabs: IPayments
 }
 
 export type IField = {
-  label: string;
-  name: string;
-  value?: Date;
-  id: string;
+  date: string[]
+  boolean: string[]
 };
 
+export type IPayments = {
+  certain_payments?: any[]
+  uncertain_payments?: any[]
+};
+
+
 const initialState: IsbpData = {
-  fields: [],
+  fields: undefined,
   sbpFileName: "",
   sbpChat: [],
+  sbpPaymentTabs: {}
 };
 
 export const slice = createSlice({
@@ -28,8 +34,11 @@ export const slice = createSlice({
       state.fields = fields;
       state.sbpFileName = sbpFileName;
     },
-    pushSbpChatChoice: (state, { payload: { choices } }) => {
-      state.sbpChat = [...state.sbpChat, ...choices]
+    pushSbpChatChoice: (state, { payload: { chat } }) => {
+      state.sbpChat = [...state.sbpChat, ...chat]
+    },
+    setSbpPaymentTabs: (state, { payload: { sbpPaymentTabs } }) => {
+      state.sbpPaymentTabs = JSON.parse(sbpPaymentTabs)
     },
     resetSbpData: (state) => {
       state.fields = initialState.fields;
@@ -41,5 +50,5 @@ export const slice = createSlice({
 
 export const selectSbpData = (state: RootState) => state.sbpData;
 
-export const { setSbpFileData, pushSbpChatChoice, resetSbpData } = slice.actions;
+export const { setSbpFileData, pushSbpChatChoice, setSbpPaymentTabs, resetSbpData } = slice.actions;
 export default slice.reducer;

@@ -4,8 +4,8 @@ import type { NextApiResponse } from "next";
 import { unlinkSync } from "fs";
 import { openaiConfig } from "../../../utils/openAiConfiguration";
 import openAiChat from "../../../utils/openAiChat";
-import PdfParse from "pdf-parse";
-import {processPDF2} from "../../../utils/processPdf";
+// import PdfParse from "pdf-parse";
+import { processPDF2 } from "../../../utils/processPdf";
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -27,12 +27,6 @@ const apiRoute = nextConnect({
 
 apiRoute.use(upload.single("sbpDocumentFile"));
 
-const fakeSbpFields = [
-  { label: "Transfer Date", name: "transfer_date", id: "1" },
-  { label: "Contract sign date", name: "contract_sign_date", id: "2" },
-  { label: "Medication date", name: "medication_date", id: "3" },
-];
-
 apiRoute.post(async (req: any, res: NextApiResponse) => {
   if (!openaiConfig.apiKey) {
     res.status(500).json({
@@ -45,14 +39,12 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
   }
 
   try {
-    const { text: sbpDocText }: any = await processPDF2(req.file.path);//await PdfParse(req.file.path);
+    const { text: sbpDocText }: any = await processPDF2(req.file.path); //await PdfParse(req.file.path);
 
     const chatInitialData = [
       {
         role: "system",
-        content:
-          `You are a helpful contract document analyst for the file below:
-          
+        content: `You are a helpful contract document analyst for the file below:
           ${sbpDocText}`,
       },
       {
@@ -66,13 +58,15 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
       },
     ];
 
-    const {chat: sbpChatChoices, lastChoice: sbpLastChoice } = await openAiChat(chatInitialData);
+    const { chat: sbpChatChoices, lastChoice: sbpLastChoice } =
+      await openAiChat(chatInitialData);
+
+      
 
     res.status(200).json({
-      sbpFields: fakeSbpFields,
+      sbpFields: JSON.parse(sbpLastChoice?.content || ''),
       sbpFileName: req.file.originalname,
       sbpChatChoices,
-      sbpLastChoice
     });
 
     unlinkSync(req.file.path);
