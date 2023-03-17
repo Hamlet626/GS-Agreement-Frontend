@@ -6,6 +6,7 @@ interface IsbpData {
   sbpFileName: string;
   sbpChat: any[];
   sbpPaymentTabs: IPayments
+  embeddings: { [content: string]: { embedding: number[]; tokenNum: number } }
 }
 
 export type IField = {
@@ -23,7 +24,8 @@ const initialState: IsbpData = {
   fields: undefined,
   sbpFileName: "",
   sbpChat: [],
-  sbpPaymentTabs: {}
+  sbpPaymentTabs: {},
+  embeddings: {}
 };
 
 export const slice = createSlice({
@@ -33,6 +35,9 @@ export const slice = createSlice({
     setSbpFileData: (state, { payload: { fields, sbpFileName } }) => {
       state.fields = fields;
       state.sbpFileName = sbpFileName;
+    },
+    setSbpEmbeddings: (state, { payload: {  embeddings } }) => {
+      state.embeddings = embeddings;
     },
     pushSbpChatChoice: (state, { payload: { chat } }) => {
       state.sbpChat = [...state.sbpChat, ...chat]

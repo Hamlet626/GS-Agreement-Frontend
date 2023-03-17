@@ -19,7 +19,8 @@ export default async function handler(req: any, res: NextApiResponse) {
     let formOptions = "";
 
     for (const [key, value] of Object.entries(req.body.sbpForm)) {
-      formOptions = formOptions + `${key.replace(/_/g, " ")}: ${value}`;
+      formOptions = formOptions + `${key.replace(/_/g, " ")}: ${value}, 
+      `;
     }
 
     const chat = [

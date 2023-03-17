@@ -24,7 +24,7 @@ export default function SbpUpload() {
       formData.append("sbpDocumentFile", sbpDocumentFile);
 
       await axios
-        .post("/api/sbp/doc-chat", formData, {
+        .post("/api/sbp/sbp-summarized", formData, {
           headers: { "content-type": "multipart/form-data" },
         })
         .then(({ data: { sbpFields, sbpFileName, sbpChatChoices } }) => {

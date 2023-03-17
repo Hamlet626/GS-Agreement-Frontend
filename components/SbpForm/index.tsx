@@ -18,7 +18,6 @@ export default function SbpForm() {
   const dispatch = useDispatch();
 
   const handleSubmitFieldsData = async () => {
-    console.log(fieldsData);
     try {
       dispatch(setLoading());
 

@@ -15,9 +15,6 @@ export const processSections=(titles:string[],rawText:string)=>{
                 title2 = titles[i].replace(/^[^a-zA-Z]+|[^a-zA-Z]+$/g, "");
                 matchIndexes = Array.from(rawText.matchAll(new RegExp(title2, 'g'))).map((e) => e.index);
 
-                // console.log(title2);
-                // console.log(matchIndexes);
-
                 ///if(couldn't find title without leading/ending [^a-z])
                 if (matchIndexes.length === 0) {
                     titles.splice(i, 1);
