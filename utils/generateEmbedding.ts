@@ -55,11 +55,11 @@ async function orderDocumentSectionsByQuerySimilarity(
 ): Promise<any> {
   const queryEmbedding = (await getEmbedding(query)).embedding;
 
-  return Object.entries(contexts)
-    .map(([content, docEmbedding]) => [
+  return contexts
+    .map((docEmbedding) => [
       vectorSimilarity(queryEmbedding, docEmbedding.embedding),
       docEmbedding.tokenNum,
-      content,
+      docEmbedding.text,
     ])
     .sort(
       ([similarityA], [similarityB]) =>
@@ -86,6 +86,6 @@ export async function constructPrompt(
 
     chosenSections.push(SEPARATOR + content.replace(/\n/g, " "));
   }
-
+  
   return chosenSections;
 }
