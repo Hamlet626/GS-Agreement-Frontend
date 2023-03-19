@@ -15,8 +15,8 @@ export type IField = {
 };
 
 export type IPayments = {
-  certain_payments?: any[]
-  uncertain_payments?: any[]
+  certain_payments?: any;
+  uncertain_payments?: any;
 };
 
 

@@ -66,6 +66,7 @@ export const materialTheme = createTheme({
             fontSize: "0.75rem",
             fontWeight: 600,
             margin: "0 1px",
+            textTransform: "none",
             "&:focus, &:active": {
               backgroundColor: theme.palette.primary.main,
               color: theme.palette.primary.light,
