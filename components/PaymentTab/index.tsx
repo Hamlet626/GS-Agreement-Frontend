@@ -24,8 +24,10 @@ export default function PaymentTab() {
     []
   );
 
-  const handleChangePaymentTab = (event: React.SyntheticEvent) => {
-    setPaymentTab(event.target.innerText);
+  const handleChangePaymentTab = ({ target }: any) => {
+    if(target.innerText){
+      setPaymentTab(target.innerText);
+    }
   };
 
   useEffect(() => {

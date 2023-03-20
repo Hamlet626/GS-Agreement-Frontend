@@ -55,5 +55,5 @@ export const slice = createSlice({
 
 export const selectSbpData = (state: RootState) => state.sbpData;
 
-export const { setSbpFileData, pushSbpChatChoice, setSbpPaymentTabs, resetSbpData } = slice.actions;
+export const { setSbpFileData, pushSbpChatChoice, setSbpPaymentTabs, setSbpEmbeddings, resetSbpData } = slice.actions;
 export default slice.reducer;

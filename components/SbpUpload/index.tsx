@@ -6,6 +6,7 @@ import {
   pushSbpChatChoice,
   resetSbpData,
   selectSbpData,
+  setSbpEmbeddings,
   setSbpFileData,
 } from "../../store/sbpData";
 import { setLoading, unsetLoading } from "../../store/loaderStatus";
@@ -27,9 +28,10 @@ export default function SbpUpload() {
         .post("/api/sbp/sbp-summarized", formData, {
           headers: { "content-type": "multipart/form-data" },
         })
-        .then(({ data: { sbpFields, sbpFileName, sbpChatChoices } }) => {
+        .then(({ data: { sbpFields, sbpFileName, sbpChatChoices, embeddings } }) => {
           dispatch(setSbpFileData({ fields: sbpFields, sbpFileName }));
           dispatch(pushSbpChatChoice({ chat: sbpChatChoices }));
+          dispatch(setSbpEmbeddings({ embeddings }));
         })
         .then(() => dispatch(unsetLoading()));
     } catch (error) {
