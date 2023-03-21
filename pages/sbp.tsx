@@ -2,8 +2,13 @@ import { Box } from "@mui/material";
 import PaymentTab from "../components/PaymentTab";
 import SbpUpload from "../components/SbpUpload";
 import SbpForm from "../components/SbpForm";
+import { useSelector } from "react-redux";
+import { selectSbpData } from "../store/sbpData";
 
 export default function Sbp() {
+  const {
+    sbpPaymentTabs: { certain_payments },
+  } = useSelector(selectSbpData);
 
   return (
     <Box
@@ -15,7 +20,7 @@ export default function Sbp() {
     >
       <SbpUpload />
       <SbpForm />
-      <PaymentTab />
+      {certain_payments && <PaymentTab />}
     </Box>
   );
 }

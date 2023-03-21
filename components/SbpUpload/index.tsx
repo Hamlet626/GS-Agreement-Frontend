@@ -27,7 +27,7 @@ export default function SbpUpload() {
         .post("/api/sbp/sbp-summarized", formData, {
           headers: { "content-type": "multipart/form-data" },
         })
-        .then(({ data: { sbpFields, sbpFileName, sbpChatChoices, embeddings } }) => {
+        .then(({ data: { sbpFields, sbpFileName, embeddings } }) => {
           dispatch(setSbpFileData({ fields: sbpFields, sbpFileName }));
           dispatch(setSbpEmbeddings({ embeddings }));
         })

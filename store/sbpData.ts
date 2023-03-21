@@ -37,7 +37,7 @@ export const slice = createSlice({
       state.embeddings = embeddings;
     },
     setSbpPaymentTabs: (state, { payload: { sbpPaymentTabs } }) => {
-      state.sbpPaymentTabs = JSON.parse(sbpPaymentTabs);
+      state.sbpPaymentTabs = sbpPaymentTabs;
     },
     resetSbpData: (state) => {
       state.fields = initialState.fields;

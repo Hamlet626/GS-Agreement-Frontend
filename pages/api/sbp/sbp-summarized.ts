@@ -71,13 +71,12 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
       },
     ];
 
-    const { chat: sbpChatChoices, lastChoice: sbpLastChoice } =
+    const { lastChoice: sbpLastChoice } =
       await openAiChat(chatInitialData);
 
     res.status(200).json({
       sbpFields: JSON.parse(sbpLastChoice?.content || ""),
       sbpFileName: req.file.originalname,
-      sbpChatChoices,
       sbpDocPrompt,
       embeddings,
     });

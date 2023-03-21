@@ -19,10 +19,7 @@ export default function PaymentTab() {
     sbpPaymentTabs: { certain_payments },
   } = useSelector(selectSbpData);
 
-  const [paymentTab, setPaymentTab] = useState<string>("");
-  const [certainPaymentsMonths, setCertainPaymentsMonths] = useState<string[]>(
-    []
-  );
+  const [paymentTab, setPaymentTab] = useState<string>('');
 
   const handleChangePaymentTab = ({ target }: any) => {
     if (target.innerText) {
@@ -30,16 +27,21 @@ export default function PaymentTab() {
     }
   };
 
+  const certainPaymentsMonths = useMemo(() => {
+    if(certain_payments){
+      return  Object.keys(certain_payments)
+    }
+  }, [certain_payments])
+
   useEffect(() => {
     if (certain_payments) {
-      setPaymentTab(Object?.keys(certain_payments)[0]);
-      setCertainPaymentsMonths(Object.keys(certain_payments));
+      setPaymentTab(Object.keys(certain_payments)[0]);
     }
   }, [certain_payments]);
 
   const monthFeeTotal = useMemo(() => {
     if (certain_payments && paymentTab) {
-      return certain_payments[paymentTab]?.reduce(
+      return certain_payments[paymentTab].reduce(
         (accumulator: number, currentValue: any) =>
           accumulator + currentValue.amount,
         0
@@ -70,7 +72,7 @@ export default function PaymentTab() {
                 aria-label="Vertical tabs example"
                 sx={{ minWidth: "100px" }}
               >
-                {certainPaymentsMonths.map((month) => (
+                {certainPaymentsMonths?.map((month) => (
                   <Tab key={month} label={month} value={month} />
                 ))}
               </Tabs>
