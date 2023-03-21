@@ -4,15 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { DatePicker } from "@mui/x-date-pickers";
-import {
-  selectSbpData,
-  setSbpPaymentTabs,
-} from "../../store/sbpData";
+import { selectSbpData, setSbpPaymentTabs } from "../../store/sbpData";
 import { setLoading, unsetLoading } from "../../store/loaderStatus";
 import axios from "axios";
 
 export default function SbpForm() {
-  const { fields } = useSelector(selectSbpData);
+  const { fields, embeddings, sbpPaymentTabs } = useSelector(selectSbpData);
   const [fieldsData, setFieldsData] = useState<any>({});
   const dispatch = useDispatch();
 
@@ -20,7 +17,7 @@ export default function SbpForm() {
     try {
       dispatch(setLoading());
       await axios
-        .post("/api/sbp/doc-form", {  sbpForm: fieldsData })
+        .post("/api/sbp/doc-form", { sbpForm: fieldsData, embeddings })
         .then(({ data: { sbpPaymentTabs } }) => {
           dispatch(setSbpPaymentTabs({ sbpPaymentTabs }));
         })
@@ -30,7 +27,7 @@ export default function SbpForm() {
       dispatch(unsetLoading());
     }
   };
-  
+
   return fields ? (
     <>
       {fields?.date.length > 0 && (
@@ -85,16 +82,18 @@ export default function SbpForm() {
         multiline
         rows={4}
       />
-      <Box justifyContent="flex-end">
-        <Button
-          variant="contained"
-          component="label"
-          color="info"
-          onClick={handleSubmitFieldsData}
-        >
-          Submit
-        </Button>
-      </Box>
+      {!sbpPaymentTabs.certain_payments && (
+        <Box justifyContent="flex-end">
+          <Button
+            variant="contained"
+            component="label"
+            color="info"
+            onClick={handleSubmitFieldsData}
+          >
+            Submit
+          </Button>
+        </Box>
+      )}
     </>
   ) : (
     <></>

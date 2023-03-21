@@ -1,8 +1,8 @@
 import type { NextApiResponse } from "next";
 import { openaiConfig } from "../../../utils/openAiConfiguration";
 import openAiChat from "../../../utils/openAiChat";
-
-
+// @ts-ignore
+import { constructPrompt } from "openai_embedding";
 
 export default async function handler(req: any, res: NextApiResponse) {
   if (!openaiConfig.apiKey) {
@@ -19,25 +19,30 @@ export default async function handler(req: any, res: NextApiResponse) {
     let formOptions = "";
 
     for (const [key, value] of Object.entries(req.body.sbpForm)) {
-      formOptions = formOptions + `${key.replace(/_/g, " ")}: ${value}, 
+      formOptions =
+        formOptions +
+        `${key.replace(/_/g, " ")}: ${value}, 
       `;
     }
+
+    const sbpDocPrompt = await constructPrompt(
+      "Estimate and list all single payments (with type and amount, with date on that month if could be estimated) the surrogate would get on the following 12 month separated into months in json format as the example below:",
+      req.body.embeddings
+    );
 
     const chat = [
       {
         role: "system",
         content: `You are a helpful contract document analyst for the file below:
-        `,
-        // Prompt Embedding
-        // estimate and list all single payments (with type and amount, with date on that month if could be estimated) the surrogate would get on the following 12 month separated into months in json format as the example below:
-        // Json Example:
+        ${sbpDocPrompt.join("\n ")}`,
       },
       {
         role: "user",
         content: `Given the document, and these information by surrogate:
 
         ${formOptions}
-        estimate and list all single payments (with type and amount, with date on that month if could be estimated) the surrogate would get on the following 12 month separated into months in json format as the example below:
+
+        Estimate and list all single payments (with type and amount, with date on that month if could be estimated) the surrogate would get on the following 12 month separated into months in json format as the example below:
         Json Example:
         {"certain_payments":["Jan 2022":[{"date":1,"type":"fee1","amount":10.00},{"type":"fee2","amount":10.00}],"Feb 2022":[{"date":12,"type":"fee2","amount":11.00}],...],"uncertain_payments":[{"type":"fee4","amount":100.00}],}
         
@@ -57,4 +62,4 @@ export default async function handler(req: any, res: NextApiResponse) {
       message: "An unexpected error occurred please try again later",
     });
   }
-};
+}

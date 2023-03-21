@@ -4,8 +4,8 @@ import type { NextApiResponse } from "next";
 import { unlinkSync } from "fs";
 import { openaiConfig } from "../../../utils/openAiConfiguration";
 import openAiChat from "../../../utils/openAiChat";
-  // @ts-ignore
-import { intoParagraphs,  computeDocEmbeddings, constructPrompt, } from "openai_embedding";
+// @ts-ignore
+import { intoParagraphs, computeDocEmbeddings, constructPrompt } from "openai_embedding";
 import PdfParse from "pdf-parse";
 
 const upload = multer({
@@ -41,10 +41,13 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
 
   try {
     const { text: sbpDocTextPrompt }: any = await PdfParse(req.file.path);
-  
-    const paragraphsArray: string[] = await intoParagraphs({ raw: sbpDocTextPrompt, maxtoken: 400 });
 
-    const embeddings = await computeDocEmbeddings(paragraphsArray)
+    const paragraphsArray: string[] = await intoParagraphs({
+      raw: sbpDocTextPrompt,
+      maxtoken: 400,
+    });
+
+    const embeddings = await computeDocEmbeddings(paragraphsArray);
 
     const sbpDocPrompt = await constructPrompt(
       "Based on the payments criteria, what are premises/prerequisites which could infer or determine amount or date of any payment?",
@@ -55,8 +58,7 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
       {
         role: "system",
         content: `You are a helpful contract document analyst for the file below:
-          ${sbpDocPrompt.join('\n ')}`,
-          // Prompt Embedding 
+          ${sbpDocPrompt.join("\n ")}`,
       },
       {
         role: "user",
@@ -71,6 +73,7 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
 
     const { chat: sbpChatChoices, lastChoice: sbpLastChoice } =
       await openAiChat(chatInitialData);
+
     res.status(200).json({
       sbpFields: JSON.parse(sbpLastChoice?.content || ""),
       sbpFileName: req.file.originalname,
