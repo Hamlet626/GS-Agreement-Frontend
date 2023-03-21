@@ -51,7 +51,8 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
 
     const sbpDocPrompt = await constructPrompt(
       "Based on the payments criteria, what are premises/prerequisites which could infer or determine amount or date of any payment?",
-      embeddings
+      embeddings,
+        3000
     );
 
     const chatInitialData = [

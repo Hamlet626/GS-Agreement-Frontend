@@ -23,7 +23,8 @@ export default async function handler(req: any, res: NextApiResponse) {
 
     const sbpDocPrompt = await constructPrompt(
       "Estimate and list all single payments (with type and amount, with date on that month if could be estimated) the surrogate would get on the following 12 month separated into months in json format as the example below:",
-      req.body.embeddings
+      req.body.embeddings,
+        2000
     );
 
     const chat = [
@@ -47,7 +48,7 @@ export default async function handler(req: any, res: NextApiResponse) {
     ];
 
     const { lastChoice: sbpLastChoice } =
-      await openAiChat(chat);
+      await openAiChat(chat,1500);
 
     res.status(200).json({
       sbpPaymentTabs: JSON.parse(sbpLastChoice?.content || ""),
