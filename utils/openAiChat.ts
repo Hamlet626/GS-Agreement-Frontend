@@ -11,7 +11,7 @@ export default async function openAiChat(chat: any[],max_tokens: number = 600) {
     presence_penalty: 0,
   });
 
-  console.log(chatCompletion.data.choices[0].message);
+  // console.log(chatCompletion.data.choices[0].message);
 
   return {
     chat: [...chat, chatCompletion.data.choices[0].message],
