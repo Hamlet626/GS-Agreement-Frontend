@@ -35,7 +35,7 @@
     "next": "13.0.5",
     "next-connect": "^0.13.0",
     "openai": "^3.2.1",
-    "openai_embedding": "github:Patriot-Conceptions/openai_embedding#main",
+    "openai_embedding": "^1.0.3",
     "pdf-parse": "^1.1.1",
     "pdf.js-extract": "^0.2.1",
     "pdf2json": "^3.0.2",
