@@ -5,14 +5,8 @@ import { unlinkSync } from "fs";
 import { openaiConfig } from "../../../utils/openAiConfiguration";
 import openAiChat from "../../../utils/openAiChat";
   // @ts-ignore
-// import {  computeDocEmbeddings, constructPrompt } from "openai_embedding";
+import { intoParagraphs,  computeDocEmbeddings, constructPrompt, } from "openai_embedding";
 import PdfParse from "pdf-parse";
-import {
-  computeDocEmbeddings,
-  constructPrompt,
-} from "../../../utils/generateEmbedding";
-
-
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -47,9 +41,10 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
 
   try {
     const { text: sbpDocTextPrompt }: any = await PdfParse(req.file.path);
+  
+    const paragraphsArray: string[] = await intoParagraphs({ raw: sbpDocTextPrompt, maxtoken: 400 });
 
-    const embeddings = await computeDocEmbeddings(sbpDocTextPrompt)
-
+    const embeddings = await computeDocEmbeddings(paragraphsArray)
 
     const sbpDocPrompt = await constructPrompt(
       "Based on the payments criteria, what are premises/prerequisites which could infer or determine amount or date of any payment?",

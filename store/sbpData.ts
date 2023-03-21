@@ -4,13 +4,13 @@ import { RootState } from "./index";
 interface IsbpData {
   fields?: IField;
   sbpFileName: string;
-  sbpPaymentTabs: IPayments
-  embeddings: { [content: string]: { embedding: number[]; tokenNum: number } }
+  sbpPaymentTabs: IPayments;
+  embeddings: { [content: string]: { embedding: number[]; tokenNum: number } };
 }
 
 export type IField = {
-  date: string[]
-  boolean: string[]
+  date: string[];
+  boolean: string[];
 };
 
 export type IPayments = {
@@ -18,12 +18,11 @@ export type IPayments = {
   uncertain_payments?: any;
 };
 
-
 const initialState: IsbpData = {
   fields: undefined,
   sbpFileName: "",
   sbpPaymentTabs: {},
-  embeddings: {}
+  embeddings: {},
 };
 
 export const slice = createSlice({
@@ -34,19 +33,27 @@ export const slice = createSlice({
       state.fields = fields;
       state.sbpFileName = sbpFileName;
     },
-    setSbpEmbeddings: (state, { payload: {  embeddings } }) => {
+    setSbpEmbeddings: (state, { payload: { embeddings } }) => {
       state.embeddings = embeddings;
     },
     setSbpPaymentTabs: (state, { payload: { sbpPaymentTabs } }) => {
-      state.sbpPaymentTabs = JSON.parse(sbpPaymentTabs)
+      state.sbpPaymentTabs = JSON.parse(sbpPaymentTabs);
     },
     resetSbpData: (state) => {
-      state = { ...initialState}
+      state.fields = initialState.fields;
+      state.sbpFileName = initialState.sbpFileName;
+      state.sbpPaymentTabs = initialState.sbpPaymentTabs;
+      state.embeddings = initialState.embeddings;
     },
   },
 });
 
 export const selectSbpData = (state: RootState) => state.sbpData;
 
-export const { setSbpFileData, setSbpPaymentTabs, setSbpEmbeddings, resetSbpData } = slice.actions;
+export const {
+  setSbpFileData,
+  setSbpPaymentTabs,
+  setSbpEmbeddings,
+  resetSbpData,
+} = slice.actions;
 export default slice.reducer;

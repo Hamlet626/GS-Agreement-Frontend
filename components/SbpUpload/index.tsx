@@ -3,7 +3,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Box, Button, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  pushSbpChatChoice,
   resetSbpData,
   selectSbpData,
   setSbpEmbeddings,
@@ -30,7 +29,6 @@ export default function SbpUpload() {
         })
         .then(({ data: { sbpFields, sbpFileName, sbpChatChoices, embeddings } }) => {
           dispatch(setSbpFileData({ fields: sbpFields, sbpFileName }));
-          dispatch(pushSbpChatChoice({ chat: sbpChatChoices }));
           dispatch(setSbpEmbeddings({ embeddings }));
         })
         .then(() => dispatch(unsetLoading()));
