@@ -4,12 +4,15 @@ import type { NextApiResponse } from "next";
 import { unlinkSync } from "fs";
 import { openaiConfig } from "../../../utils/openAiConfiguration";
 import openAiChat from "../../../utils/openAiChat";
+  // @ts-ignore
+// import {  computeDocEmbeddings, constructPrompt } from "openai_embedding";
 import PdfParse from "pdf-parse";
 import {
   computeDocEmbeddings,
   constructPrompt,
 } from "../../../utils/generateEmbedding";
-// import generateEmbedding from "../../../utils/generateEmbedding";
+
+
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -45,8 +48,6 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
   try {
     const { text: sbpDocTextPrompt }: any = await PdfParse(req.file.path);
 
-    // const embeddings = await computeDocEmbeddings(sbpDocTextPrompt);
-
     const embeddings = await computeDocEmbeddings(sbpDocTextPrompt)
 
 
@@ -60,6 +61,7 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
         role: "system",
         content: `You are a helpful contract document analyst for the file below:
           ${sbpDocPrompt.join('\n ')}`,
+          // Prompt Embedding 
       },
       {
         role: "user",

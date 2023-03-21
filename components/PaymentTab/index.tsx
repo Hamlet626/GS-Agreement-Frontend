@@ -25,7 +25,7 @@ export default function PaymentTab() {
   );
 
   const handleChangePaymentTab = ({ target }: any) => {
-    if(target.innerText){
+    if (target.innerText) {
       setPaymentTab(target.innerText);
     }
   };
@@ -38,78 +38,84 @@ export default function PaymentTab() {
   }, [certain_payments]);
 
   const monthFeeTotal = useMemo(() => {
-    return certain_payments[paymentTab]?.reduce(
-      (accumulator: number, currentValue: any) =>
-        accumulator + currentValue.amount,
-      0
-    );
+    if (certain_payments && paymentTab) {
+      return certain_payments[paymentTab]?.reduce(
+        (accumulator: number, currentValue: any) =>
+          accumulator + currentValue.amount,
+        0
+      );
+    }
   }, [certain_payments, paymentTab]);
 
   return (
     <>
-      <Typography variant="h2" align="center" sx={{ py: 2 }}>
-        Certain Payments
-      </Typography>
-      <Box
-        sx={{
-          flexGrow: 1,
-          bgcolor: "background.paper",
-          display: "flex",
-          gap: "1rem",
-        }}
-      >
-        {certain_payments && (
-          <>
-            <Tabs
-              orientation="vertical"
-              value={paymentTab}
-              onChange={handleChangePaymentTab}
-              aria-label="Vertical tabs example"
-              sx={{ minWidth: "100px" }}
-            >
-              {certainPaymentsMonths.map((month) => (
-                <Tab key={month} label={month} value={month} />
-              ))}
-            </Tabs>
+      {certain_payments && (
+        <>
+          <Typography variant="h2" align="center" sx={{ py: 2 }}>
+            Certain Payments
+          </Typography>
+          <Box
+            sx={{
+              flexGrow: 1,
+              bgcolor: "background.paper",
+              display: "flex",
+              gap: "1rem",
+            }}
+          >
+            <>
+              <Tabs
+                orientation="vertical"
+                value={paymentTab}
+                onChange={handleChangePaymentTab}
+                aria-label="Vertical tabs example"
+                sx={{ minWidth: "100px" }}
+              >
+                {certainPaymentsMonths.map((month) => (
+                  <Tab key={month} label={month} value={month} />
+                ))}
+              </Tabs>
 
-            <Box
-              sx={{
-                p: 3,
-                width: "100%",
-                borderRadius: "8px",
-                border: `1px solid ${theme.colors.$primaryMain}`,
-              }}
-            >
-              <Typography variant="h6">
-                {paymentTab} Fee{" "}
-                <strong style={{ marginLeft: "12px" }}>${monthFeeTotal}</strong>
-              </Typography>
-              <List dense>
-                {Boolean(certain_payments && paymentTab) &&
-                  certain_payments[paymentTab].map(
-                    (payment: any, index: number) => (
-                      <ListItem key={index}>
-                        <ListItemIcon>
-                          <InsertInvitationIcon />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary={
-                            <>
-                              Fee {paymentTab} - {payment.date}:
-                              <strong style={{ marginLeft: "12px" }}>
-                                ${payment.amount}
-                              </strong>
-                            </>
-                          }
-                        />
-                      </ListItem>
-                    )
-                  )}
-              </List>
-            </Box>
-          </>
-        )}
-      </Box>
+              <Box
+                sx={{
+                  p: 3,
+                  width: "100%",
+                  borderRadius: "8px",
+                  border: `1px solid ${theme.colors.$primaryMain}`,
+                }}
+              >
+                <Typography variant="h6">
+                  {paymentTab} Fee{" "}
+                  <strong style={{ marginLeft: "12px" }}>
+                    ${monthFeeTotal}
+                  </strong>
+                </Typography>
+                <List dense>
+                  {Boolean(certain_payments && paymentTab) &&
+                    certain_payments[paymentTab].map(
+                      (payment: any, index: number) => (
+                        <ListItem key={index}>
+                          <ListItemIcon>
+                            <InsertInvitationIcon />
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={
+                              <>
+                                Fee {paymentTab} - {payment.date}:
+                                <strong style={{ marginLeft: "12px" }}>
+                                  ${payment.amount}
+                                </strong>
+                              </>
+                            }
+                          />
+                        </ListItem>
+                      )
+                    )}
+                </List>
+              </Box>
+            </>
+          </Box>
+        </>
+      )}
     </>
   );
 }

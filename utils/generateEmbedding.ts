@@ -1,4 +1,6 @@
 import { openai } from "./openAiConfiguration";
+  // @ts-ignore
+  import { intoParagraphs } from "openai_embedding";
 
 const SEPARATOR = "\n* ";
 const separatorLength = 4;
@@ -24,17 +26,17 @@ async function getEmbedding(text: string): Promise<IEmbeddingData> {
   };
 }
 
-function separateTextInParagraphsArray(bigString: string) {
-  const separator = "\n\n";
-  const regex = new RegExp(`(${separator})+`);
-  const nastyArray = bigString.split(regex);
-  return nastyArray.filter((string) => !string.startsWith("\n\n"));
-}
+// function separateTextInParagraphsArray(bigString: string) {
+//   const separator = "\n\n";
+//   const regex = new RegExp(`(${separator})+`);
+//   const nastyArray = bigString.split(regex);
+//   return nastyArray.filter((string) => !string.startsWith("\n\n"));
+// }
 
 export async function computeDocEmbeddings(
   bigString: string
 ): Promise<IEmbeddingData[]> {
-  const paragraphsArray = separateTextInParagraphsArray(bigString);
+  const paragraphsArray: string[] = await intoParagraphs({ raw: bigString, maxtoken: 400 });
 
   const embeddingsDB = await Promise.all(
     paragraphsArray.map(async (string) => {

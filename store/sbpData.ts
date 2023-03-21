@@ -4,7 +4,6 @@ import { RootState } from "./index";
 interface IsbpData {
   fields?: IField;
   sbpFileName: string;
-  sbpChat: any[];
   sbpPaymentTabs: IPayments
   embeddings: { [content: string]: { embedding: number[]; tokenNum: number } }
 }
@@ -23,7 +22,6 @@ export type IPayments = {
 const initialState: IsbpData = {
   fields: undefined,
   sbpFileName: "",
-  sbpChat: [],
   sbpPaymentTabs: {},
   embeddings: {}
 };
@@ -39,21 +37,16 @@ export const slice = createSlice({
     setSbpEmbeddings: (state, { payload: {  embeddings } }) => {
       state.embeddings = embeddings;
     },
-    pushSbpChatChoice: (state, { payload: { chat } }) => {
-      state.sbpChat = [...state.sbpChat, ...chat]
-    },
     setSbpPaymentTabs: (state, { payload: { sbpPaymentTabs } }) => {
       state.sbpPaymentTabs = JSON.parse(sbpPaymentTabs)
     },
     resetSbpData: (state) => {
-      state.fields = initialState.fields;
-      state.sbpFileName = initialState.sbpFileName;
-      state.sbpChat = initialState.sbpChat;
+      state = { ...initialState}
     },
   },
 });
 
 export const selectSbpData = (state: RootState) => state.sbpData;
 
-export const { setSbpFileData, pushSbpChatChoice, setSbpPaymentTabs, setSbpEmbeddings, resetSbpData } = slice.actions;
+export const { setSbpFileData, setSbpPaymentTabs, setSbpEmbeddings, resetSbpData } = slice.actions;
 export default slice.reducer;

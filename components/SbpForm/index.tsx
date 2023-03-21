@@ -5,7 +5,6 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { DatePicker } from "@mui/x-date-pickers";
 import {
-  pushSbpChatChoice,
   selectSbpData,
   setSbpPaymentTabs,
 } from "../../store/sbpData";
@@ -13,19 +12,17 @@ import { setLoading, unsetLoading } from "../../store/loaderStatus";
 import axios from "axios";
 
 export default function SbpForm() {
-  const { fields, sbpChat } = useSelector(selectSbpData);
+  const { fields } = useSelector(selectSbpData);
   const [fieldsData, setFieldsData] = useState<any>({});
   const dispatch = useDispatch();
 
   const handleSubmitFieldsData = async () => {
     try {
       dispatch(setLoading());
-
       await axios
-        .post("/api/sbp/doc-form", { chat: sbpChat, sbpForm: fieldsData })
-        .then(({ data: { sbpPaymentTabs, sbpChatChoices } }) => {
+        .post("/api/sbp/doc-form", {  sbpForm: fieldsData })
+        .then(({ data: { sbpPaymentTabs } }) => {
           dispatch(setSbpPaymentTabs({ sbpPaymentTabs }));
-          dispatch(pushSbpChatChoice({ choices: sbpChatChoices }));
         })
         .then(() => dispatch(unsetLoading()));
     } catch (error) {

@@ -24,13 +24,19 @@ export default async function handler(req: any, res: NextApiResponse) {
     }
 
     const chat = [
-      ...req.body.chat,
+      {
+        role: "system",
+        content: `You are a helpful contract document analyst for the file below:
+        `,
+        // Prompt Embedding
+        // estimate and list all single payments (with type and amount, with date on that month if could be estimated) the surrogate would get on the following 12 month separated into months in json format as the example below:
+        // Json Example:
+      },
       {
         role: "user",
         content: `Given the document, and these information by surrogate:
 
         ${formOptions}
-        
         estimate and list all single payments (with type and amount, with date on that month if could be estimated) the surrogate would get on the following 12 month separated into months in json format as the example below:
         Json Example:
         {"certain_payments":["Jan 2022":[{"date":1,"type":"fee1","amount":10.00},{"type":"fee2","amount":10.00}],"Feb 2022":[{"date":12,"type":"fee2","amount":11.00}],...],"uncertain_payments":[{"type":"fee4","amount":100.00}],}
