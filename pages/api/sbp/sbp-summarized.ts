@@ -1,12 +1,13 @@
 import nextConnect from "next-connect";
 import multer from "multer";
-import type { NextApiResponse } from "next";
-import { unlinkSync } from "fs";
-import { openaiConfig } from "../../../utils/openAiConfiguration";
+import type {NextApiResponse} from "next";
+import {unlinkSync} from "fs";
+import {openaiConfig} from "../../../utils/openAiConfiguration";
 import openAiChat from "../../../utils/openAiChat";
 // @ts-ignore
-import { intoParagraphs, computeDocEmbeddings, constructPrompt } from "openai_embedding";
+import {computeDocEmbeddings, constructPrompt, intoParagraphs} from "openai_embedding";
 import PdfParse from "pdf-parse";
+import simplifyDates from "../../../utils/simplifyDates";
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -75,8 +76,20 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
     const { lastChoice: sbpLastChoice } =
       await openAiChat(chatInitialData);
 
+    let sbpFields = JSON.parse(sbpLastChoice?.content || "");
+    let dateResponse=(await openAiChat([
+      { role: "system", content: `You are an intellectual assistant. Given a set of dates:
+            ${JSON.stringify(sbpFields.date)}` },
+      { role: "user", content: `What are the dates that could be inferred or simplified into one single date?
+            For example:
+            Set of dates: [“3 days after happening of event a”, “5 weeks of event a”, “next month after 20 weeks of event a”, “next month of event b”]
+            Response: {“date of event a”:[“3 days after happening of event a”, “5 weeks of event a”, “next month after 20 weeks of event a”]}
+            JSON response ONLY:` },
+    ],1000)).lastChoice;
+    sbpFields.date=Object.keys(JSON.parse(dateResponse?.content || ""));
+
     res.status(200).json({
-      sbpFields: JSON.parse(sbpLastChoice?.content || ""),
+      sbpFields: sbpFields,
       sbpFileName: req.file.originalname,
       sbpDocPrompt,
       embeddings,
