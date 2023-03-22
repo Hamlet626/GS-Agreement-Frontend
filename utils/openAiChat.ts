@@ -18,4 +18,3 @@ export default async function openAiChat(chat: any[],max_tokens: number = 600) {
     lastChoice: chatCompletion.data.choices[0].message,
   };
 }
-
