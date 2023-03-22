@@ -9,7 +9,7 @@ import { setLoading, unsetLoading } from "../../store/loaderStatus";
 import axios from "axios";
 
 export default function SbpForm() {
-  const { fields, embeddings, sbpPaymentTabs } = useSelector(selectSbpData);
+  const { fields, embeddings } = useSelector(selectSbpData);
   const [fieldsData, setFieldsData] = useState<any>({});
   const dispatch = useDispatch();
 
@@ -82,7 +82,6 @@ export default function SbpForm() {
         multiline
         rows={4}
       />
-      {!sbpPaymentTabs.certain_payments && (
         <Box justifyContent="flex-end">
           <Button
             variant="contained"
@@ -93,7 +92,6 @@ export default function SbpForm() {
             Submit
           </Button>
         </Box>
-      )}
     </>
   ) : (
     <></>
