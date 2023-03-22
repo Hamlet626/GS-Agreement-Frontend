@@ -49,6 +49,18 @@ export default function PaymentTab() {
     }
   }, [certain_payments, paymentTab]);
 
+  const totalFee = useMemo(() => {
+    let total = 0;
+    if (certain_payments && certainPaymentsMonths) {
+      certainPaymentsMonths.forEach((month: string) =>
+        certain_payments[month].forEach(
+          ({ amount }: { amount: number }) => (total = amount + total)
+        )
+      );
+    }
+    return total;
+  }, [certain_payments, certainPaymentsMonths]);
+
   return (
     <>
       {certain_payments && (
@@ -56,6 +68,18 @@ export default function PaymentTab() {
           <Typography variant="h2" align="center" sx={{ py: 2 }}>
             Certain Payments
           </Typography>
+          <Box justifyContent="flex-end">
+            <Typography variant="h5" align="right">
+              Total Payments:
+            </Typography>
+            <Typography variant="h5" align="right" sx={{ pb: 2 }}>
+              {totalFee.toLocaleString("en-US", {
+                style: "currency",
+                currency: "USD",
+              })}
+            </Typography>
+          </Box>
+
           <Box
             sx={{
               flexGrow: 1,
@@ -88,7 +112,10 @@ export default function PaymentTab() {
                 <Typography variant="h6">
                   {paymentTab} Fee{" "}
                   <strong style={{ marginLeft: "12px" }}>
-                    ${monthFeeTotal}
+                    {monthFeeTotal.toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    })}
                   </strong>
                 </Typography>
                 <List dense>
@@ -97,7 +124,7 @@ export default function PaymentTab() {
                       (payment: any, index: number) =>
                         Number(payment.amount) > 0 ? (
                           <ListItem key={index}>
-                            <ListItemIcon >
+                            <ListItemIcon>
                               <InsertInvitationIcon />
                             </ListItemIcon>
                             <ListItemText
@@ -105,7 +132,10 @@ export default function PaymentTab() {
                                 <>
                                   Fee {paymentTab} - {payment.date}:
                                   <strong style={{ marginLeft: "12px" }}>
-                                    ${payment.amount}
+                                    {payment.amount.toLocaleString("en-US", {
+                                      style: "currency",
+                                      currency: "USD",
+                                    })}
                                   </strong>
                                 </>
                               }

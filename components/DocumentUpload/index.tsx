@@ -42,8 +42,8 @@ export default function DocumentUpload() {
 
   return (
     <Wrapper>
-      <Typography variant="h2" align="center">
-        Upload a Document
+      <Typography variant="h5" align="center">
+        Or
       </Typography>
       <Button
         variant="contained"

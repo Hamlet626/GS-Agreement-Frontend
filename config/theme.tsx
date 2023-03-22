@@ -9,8 +9,8 @@ export const theme = {
     $error: red.A400,
     $warning: "#664d03",
     $white: "#ffffff",
-  }
-}
+  },
+};
 
 export const materialTheme = createTheme({
   palette: {
@@ -34,15 +34,17 @@ export const materialTheme = createTheme({
             fontSize: "25px",
             lineHeight: "1.167",
             textTransform: "uppercase",
-            textAlign: "center",
             marginBottom: "0.35em",
 
             "&::after": {
               content: "''",
               width: "55px",
               display: "block",
-              margin: "8px auto 0",
               borderBottom: `6px solid ${theme.palette.primary.main}`,
+              margin: "8px auto 0",
+              ...(ownerState.align === "left" && {
+                margin: "8px 0",
+              }),
             },
           }),
         }),

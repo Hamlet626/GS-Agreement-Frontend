@@ -41,7 +41,7 @@ export default function DraftEditor() {
 
   return (
     <Wrapper>
-      <Typography variant="h2" align="center">
+      <Typography variant="h2" align="left">
         Write a Document
       </Typography>
       <DraftEditorRoot>
