@@ -1,12 +1,20 @@
 import nextConnect from "next-connect";
 import multer from "multer";
-import type {NextApiResponse} from "next";
-import {unlinkSync} from "fs";
-import {openaiConfig} from "../../../utils/openAiConfiguration";
+import type { NextApiResponse } from "next";
+import { readFileSync, unlinkSync } from "fs";
+import { openaiConfig } from "../../../utils/openAiConfiguration";
 import openAiChat from "../../../utils/openAiChat";
 // @ts-ignore
-import {computeDocEmbeddings, constructPrompt, intoParagraphs} from "openai_embedding";
+import { computeDocEmbeddings, constructPrompt } from "openai_embedding";
 import PdfParse from "pdf-parse";
+import { textToParagraphArray } from "../../../utils/textToParagraphArray";
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};
+
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -29,6 +37,9 @@ const apiRoute = nextConnect({
 apiRoute.use(upload.single("sbpDocumentFile"));
 
 apiRoute.post(async (req: any, res: NextApiResponse) => {
+  
+  const file = readFileSync(req.file.path);
+
   if (!openaiConfig.apiKey) {
     res.status(500).json({
       error: {
@@ -40,19 +51,17 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
   }
 
   try {
-    const { text: sbpDocTextPrompt }: any = await PdfParse(req.file.path);
 
-    const paragraphsArray: string[] = await intoParagraphs({
-      raw: sbpDocTextPrompt,
-      maxtoken: 400,
-    });
+    const { text: sbpDocTextPrompt }: any = await PdfParse(file);
+
+    const paragraphsArray: string[] = textToParagraphArray(sbpDocTextPrompt);
 
     const embeddings = await computeDocEmbeddings(paragraphsArray);
 
     const sbpDocPrompt = await constructPrompt(
       "Based on the payments criteria, what are premises/prerequisites which could infer or determine amount or date of any payment?",
       embeddings,
-        3000
+      3000
     );
 
     const chatInitialData = [
@@ -72,10 +81,10 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
       },
     ];
 
-    const { lastChoice: sbpLastChoice } =
-      await openAiChat(chatInitialData);
+    const { lastChoice: sbpLastChoice } = await openAiChat(chatInitialData);
 
     let sbpFields = JSON.parse(sbpLastChoice?.content || "");
+
     const dateResponse=(await openAiChat([
       { role: "system", content: `You are an intellectual assistant. Given a set of dates:
             ${JSON.stringify(sbpFields.date)}` },
@@ -95,8 +104,9 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
       embeddings,
       dateMergeList
     });
-
-    unlinkSync(req.file.path);
+    
+    unlinkSync(file);
+    return
   } catch (error: any) {
     res.status(500).end({
       message: "An unexpected error occurred please try again later",
@@ -106,8 +116,3 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
 
 export default apiRoute;
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};

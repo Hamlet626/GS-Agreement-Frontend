@@ -1,4 +1,4 @@
-import { Box, Button, Grid, TextField } from "@mui/material";
+import { Box, Button, Grid, TextField, FormLabel } from "@mui/material";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Checkbox from "@mui/material/Checkbox";
@@ -9,7 +9,7 @@ import { setLoading, unsetLoading } from "../../store/loaderStatus";
 import axios from "axios";
 
 export default function SbpForm() {
-  const { fields, embeddings, sbpPaymentTabs, dateMergeList} = useSelector(selectSbpData);
+  const { fields, embeddings, dateMergeList} = useSelector(selectSbpData);
   const [fieldsData, setFieldsData] = useState<any>({});
   const dispatch = useDispatch();
 
@@ -30,6 +30,9 @@ export default function SbpForm() {
 
   return fields ? (
     <>
+      <FormLabel component="legend" sx={{ margin: '1.5rem 0 0.75rem 0'}}>
+        Provide some info to help us estimate the payments:
+      </FormLabel>
       {fields?.date.length > 0 && (
         <Grid container spacing={2}>
           {fields?.date?.map((date: string) => (
@@ -72,6 +75,9 @@ export default function SbpForm() {
             label={boolean.charAt(0).toUpperCase() + boolean.slice(1)}
           />
         ))}
+      <FormLabel component="legend" sx={{ margin: '1.5rem 0 0.75rem 0'}}>
+        Put here additional data you want to provide:
+      </FormLabel>
       <TextField
         onChange={({ target: { value } }) =>
           setFieldsData((prev: any) => {
@@ -82,18 +88,16 @@ export default function SbpForm() {
         multiline
         rows={4}
       />
-      {!sbpPaymentTabs.certain_payments && (
-        <Box justifyContent="flex-end">
-          <Button
-            variant="contained"
-            component="label"
-            color="info"
-            onClick={handleSubmitFieldsData}
-          >
-            Submit
-          </Button>
-        </Box>
-      )}
+      <Box justifyContent="flex-end">
+        <Button
+          variant="contained"
+          component="label"
+          color="info"
+          onClick={handleSubmitFieldsData}
+        >
+          Submit
+        </Button>
+      </Box>
     </>
   ) : (
     <></>

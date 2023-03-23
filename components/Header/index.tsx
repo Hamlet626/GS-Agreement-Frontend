@@ -2,8 +2,8 @@ import * as React from "react";
 import { Container } from "@mui/system";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { AppBar, Box, Button, Toolbar } from "@mui/material";
-import { Navbar } from "./styles";
+import { AppBar, Box, Toolbar } from "@mui/material";
+import { Button, Navbar } from "./styles";
 import { theme } from "../../config/theme";
 
 export default function Header() {
@@ -33,6 +33,7 @@ export default function Header() {
                   variant="text"
                   key={href}
                   onClick={() => router.push(href)}
+                  actived={router.pathname === href}
                 >
                   {text}
                 </Button>
