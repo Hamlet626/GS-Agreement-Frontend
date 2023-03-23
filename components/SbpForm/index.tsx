@@ -9,7 +9,7 @@ import { setLoading, unsetLoading } from "../../store/loaderStatus";
 import axios from "axios";
 
 export default function SbpForm() {
-  const { fields, embeddings, sbpPaymentTabs } = useSelector(selectSbpData);
+  const { fields, embeddings, sbpPaymentTabs, dateMergeList} = useSelector(selectSbpData);
   const [fieldsData, setFieldsData] = useState<any>({});
   const dispatch = useDispatch();
 
@@ -17,7 +17,7 @@ export default function SbpForm() {
     try {
       dispatch(setLoading());
       await axios
-        .post("/api/sbp/doc-form", { sbpForm: fieldsData, embeddings })
+        .post("/api/sbp/doc-form", { sbpForm: fieldsData, embeddings, dateMergeList })
         .then(({ data: { sbpPaymentTabs } }) => {
           dispatch(setSbpPaymentTabs({ sbpPaymentTabs }));
         })

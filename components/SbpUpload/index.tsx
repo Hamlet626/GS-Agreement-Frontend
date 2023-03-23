@@ -4,7 +4,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   resetSbpData,
-  selectSbpData,
+  selectSbpData, setSbpDateMergeList,
   setSbpEmbeddings,
   setSbpFileData,
 } from "../../store/sbpData";
@@ -27,9 +27,10 @@ export default function SbpUpload() {
         .post("/api/sbp/sbp-summarized", formData, {
           headers: { "content-type": "multipart/form-data" },
         })
-        .then(({ data: { sbpFields, sbpFileName, embeddings } }) => {
+        .then(({ data: { sbpFields, sbpFileName, embeddings, dateMergeList } }) => {
           dispatch(setSbpFileData({ fields: sbpFields, sbpFileName }));
           dispatch(setSbpEmbeddings({ embeddings }));
+          dispatch(setSbpDateMergeList({dateMergeList}))
         })
         .then(() => dispatch(unsetLoading()));
     } catch (error) {

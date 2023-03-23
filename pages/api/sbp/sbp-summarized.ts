@@ -7,7 +7,6 @@ import openAiChat from "../../../utils/openAiChat";
 // @ts-ignore
 import {computeDocEmbeddings, constructPrompt, intoParagraphs} from "openai_embedding";
 import PdfParse from "pdf-parse";
-import simplifyDates from "../../../utils/simplifyDates";
 
 const upload = multer({
   storage: multer.diskStorage({
@@ -77,7 +76,7 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
       await openAiChat(chatInitialData);
 
     let sbpFields = JSON.parse(sbpLastChoice?.content || "");
-    let dateResponse=(await openAiChat([
+    const dateResponse=(await openAiChat([
       { role: "system", content: `You are an intellectual assistant. Given a set of dates:
             ${JSON.stringify(sbpFields.date)}` },
       { role: "user", content: `What are the dates that could be inferred or simplified into one single date?
@@ -86,13 +85,15 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
             Response: {“date of event a”:[“3 days after happening of event a”, “5 weeks of event a”, “next month after 20 weeks of event a”]}
             JSON response ONLY:` },
     ],1000)).lastChoice;
-    sbpFields.date=Object.keys(JSON.parse(dateResponse?.content || ""));
+    const dateMergeList=JSON.parse(dateResponse?.content || "");
+    sbpFields.date=Object.keys(dateMergeList);
 
     res.status(200).json({
       sbpFields: sbpFields,
       sbpFileName: req.file.originalname,
       sbpDocPrompt,
       embeddings,
+      dateMergeList
     });
 
     unlinkSync(req.file.path);

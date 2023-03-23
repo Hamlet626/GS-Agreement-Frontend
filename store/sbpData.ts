@@ -6,6 +6,7 @@ interface IsbpData {
   sbpFileName: string;
   sbpPaymentTabs: IPayments;
   embeddings: { [content: string]: { embedding: number[]; tokenNum: number } };
+  dateMergeList?:{[date:string]:string[]};
 }
 
 export type IField = {
@@ -36,6 +37,9 @@ export const slice = createSlice({
     setSbpEmbeddings: (state, { payload: { embeddings } }) => {
       state.embeddings = embeddings;
     },
+    setSbpDateMergeList: (state, { payload: { dateMergeList } }) => {
+      state.dateMergeList = dateMergeList;
+    },
     setSbpPaymentTabs: (state, { payload: { sbpPaymentTabs } }) => {
       state.sbpPaymentTabs = sbpPaymentTabs;
     },
@@ -54,6 +58,7 @@ export const {
   setSbpFileData,
   setSbpPaymentTabs,
   setSbpEmbeddings,
+  setSbpDateMergeList,
   resetSbpData,
 } = slice.actions;
 export default slice.reducer;
