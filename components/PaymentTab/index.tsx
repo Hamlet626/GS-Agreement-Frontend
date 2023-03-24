@@ -112,7 +112,7 @@ export default function PaymentTab() {
                 <Typography variant="h6">
                   {paymentTab} Fee{" "}
                   <strong style={{ marginLeft: "12px" }}>
-                    {monthFeeTotal.toLocaleString("en-US", {
+                    {monthFeeTotal?.toLocaleString("en-US", {
                       style: "currency",
                       currency: "USD",
                     })}
@@ -132,7 +132,7 @@ export default function PaymentTab() {
                                 <>
                                   Fee {paymentTab} - {payment.date}:
                                   <strong style={{ marginLeft: "12px" }}>
-                                    {payment.amount.toLocaleString("en-US", {
+                                    {payment.amount?.toLocaleString("en-US", {
                                       style: "currency",
                                       currency: "USD",
                                     })}
