@@ -6,9 +6,7 @@ import { useSelector } from "react-redux";
 import { selectSbpData } from "../store/sbpData";
 
 export default function Sbp() {
-  const {
-    sbpPaymentTabs: { certain_payments },
-  } = useSelector(selectSbpData);
+  const { sbpPaymentTabs } = useSelector(selectSbpData);
 
   return (
     <Box
@@ -20,7 +18,7 @@ export default function Sbp() {
     >
       <SbpUpload />
       <SbpForm />
-      {certain_payments && <PaymentTab />}
+      {sbpPaymentTabs && sbpPaymentTabs?.certain_payments && <PaymentTab />}
     </Box>
   );
 }

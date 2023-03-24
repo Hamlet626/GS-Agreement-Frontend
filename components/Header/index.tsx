@@ -33,7 +33,10 @@ export default function Header() {
                   variant="text"
                   key={href}
                   onClick={() => router.push(href)}
-                  actived={router.pathname === href}
+                  actived={
+                    router.pathname === href ||
+                    (router.pathname === "/summarized" && href === "/")
+                  }
                 >
                   {text}
                 </Button>

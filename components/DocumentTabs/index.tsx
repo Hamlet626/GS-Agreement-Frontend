@@ -63,7 +63,7 @@ export default function DocumentTabs() {
 
   return (
     <Wrapper ref={tabRef}>
-      <Typography variant="h2">Select a Section</Typography>
+      <Typography variant="h2" align="center">Select a Section</Typography>
       {tabs}
     </Wrapper>
   );

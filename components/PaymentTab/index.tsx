@@ -16,7 +16,7 @@ import { useSelector } from "react-redux";
 
 export default function PaymentTab() {
   const {
-    sbpPaymentTabs: { certain_payments },
+    sbpPaymentTabs: { certain_payments, uncertain_payments },
   } = useSelector(selectSbpData);
 
   const [paymentTab, setPaymentTab] = useState<string>("");
@@ -53,13 +53,18 @@ export default function PaymentTab() {
     let total = 0;
     if (certain_payments && certainPaymentsMonths) {
       certainPaymentsMonths.forEach((month: string) =>
-        certain_payments[month].forEach(
+        certain_payments[month]?.forEach(
           ({ amount }: { amount: number }) => (total = amount + total)
         )
       );
     }
+    if(uncertain_payments?.length > 0) {
+      uncertain_payments.forEach(
+        ({ amount }: { amount: number }) => (total = amount + total)
+      )
+    }
     return total;
-  }, [certain_payments, certainPaymentsMonths]);
+  }, [certain_payments, certainPaymentsMonths, uncertain_payments]);
 
   return (
     <>

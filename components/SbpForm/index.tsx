@@ -19,7 +19,7 @@ export default function SbpForm() {
       await axios
         .post("/api/sbp/doc-form", { sbpForm: fieldsData, embeddings,fileText, dateMergeList })
         .then(({ data: { sbpPaymentTabs } }) => {
-          dispatch(setSbpPaymentTabs({ sbpPaymentTabs }));
+          dispatch(setSbpPaymentTabs({ sbpPaymentTabs: JSON.parse(sbpPaymentTabs) }));
         })
         .then(() => dispatch(unsetLoading()));
     } catch (error) {

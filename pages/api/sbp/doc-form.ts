@@ -1,11 +1,11 @@
-import type { NextApiResponse } from "next";
+import type { NextApiRequest, NextApiResponse } from "next";
 import { openaiConfig } from "../../../utils/openAiConfiguration";
 import openAiChat from "../../../utils/openAiChat";
 // @ts-ignore
-import { constructPrompt } from "openai_embedding";
+// import { constructPrompt } from "openai_embedding";
 import {unmergeDates} from "../../../utils/datesFolder";
 
-export default async function handler(req: any, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (!openaiConfig.apiKey) {
     res.status(500).json({
       error: {
@@ -39,13 +39,15 @@ export default async function handler(req: any, res: NextApiResponse) {
         JSON answers:`,
       },
     ];
+    // Note: Ensure that the 'date' and 'type' fields in the JSON are formatted as strings, while the 'amount' field should always be in numerical format.
+
 
     const { lastChoice: sbpLastChoice } =
       await openAiChat(chat,1200);
 
     console.log(sbpLastChoice?.content);
     res.status(200).json({
-      sbpPaymentTabs: JSON.parse(sbpLastChoice?.content || ""),
+      sbpPaymentTabs: sbpLastChoice?.content.replace(/TBD/g, '0'),
     });
   } catch (error: any) {
     res.status(500).end({
