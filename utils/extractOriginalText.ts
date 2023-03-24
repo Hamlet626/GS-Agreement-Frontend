@@ -3,6 +3,11 @@ import {encoding_for_model} from "@dqbd/tiktoken";
 import { computeDocEmbeddings, constructPrompt } from "openai_embedding";
 
 const maxTokens = 4096-1200-360;
+
+const reference_embed_text = `All fees categories with detail are listed below:
+Compensation Fee:
+Surrogate will be paid $999/month after being pregnant.`;
+
 export async function extractOriginalText(file: string) {
     const encoding = encoding_for_model("gpt-3.5-turbo");
 
@@ -20,6 +25,6 @@ export async function extractOriginalText(file: string) {
     }
 
     let embeddings= await computeDocEmbeddings(sections);
-    let choices= await constructPrompt("list every fee detail including date, amount, and dependency in different situation",embeddings,99999000);
+    let choices= await constructPrompt(reference_embed_text,embeddings,99999000);
     return choices[0];
 }
