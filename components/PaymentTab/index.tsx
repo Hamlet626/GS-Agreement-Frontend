@@ -8,6 +8,13 @@ import {
   ListItemText,
   Tab,
   Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
 } from "@mui/material";
 import { theme } from "../../config/theme";
 import InsertInvitationIcon from "@mui/icons-material/InsertInvitation";
@@ -40,7 +47,7 @@ export default function PaymentTab() {
   }, [certain_payments]);
 
   const monthFeeTotal = useMemo(() => {
-    if (certain_payments && paymentTab) {
+    if (certain_payments && paymentTab && certain_payments[paymentTab]) {
       return certain_payments[paymentTab].reduce(
         (accumulator: number, currentValue: any) =>
           accumulator + currentValue.amount,
@@ -49,7 +56,7 @@ export default function PaymentTab() {
     }
   }, [certain_payments, paymentTab]);
 
-  const totalFee = useMemo(() => {
+  const certainPaymentsTotalFee = useMemo(() => {
     let total = 0;
     if (certain_payments && certainPaymentsMonths) {
       certainPaymentsMonths.forEach((month: string) =>
@@ -58,31 +65,39 @@ export default function PaymentTab() {
         )
       );
     }
-    if(uncertain_payments?.length > 0) {
-      uncertain_payments.forEach(
-        ({ amount }: { amount: number }) => (total = amount + total)
-      )
-    }
+
     return total;
-  }, [certain_payments, certainPaymentsMonths, uncertain_payments]);
+  }, [certain_payments, certainPaymentsMonths]);
+
+  const uncertainPaymentsTotalFee = useMemo(() => {
+    if (uncertain_payments?.length > 0) {
+      return uncertain_payments.reduce(
+        (accumulator: number, currentValue: any) =>
+          accumulator + currentValue.amount,
+        0
+      );
+    }
+  }, [uncertain_payments]);
 
   return (
     <>
       {certain_payments && (
         <>
-          <Typography variant="h2" align="center" sx={{ py: 2 }}>
-            Certain Payments
-          </Typography>
-          <Box justifyContent="flex-end">
-            <Typography variant="h5" align="right">
-              Total Payments:
+          <Box style={{ display: "flex", justifyContent: "space-between", flexWrap: 'wrap' }}>
+            <Typography variant="h2" align="left" sx={{ py: 2 }}>
+              Certain Payments
             </Typography>
-            <Typography variant="h5" align="right" sx={{ pb: 2 }}>
-              {totalFee.toLocaleString("en-US", {
-                style: "currency",
-                currency: "USD",
-              })}
-            </Typography>
+            <Box justifyContent="flex-end">
+              <Typography variant="h5" align="right">
+                Total Month Payments:
+              </Typography>
+              <Typography variant="h5" align="right" sx={{ pb: 2 }}>
+                {certainPaymentsTotalFee.toLocaleString("en-US", {
+                  style: "currency",
+                  currency: "USD",
+                })}
+              </Typography>
+            </Box>
           </Box>
 
           <Box
@@ -154,6 +169,56 @@ export default function PaymentTab() {
               </Box>
             </>
           </Box>
+        </>
+      )}
+      {uncertain_payments?.length > 0 && (
+        <>
+          <Typography variant="h2" align="left" sx={{ pt: 4 }}>
+            Total Payments
+          </Typography>
+          <TableContainer  component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Payment type</TableCell>
+                  <TableCell>Amount</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableRow>
+                  <TableCell>All month payments</TableCell>
+                  <TableCell>
+                    {certainPaymentsTotalFee.toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    })}
+                  </TableCell>
+                </TableRow>
+                {uncertain_payments.map((payment: any, index: number) => (
+                  <TableRow key={index}>
+                    <TableCell>{payment.type}</TableCell>
+                    <TableCell>
+                      {payment.amount?.toLocaleString("en-US", {
+                        style: "currency",
+                        currency: "USD",
+                      })}
+                    </TableCell>
+                  </TableRow>
+                ))}
+                <TableRow>
+                  <TableCell sx={{ fontWeight: 'bolder'}}>Total</TableCell>
+                  <TableCell sx={{ fontWeight: 'bolder'}}>
+                    {(
+                      certainPaymentsTotalFee + uncertainPaymentsTotalFee
+                    ).toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "USD",
+                    })}
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
         </>
       )}
     </>
