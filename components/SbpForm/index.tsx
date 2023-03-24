@@ -9,7 +9,7 @@ import { setLoading, unsetLoading } from "../../store/loaderStatus";
 import axios from "axios";
 
 export default function SbpForm() {
-  const { fields, embeddings, dateMergeList} = useSelector(selectSbpData);
+  const { fields, embeddings,fileText, dateMergeList} = useSelector(selectSbpData);
   const [fieldsData, setFieldsData] = useState<any>({});
   const dispatch = useDispatch();
 
@@ -17,7 +17,7 @@ export default function SbpForm() {
     try {
       dispatch(setLoading());
       await axios
-        .post("/api/sbp/doc-form", { sbpForm: fieldsData, embeddings, dateMergeList })
+        .post("/api/sbp/doc-form", { sbpForm: fieldsData, embeddings,fileText, dateMergeList })
         .then(({ data: { sbpPaymentTabs } }) => {
           dispatch(setSbpPaymentTabs({ sbpPaymentTabs }));
         })
@@ -44,7 +44,8 @@ export default function SbpForm() {
                   setFieldsData((prev: any) => {
                     return {
                       ...prev,
-                      [date.replace(/ /g, "_")]: new Date(
+                      [date//.replace(/ /g, "_")
+                          ]: new Date(
                         newValue
                       ).toDateString(),
                     };
@@ -61,12 +62,14 @@ export default function SbpForm() {
             key={boolean}
             control={
               <Checkbox
-                checked={fieldsData[boolean.replace(/ /g, "_")] === "Yes"}
+                checked={fieldsData[boolean//.replace(/ /g, "_")
+                    ] === "Yes"}
                 onChange={({ target: { checked } }) =>
                   setFieldsData((prev: any) => {
                     return {
                       ...prev,
-                      [boolean.replace(/ /g, "_")]: checked ? "Yes" : "No",
+                      [boolean//.replace(/ /g, "_")
+                          ]: checked ? "Yes" : "No",
                     };
                   })
                 }

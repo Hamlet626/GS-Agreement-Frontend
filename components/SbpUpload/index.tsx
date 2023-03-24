@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   resetSbpData,
   selectSbpData, setSbpDateMergeList,
-  setSbpEmbeddings,
   setSbpFileData,
 } from "../../store/sbpData";
 import { setLoading, unsetLoading } from "../../store/loaderStatus";
@@ -27,9 +26,9 @@ export default function SbpUpload() {
         .post("/api/sbp/sbp-summarized", formData, {
           headers: { "content-type": "multipart/form-data" },
         })
-        .then(({ data: { sbpFields, sbpFileName, embeddings, dateMergeList } }) => {
-          dispatch(setSbpFileData({ fields: sbpFields, sbpFileName }));
-          dispatch(setSbpEmbeddings({ embeddings }));
+        .then(({ data: { sbpFields, sbpFileName, embeddings, dateMergeList, fileText } }) => {
+          dispatch(setSbpFileData({ fields: sbpFields, sbpFileName, fileText, embeddings}));
+          // dispatch(setSbpEmbeddings({ embeddings }));
           dispatch(setSbpDateMergeList({dateMergeList}))
         })
         .then(() => dispatch(unsetLoading()));

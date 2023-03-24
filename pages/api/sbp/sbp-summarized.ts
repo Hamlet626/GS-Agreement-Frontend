@@ -6,8 +6,9 @@ import { openaiConfig } from "../../../utils/openAiConfiguration";
 import openAiChat from "../../../utils/openAiChat";
 // @ts-ignore
 import { computeDocEmbeddings, constructPrompt } from "openai_embedding";
-import PdfParse from "pdf-parse";
-import { textToParagraphArray } from "../../../utils/textToParagraphArray";
+import {processPDF2} from "../../../utils/processPdf";
+import {extractOriginalText} from "../../../utils/extractOriginalText";
+import {mergeDates} from "../../../utils/datesFolder";
 
 export const config = {
   api: {
@@ -37,8 +38,6 @@ const apiRoute = nextConnect({
 apiRoute.use(upload.single("sbpDocumentFile"));
 
 apiRoute.post(async (req: any, res: NextApiResponse) => {
-  
-  const file = readFileSync(req.file.path);
 
   if (!openaiConfig.apiKey) {
     res.status(500).json({
@@ -52,60 +51,44 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
 
   try {
 
-    const { text: sbpDocTextPrompt }: any = await PdfParse(file);
+    // const file = readFileSync(req.file.path);
+    // const { text: fileText }: any = await PdfParse(file);
+    ///replace new line with space
+    // const fileText2 = fileText.substring(0, fileText.length*5/6).replace(/(\r\n|\n|\r)/gm, " ");
 
-    const paragraphsArray: string[] = textToParagraphArray(sbpDocTextPrompt);
-
-    const embeddings = await computeDocEmbeddings(paragraphsArray);
-
-    const sbpDocPrompt = await constructPrompt(
-      "Based on the payments criteria, what are premises/prerequisites which could infer or determine amount or date of any payment?",
-      embeddings,
-      3000
-    );
+    const fileText=await extractOriginalText((await processPDF2(req.file.path)).text);
 
     const chatInitialData = [
       {
         role: "system",
         content: `You are a helpful contract document analyst for the file below:
-          ${sbpDocPrompt.join("\n ")}`,
+            ${fileText}`,
       },
       {
         role: "user",
         content: `Based on the payments criteria, what are premises/prerequisites which could infer or determine amount or date of any payment? Put those premises into "date"/"yes or no(boolean)" two categories and provide me a JSON for those premises information, for example:
-        {"date":["transfer date","xx date"],"boolean":["multiple fetuses"]}
+            {"date":["transfer date","xx date"],"boolean":["multiple fetuses"]}
 
-        Note that omit keys directly about payment date, instead provide date or boolean that could infer payment occurrence or date or amount.
+            Note that omit keys directly about payment date, instead provide date or boolean that could infer payment occurrence or date or amount.
 
-        JSON answers:`,
+            JSON answers:`,
       },
     ];
 
-    const { lastChoice: sbpLastChoice } = await openAiChat(chatInitialData);
+    const { lastChoice: sbpLastChoice } = await openAiChat(chatInitialData,400);
 
-    let sbpFields = JSON.parse(sbpLastChoice?.content || "");
+    let rawSbpFields = JSON.parse(sbpLastChoice?.content || "");
 
-    const dateResponse=(await openAiChat([
-      { role: "system", content: `You are an intellectual assistant. Given a set of dates:
-            ${JSON.stringify(sbpFields.date)}` },
-      { role: "user", content: `What are the dates that could be inferred or simplified into one single date?
-            For example:
-            Set of dates: [“3 days after happening of event a”, “5 weeks of event a”, “next month after 20 weeks of event a”, “next month of event b”]
-            Response: {“date of event a”:[“3 days after happening of event a”, “5 weeks of event a”, “next month after 20 weeks of event a”]}
-            JSON response ONLY:` },
-    ],1000)).lastChoice;
-    const dateMergeList=JSON.parse(dateResponse?.content || "");
-    sbpFields.date=Object.keys(dateMergeList);
+    let {sbpFields,dateMergeList} = await mergeDates(rawSbpFields);
 
     res.status(200).json({
-      sbpFields: sbpFields,
       sbpFileName: req.file.originalname,
-      sbpDocPrompt,
-      embeddings,
+      fileText,
+      sbpFields,
       dateMergeList
     });
     
-    unlinkSync(file);
+    // unlinkSync(file);
     return
   } catch (error: any) {
     res.status(500).end({
