@@ -28,10 +28,10 @@ export const getTitlesFromPdf = (c: any) => {
     if (cache) titles.push(cache);
   });
 
-  return { titles };
+  return { titles,text };
 };
 
-export const processPDF2 = async (filePath: string) => {
+export const processPDF2 = async (filePath: string):Promise<{ titles: string[],text:string }> => {
   return await new Promise((resolve, reject) => {
     const pdfParser = new PDFParser();
     pdfParser.on("pdfParser_dataError", (errData: any) =>

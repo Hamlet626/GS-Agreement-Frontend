@@ -1,11 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
-import { Configuration, OpenAIApi } from "openai";
-
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-const openai = new OpenAIApi(configuration);
+import { openai, openaiConfig } from "../../utils/openAiConfiguration";
 
 const apiRoute = nextConnect({
   onError(error, req, res: any) {
@@ -19,7 +14,7 @@ const apiRoute = nextConnect({
 });
 
 apiRoute.post(async (req: NextApiRequest, res: NextApiResponse) => {
-  if (!configuration.apiKey) {
+  if (!openaiConfig.apiKey) {
     res.status(500).json({
       error: {
         message:

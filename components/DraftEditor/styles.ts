@@ -1,16 +1,17 @@
 import { styled } from "@stitches/react";
+import { theme } from "../../config/theme";
 
 export const DraftEditorRoot = styled("div", {
   display: "flex",
   flexDirection: "column",
-  border: `1px solid #0c273a50`,
+  border: `1px solid ${theme.colors.$secondaryMain}50`,
   borderRadius: "8px",
   "& .rdw-editor-wrapper": {
     flexGrow: 1,
   },
   "& .rdw-editor-toolbar": {
     backgroundColor: "transparent",
-    borderBottom: `1px solid #0c273a50`,
+    borderBottom: `1px solid ${theme.colors.$secondaryMain}50`,
     borderLeft: "none",
     borderRight: "none",
     borderTop: "none",
@@ -21,19 +22,19 @@ export const DraftEditorRoot = styled("div", {
     border: "none",
   },
   "& .rdw-option-wrapper:hover": {
-    backgroundColor: "#dea27a",
+    backgroundColor: theme.colors.$primaryMain,
     boxShadow: "none",
   },
   "& .rdw-option-active": {
-    backgroundColor: "#dea27a",
+    backgroundColor: theme.colors.$primaryMain,
     boxShadow: "none",
   },
   "& .rdw-editor-main": {
-    color: "#0c273a",
+    color: theme.colors.$secondaryMain,
     padding: "2rem",
   },
   "& .public-DraftEditorPlaceholder-root": {
-    color: "#0c273a",
+    color: theme.colors.$secondaryMain,
   },
   "& .public-DraftStyleDefault-block": {
     margin: 0,
@@ -49,7 +50,6 @@ export const Wrapper = styled("div", {
   display: "flex",
   flexDirection: "column",
   gap: "1rem",
-  padding: "2rem 0",
 });
 
 export const ButtonWrapper = styled("div", {

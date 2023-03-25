@@ -1,16 +1,28 @@
 import { createTheme } from "@mui/material/styles";
 import { red } from "@mui/material/colors";
-const theme = createTheme({
+
+export const theme = {
+  colors: {
+    $primaryMain: "#dea27a",
+    $primaryLight: "#fff7f2",
+    $secondaryMain: "#0c273a",
+    $error: red.A400,
+    $warning: "#664d03",
+    $white: "#ffffff",
+  },
+};
+
+export const materialTheme = createTheme({
   palette: {
     primary: {
-      main: "#dea27a",
-      light: "#fff7f2",
+      main: theme.colors.$primaryMain,
+      light: theme.colors.$primaryLight,
     },
     secondary: {
-      main: "#0c273a",
+      main: theme.colors.$secondaryMain,
     },
     error: {
-      main: red.A400,
+      main: theme.colors.$error,
     },
   },
   components: {
@@ -22,28 +34,30 @@ const theme = createTheme({
             fontSize: "25px",
             lineHeight: "1.167",
             textTransform: "uppercase",
-            textAlign: "center",
             marginBottom: "0.35em",
 
             "&::after": {
               content: "''",
               width: "55px",
               display: "block",
-              margin: "8px auto 0",
               borderBottom: `6px solid ${theme.palette.primary.main}`,
+              margin: "8px auto 0",
+              ...(ownerState.align === "left" && {
+                margin: "8px 0",
+              }),
             },
           }),
         }),
       },
     },
-    MuiButton:{
+    MuiButton: {
       styleOverrides: {
-        root:({ ownerState }) => ({
-          ...(ownerState.variant === 'contained' && {
-                size: 'large'
-              }),
+        root: ({ ownerState }) => ({
+          ...(ownerState.variant === "contained" && {
+            size: "large",
+          }),
         }),
-      }
+      },
     },
     MuiTab: {
       styleOverrides: {
@@ -54,6 +68,7 @@ const theme = createTheme({
             fontSize: "0.75rem",
             fontWeight: 600,
             margin: "0 1px",
+            textTransform: "none",
             "&:focus, &:active": {
               backgroundColor: theme.palette.primary.main,
               color: theme.palette.primary.light,
@@ -64,4 +79,3 @@ const theme = createTheme({
     },
   },
 });
-export default theme;

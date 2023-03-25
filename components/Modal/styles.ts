@@ -1,6 +1,7 @@
-import { styled } from "@stitches/react";
 import { DialogTitle as MaterialDialogTitle } from "@mui/material";
 import InfoIcon from "@mui/icons-material/Info";
+import { styled } from "@stitches/react";
+import { theme } from "../../config/theme";
 
 export const DialogTitle = styled(MaterialDialogTitle, {
   display: "flex",
@@ -10,6 +11,6 @@ export const DialogTitle = styled(MaterialDialogTitle, {
 });
 
 export const Icon = styled(InfoIcon, {
-  color: "#dea27a",
+  color: theme.colors.$primaryMain,
   fontSize: "32px",
 });
