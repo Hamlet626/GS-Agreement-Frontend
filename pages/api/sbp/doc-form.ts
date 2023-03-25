@@ -34,8 +34,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         Estimate and list all single payments (with type and amount, with date on that month if could be estimated) the surrogate would get on the following 12 month separated into months in json format as the example below:
         Json Example:
-        {"certain_payments":["Jan 2022":[{"date":1,"type":"fee1","amount":10.00},{"type":"fee2","amount":10.00}],"Feb 2022":[{"date":12,"type":"fee2","amount":11.00}],...],"uncertain_payments":[{"type":"fee4","amount":100.00}],}
-        
+        {"certain_payments":{"Jan 2022":[{"date":1,"type":"fee1","amount":10.00},{"type":"fee2","amount":10.00}],"Feb 2022":[{"date":12,"type":"fee2","amount":11.00}],...},"uncertain_payments":[{"type":"fee4","amount":100.00}],}
+
         JSON answers:`,
       },
     ];
@@ -47,7 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     console.log(sbpLastChoice?.content);
     res.status(200).json({
-      sbpPaymentTabs: sbpLastChoice?.content.replace(/TBD/g, '0'),
+      sbpPaymentTabs: sbpLastChoice?.content//.replace(/TBD/g, '0'),
     });
   } catch (error: any) {
     res.status(500).end({
@@ -55,3 +55,123 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
   }
 }
+
+const sample=`{
+  "certain_payments": [
+    {
+      "Dec 2023": [
+        {
+          "date": 1,
+          "type": "Main Pregnancy Compensation",
+          "amount": 4180
+        }
+      ]
+    },
+    {
+      "Jan 2024": [
+        {
+          "date": 1,
+          "type": "Monthly non-accountable allowance",
+          "amount": 300
+        },
+        {
+          "date": null,
+          "type": "Injection Medication Start Fee",
+          "amount": 600
+        }
+      ]
+    },
+    {
+      "Feb 2024": [
+        {
+          "date": 1,
+          "type": "Monthly non-accountable allowance",
+          "amount": 300
+        }
+      ]
+    },
+    {
+      "Mar 2024": [
+        {
+          "date": 1,
+          "type": "Monthly non-accountable allowance",
+          "amount": 300
+        }
+      ]
+    },
+    {
+      "Apr 2024": [
+        {
+          "date": 1,
+          "type": "Monthly non-accountable allowance",
+          "amount": 300
+        }
+      ]
+    },
+    {
+      "May 2024": [
+        {
+          "date": 1,
+          "type": "Monthly non-accountable allowance",
+          "amount": 300
+        }
+      ]
+    },
+    {
+      "Jun 2024": [
+        {
+          "date": 1,
+          "type": "Monthly non-accountable allowance",
+          "amount": 300
+        }
+      ]
+    },
+    {
+      "Jul 2024": [
+        {
+          "date": 1,
+          "type": "Monthly non-accountable allowance",
+          "amount": 300
+        }
+      ]
+    },
+    {
+      "Aug 2024": [
+        {
+          "date": 1,
+          "type": "Monthly non-accountable allowance",
+          "amount": 300
+        }
+      ]
+    },
+    {
+      "Sep 2024": [
+        {
+          "date": 1,
+          "type": "Monthly non-accountable allowance",
+          "amount": 300
+        }
+      ]
+    },
+    {
+      "Oct 2024": [
+        {
+          "date": 1,
+          "type": "Monthly non-accountable allowance",
+          "amount": 300
+        }
+      ]
+    },
+    {
+      "Nov 2024": [
+        {
+          "date": 1,
+          "type": "Monthly non-accountable allowance",
+          "amount": 300
+        }
+      ]
+    }
+  ],
+  "uncertain_payments": []
+}
+`

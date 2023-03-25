@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Box,
   Tabs,
@@ -26,13 +26,7 @@ export default function PaymentTab() {
     sbpPaymentTabs: { certain_payments, uncertain_payments },
   } = useSelector(selectSbpData);
 
-  const [paymentTab, setPaymentTab] = useState<string>("");
-
-  const handleChangePaymentTab = ({ target }: any) => {
-    if (target.innerText) {
-      setPaymentTab(target.innerText);
-    }
-  };
+  const [paymentTab, setPaymentTab] = useState<string>(Object.keys(certain_payments)[0]);
 
   const certainPaymentsMonths = useMemo(() => {
     if (certain_payments) {
@@ -40,21 +34,15 @@ export default function PaymentTab() {
     }
   }, [certain_payments]);
 
-  useEffect(() => {
-    if (certain_payments) {
-      setPaymentTab(Object.keys(certain_payments)[0]);
-    }
-  }, [certain_payments]);
-
   const monthFeeTotal = useMemo(() => {
-    if (certain_payments && paymentTab && certain_payments[paymentTab]) {
-      return certain_payments[paymentTab].reduce(
-        (accumulator: number, currentValue: any) =>
-          accumulator + currentValue.amount,
-        0
-      );
+    let total: {[key:string]:number;} = {};
+    for(let month in certain_payments){
+      let totalMth = 0;
+      certain_payments[month].forEach(({ amount }: { amount: number }) => (totalMth += amount));
+      total[month] = totalMth;
     }
-  }, [certain_payments, paymentTab]);
+    return total;
+  }, [certain_payments]);
 
   const certainPaymentsTotalFee = useMemo(() => {
     let total = 0;
@@ -73,7 +61,7 @@ export default function PaymentTab() {
     if (uncertain_payments?.length > 0) {
       return uncertain_payments.reduce(
         (accumulator: number, currentValue: any) =>
-          accumulator + currentValue.amount,
+          accumulator + (parseFloat(currentValue.amount)||0),
         0
       );
     }
@@ -83,23 +71,7 @@ export default function PaymentTab() {
     <>
       {certain_payments && (
         <>
-          <Box style={{ display: "flex", justifyContent: "space-between", flexWrap: 'wrap' }}>
-            <Typography variant="h2" align="left" sx={{ py: 2 }}>
-              Certain Payments
-            </Typography>
-            <Box justifyContent="flex-end">
-              <Typography variant="h5" align="right">
-                Total Month Payments:
-              </Typography>
-              <Typography variant="h5" align="right" sx={{ pb: 2 }}>
-                {certainPaymentsTotalFee.toLocaleString("en-US", {
-                  style: "currency",
-                  currency: "USD",
-                })}
-              </Typography>
-            </Box>
-          </Box>
-
+          <PaymentsHeader leftText={"Upcoming Payments"} rightText={`Total: ${toFormalAmount(certainPaymentsTotalFee)}`}/>
           <Box
             sx={{
               flexGrow: 1,
@@ -112,12 +84,12 @@ export default function PaymentTab() {
               <Tabs
                 orientation="vertical"
                 value={paymentTab}
-                onChange={handleChangePaymentTab}
+                onChange={(ev,val)=>setPaymentTab(val)}
                 aria-label="Vertical tabs example"
                 sx={{ minWidth: "100px" }}
               >
                 {certainPaymentsMonths?.map((month) => (
-                  <Tab key={month} label={month} value={month} />
+                  <Tab key={month} label={`${month}\n${toFormalAmount(monthFeeTotal[month])}`} value={month} />
                 ))}
               </Tabs>
 
@@ -130,12 +102,9 @@ export default function PaymentTab() {
                 }}
               >
                 <Typography variant="h6">
-                  {paymentTab} Fee{" "}
+                  Total Estimated Amount for {paymentTab}:{" "}
                   <strong style={{ marginLeft: "12px" }}>
-                    {monthFeeTotal?.toLocaleString("en-US", {
-                      style: "currency",
-                      currency: "USD",
-                    })}
+                    {toFormalAmount(monthFeeTotal[paymentTab])}
                   </strong>
                 </Typography>
                 <List dense>
@@ -150,12 +119,9 @@ export default function PaymentTab() {
                             <ListItemText
                               primary={
                                 <>
-                                  Fee {paymentTab} - {payment.date}:
+                                  {formatDate(payment.date,paymentTab)}:
                                   <strong style={{ marginLeft: "12px" }}>
-                                    {payment.amount?.toLocaleString("en-US", {
-                                      style: "currency",
-                                      currency: "USD",
-                                    })}
+                                    {`${payment.type} ${toFormalAmount(payment.amount)}`}
                                   </strong>
                                 </>
                               }
@@ -173,49 +139,39 @@ export default function PaymentTab() {
       )}
       {uncertain_payments?.length > 0 && (
         <>
-          <Typography variant="h2" align="left" sx={{ pt: 4 }}>
-            Total Payments
-          </Typography>
+          <PaymentsHeader leftText={"Potential Payments"}
+                          rightText={`Total: ${toFormalAmount(uncertainPaymentsTotalFee)}`}/>
           <TableContainer  component={Paper}>
             <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Payment type</TableCell>
-                  <TableCell>Amount</TableCell>
-                </TableRow>
-              </TableHead>
+              {/*<TableHead>*/}
+              {/*  <TableRow>*/}
+              {/*    <TableCell>Payment type</TableCell>*/}
+              {/*    <TableCell>Amount</TableCell>*/}
+              {/*  </TableRow>*/}
+              {/*</TableHead>*/}
               <TableBody>
-                <TableRow>
-                  <TableCell>All month payments</TableCell>
-                  <TableCell>
-                    {certainPaymentsTotalFee.toLocaleString("en-US", {
-                      style: "currency",
-                      currency: "USD",
-                    })}
-                  </TableCell>
-                </TableRow>
+                {/*<TableRow>*/}
+                {/*  <TableCell>All month payments</TableCell>*/}
+                {/*  <TableCell>*/}
+                {/*    {toFormalAmount(certainPaymentsTotalFee)}*/}
+                {/*  </TableCell>*/}
+                {/*</TableRow>*/}
                 {uncertain_payments.map((payment: any, index: number) => (
                   <TableRow key={index}>
                     <TableCell>{payment.type}</TableCell>
                     <TableCell>
-                      {payment.amount?.toLocaleString("en-US", {
-                        style: "currency",
-                        currency: "USD",
-                      })}
+                      {toFormalAmount(payment.amount)}
                     </TableCell>
                   </TableRow>
                 ))}
-                <TableRow>
-                  <TableCell sx={{ fontWeight: 'bolder'}}>Total</TableCell>
-                  <TableCell sx={{ fontWeight: 'bolder'}}>
-                    {(
-                      certainPaymentsTotalFee + uncertainPaymentsTotalFee
-                    ).toLocaleString("en-US", {
-                      style: "currency",
-                      currency: "USD",
-                    })}
-                  </TableCell>
-                </TableRow>
+                {/*<TableRow>*/}
+                {/*  <TableCell sx={{ fontWeight: 'bolder'}}>Total</TableCell>*/}
+                {/*  <TableCell sx={{ fontWeight: 'bolder'}}>*/}
+                {/*    {toFormalAmount(*/}
+                {/*      certainPaymentsTotalFee + uncertainPaymentsTotalFee*/}
+                {/*    )}*/}
+                {/*  </TableCell>*/}
+                {/*</TableRow>*/}
               </TableBody>
             </Table>
           </TableContainer>
@@ -223,4 +179,35 @@ export default function PaymentTab() {
       )}
     </>
   );
+}
+
+type HeaderProps = {
+  leftText: string;
+  rightText: string;
+};
+const PaymentsHeader: React.FC<HeaderProps> = ({ leftText, rightText}) => {
+  return <Box style={{ display: "flex", justifyContent: "space-between", flexWrap: 'wrap' }}>
+    <Typography variant="h2" align="left" sx={{ py: 2 }}>
+      {leftText}
+    </Typography>
+    <Box justifyContent="flex-end" paddingTop={2}>
+      <Typography variant="h5" align="right" sx={{ pb: 2 }}>
+        {rightText}
+      </Typography>
+    </Box>
+  </Box>
+}
+const toFormalAmount = (amount: number) => {
+  return amount?.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
+};
+
+///return date in format Mon Feb 01 2021, given a date number and a month string in formate "Feb 2023"
+const formatDate = (date: number, month: string) => {
+  const monthStr=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const monthNum = monthStr.indexOf(month.split(" ")[0])+1;
+  const year = Number(month.split(" ")[1]);
+  return new Date(year,monthNum,date).toDateString();
 }
