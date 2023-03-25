@@ -42,7 +42,7 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
 
     let rawText: any = await mammoth
       .extractRawText({ path: req.file.path })
-      .then(function (result){
+      .then(function (result) {
         return result.value;
       });
 
