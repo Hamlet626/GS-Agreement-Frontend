@@ -109,7 +109,7 @@ export default function PaymentTab() {
                 </Typography>
                 <List dense>
                   {Boolean(certain_payments && paymentTab) &&
-                    certain_payments[paymentTab].map(
+                    certain_payments[paymentTab]?.map(
                       (payment: any, index: number) =>
                         Number(payment.amount) > 0 ? (
                           <ListItem key={index}>
