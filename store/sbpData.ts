@@ -39,6 +39,9 @@ export const slice = createSlice({
       state.fileText = fileText;
       state.embeddings = embeddings;
     },
+    setSbpFields: (state, { payload: { sbpFields} }) => {
+      state.fields = sbpFields;
+    },
     setSbpDateMergeList: (state, { payload: { dateMergeList } }) => {
       state.dateMergeList = dateMergeList;
     },
@@ -59,6 +62,7 @@ export const selectSbpData = (state: RootState) => state.sbpData;
 
 export const {
   setSbpFileData,
+  setSbpFields,
   setSbpPaymentTabs,
   setSbpDateMergeList,
   resetSbpData,

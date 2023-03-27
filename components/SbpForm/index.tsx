@@ -9,7 +9,7 @@ import { setLoading, unsetLoading } from "../../store/loaderStatus";
 import axios from "axios";
 
 export default function SbpForm() {
-  const { fields, embeddings,fileText, dateMergeList} = useSelector(selectSbpData);
+  const { fields,fileText, dateMergeList} = useSelector(selectSbpData);
   const [fieldsData, setFieldsData] = useState<any>({});
   const dispatch = useDispatch();
 
@@ -17,9 +17,10 @@ export default function SbpForm() {
     try {
       dispatch(setLoading());
       await axios
-        .post("/api/sbp/doc-form", { sbpForm: fieldsData, embeddings,fileText, dateMergeList })
-        .then(({ data: { sbpPaymentTabs } }) => {
-          dispatch(setSbpPaymentTabs({ sbpPaymentTabs: JSON.parse(sbpPaymentTabs) }));
+        .post("/api/sbp/doc-perplex-dates", { sbpForm: fieldsData, dateMergeList })
+        .then(async({ data: { formOptions } }) => {
+            const { data: { sbpPaymentTabs } }=await axios.post("/api/sbp/doc-form", {formOptions,fileText });
+            dispatch(setSbpPaymentTabs({ sbpPaymentTabs: JSON.parse(sbpPaymentTabs) }));
         })
         .then(() => dispatch(unsetLoading()));
     } catch (error) {

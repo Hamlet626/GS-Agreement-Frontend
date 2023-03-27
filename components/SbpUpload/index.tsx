@@ -4,7 +4,7 @@ import { Box, Button, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   resetSbpData,
-  selectSbpData, setSbpDateMergeList,
+  selectSbpData, setSbpDateMergeList, setSbpFields,
   setSbpFileData,
 } from "../../store/sbpData";
 import { setLoading, unsetLoading } from "../../store/loaderStatus";
@@ -23,13 +23,15 @@ export default function SbpUpload() {
       formData.append("sbpDocumentFile", sbpDocumentFile);
 
       await axios
-        .post("/api/sbp/sbp-summarized", formData, {
+        .post("/api/sbp/process-doc", formData, {
           headers: { "content-type": "multipart/form-data" },
         })
-        .then(({ data: { sbpFields, sbpFileName, embeddings, dateMergeList, fileText } }) => {
-          dispatch(setSbpFileData({ fields: sbpFields, sbpFileName, fileText, embeddings}));
-          // dispatch(setSbpEmbeddings({ embeddings }));
-          dispatch(setSbpDateMergeList({dateMergeList}))
+        .then(async({ data: { sbpFileName, fileText } }) => {
+          dispatch(setSbpFileData({ fields: undefined, sbpFileName, fileText, undefined}));
+          const {data:{rawSbpFields}}=await axios.post("/api/sbp/doc-raw-dates", { fileText });
+          const {data:{sbpFields,dateMergeList}}=await axios.post("/api/sbp/doc-simplified-dates", { rawSbpFields });
+          dispatch(setSbpFields({sbpFields}));
+          dispatch(setSbpDateMergeList({dateMergeList}));
         })
         .then(() => dispatch(unsetLoading()));
     } catch (error) {

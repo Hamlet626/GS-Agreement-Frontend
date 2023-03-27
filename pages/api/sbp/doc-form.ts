@@ -6,19 +6,7 @@ import openAiChat from "../../../utils/openAiChat";
 import {unmergeDates} from "../../../utils/datesFolder";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (!openaiConfig.apiKey) {
-    res.status(500).json({
-      error: {
-        message:
-          "OpenAI API key not configured, please follow instructions in README.md",
-      },
-    });
-    return;
-  }
-
   try {
-    let formOptions: string=await unmergeDates(req.body.sbpForm,req.body.dateMergeList);
-
     const chat = [
       {
         role: "system",
@@ -30,7 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         role: "user",
         content: `Given the document, and these information by surrogate:
 
-        ${formOptions}
+        ${req.body.formOptions}
 
         Estimate and list all single payments (with type and amount, with date on that month if could be estimated) the surrogate would get on the following 12 month separated into months in json format as the example below:
         Json Example:
