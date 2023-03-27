@@ -7,6 +7,7 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { selectSbpData, setSbpPaymentTabs } from "../../store/sbpData";
 import { setLoading, unsetLoading } from "../../store/loaderStatus";
 import axios from "axios";
+import {getPaymentTabs} from "../../utils/apis/getPaymentTabs";
 
 export default function SbpForm() {
   const { fields,fileText, dateMergeList} = useSelector(selectSbpData);
@@ -19,7 +20,10 @@ export default function SbpForm() {
       await axios
         .post("/api/sbp/doc-perplex-dates", { sbpForm: fieldsData, dateMergeList })
         .then(async({ data: { formOptions } }) => {
-            const { data: { sbpPaymentTabs } }=await axios.post("/api/sbp/doc-form", {formOptions,fileText });
+
+            // const { data: { sbpPaymentTabs } }=await axios.post("/api/sbp/doc-form", {formOptions,fileText });
+            const sbpPaymentTabs = await getPaymentTabs(fileText||"",formOptions);
+
             dispatch(setSbpPaymentTabs({ sbpPaymentTabs: JSON.parse(sbpPaymentTabs) }));
         })
         .then(() => dispatch(unsetLoading()));
