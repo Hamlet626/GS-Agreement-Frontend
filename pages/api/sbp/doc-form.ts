@@ -1,9 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { openaiConfig } from "../../../utils/openAiConfiguration";
 import openAiChat from "../../../utils/openAiChat";
-// @ts-ignore
-// import { constructPrompt } from "openai_embedding";
-import {unmergeDates} from "../../../utils/datesFolder";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
