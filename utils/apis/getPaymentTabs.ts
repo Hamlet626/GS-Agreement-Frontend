@@ -14,11 +14,11 @@ export const getPaymentTabs = async (fileText: string, formOptions: string):Prom
 
         ${formOptions}
 
-        Estimate and list all single payments (with type and amount, with date on that month if could be estimated) the surrogate would get on the following 12 month separated into months in json format as the example below:
-        Json Example:
-        {"certain_payments":{"Jan 2022":[{"date":1,"type":"fee1","amount":10.00},{"type":"fee2","amount":10.00}],"Feb 2022":[{"date":12,"type":"fee2","amount":11.00}],...},"uncertain_payments":[{"type":"fee4","amount":100.00}],}
+        Estimate and list all single payments (with type and amount, with date on that month if could be estimated) the surrogate would get on the following 12 month separated into months in json format(in one line without any quotation marks!) as the example below:
+        Json answer example:
+        {certain_payments:{Jan 2022:[{date:1,type:fee1,amount:10.00},{type:fee2,amount:10.00}],Feb 2022:[{date:12,type:fee2,amount:11.00}],...},uncertain_payments:[{type:fee4,amount:100.00}]}
 
-        JSON answers:`,
+        JSON answers in one line without any quotation marks:`,
         },
     ];
     // Note: Ensure that the 'date' and 'type' fields in the JSON are formatted as strings, while the 'amount' field should always be in numerical format.
@@ -28,6 +28,19 @@ export const getPaymentTabs = async (fileText: string, formOptions: string):Prom
         await openAiChat(chat,1200);
 
     if(sbpLastChoice?.content==null){throw "Error while getting estimated payments!";}
-    return sbpLastChoice?.content;
+
+    console.log(`sbpLastChoice: ${sbpLastChoice.content}`);
+    let correctJson = sbpLastChoice?.content
+        .replace(/(['"])?([^{}[\]:,]*[^{}[\]:, ][^{}[\]:,]*)(['"])?:/g, '"$2":')
+        .replace(/:(['"])?([^{}[\]:,]*[^{}[\]:, ][^{}[\]:,]*)(['"])?/g, ':"$2"');
+    console.log(`correctJson: ${correctJson}`);
+    correctJson=JSON.stringify(JSON.parse(correctJson,(key,value)=>{
+        if(typeof value==="string"){
+            return /^[0-9,.]+$/.test(value)?parseFloat(value.trim()):value.trim();
+        }
+        return value;
+    }));
+    console.log(`correctJson: ${correctJson}`);
+    return correctJson;
 
 }
