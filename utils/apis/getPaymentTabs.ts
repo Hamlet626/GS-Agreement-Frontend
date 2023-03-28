@@ -16,7 +16,7 @@ export const getPaymentTabs = async (fileText: string, formOptions: string):Prom
 
         Estimate and list all single payments (with type and amount, with date on that month if could be estimated) the surrogate would get on the following 12 month separated into months in json format(in one line without any quotation marks!) as the example below:
         Json answer example:
-        {certain_payments:{Jan 2022:[{date:1,type:fee1,amount:10.00},{type:fee2,amount:10.00}],Feb 2022:[{date:12,type:fee2,amount:11.00}],...},uncertain_payments:[{type:fee4,amount:100.00}]}
+        {certain_payments:{Jan 2022:[{date:1,type:Compensation Fee,amount:10.00},{type:Insurance Fee,amount:10.00}],Feb 2022:[{date:12,type:Insurance Fee,amount:11.00}],...},uncertain_payments:[{type:Xx Fee,amount:100.00}]}
 
         JSON answers in one line without any quotation marks:`,
         },
@@ -25,7 +25,7 @@ export const getPaymentTabs = async (fileText: string, formOptions: string):Prom
 
 
     const { lastChoice: sbpLastChoice } =
-        await openAiChat(chat,1200);
+        await openAiChat(chat,900);
 
     if(sbpLastChoice?.content==null){throw "Error while getting estimated payments!";}
 
