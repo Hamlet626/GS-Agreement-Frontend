@@ -9,6 +9,7 @@ import { computeDocEmbeddings, constructPrompt } from "openai_embedding";
 import {processPDF2} from "../../../utils/processPdf";
 import {extractOriginalText} from "../../../utils/extractOriginalText";
 import {mergeDates} from "../../../utils/datesFolder";
+import PdfParse from "pdf-parse";
 
 export const config = {
   api: {
@@ -52,9 +53,7 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
   try {
 
     // const file = readFileSync(req.file.path);
-    // const { text: fileText }: any = await PdfParse(file);
-    ///replace new line with space
-    // const fileText2 = fileText.substring(0, fileText.length*5/6).replace(/(\r\n|\n|\r)/gm, " ");
+    // const fileText = await extractOriginalText((await PdfParse(file)).text);
 
     const fileText=await extractOriginalText((await processPDF2(req.file.path)).text);
 
@@ -62,10 +61,10 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
       sbpFileName: req.file.originalname,
       fileText,
     });
-    
-    // unlinkSync(file);
+
     return
   } catch (error: any) {
+    console.log(error);
     res.status(500).end({
       message: "An unexpected error occurred please try again later",
     });
