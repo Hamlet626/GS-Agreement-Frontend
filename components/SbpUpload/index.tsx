@@ -10,6 +10,7 @@ import {
 import { setLoading, unsetLoading } from "../../store/loaderStatus";
 import axios from "axios";
 
+
 export default function SbpUpload() {
   const { sbpFileName } = useSelector(selectSbpData);
   const dispatch = useDispatch();
@@ -26,12 +27,17 @@ export default function SbpUpload() {
         .post("/api/sbp/process-doc", formData, {
           headers: { "content-type": "multipart/form-data" },
         })
-        .then(async({ data: { sbpFileName, fileText } }) => {
-          dispatch(setSbpFileData({ fields: undefined, sbpFileName, fileText, undefined}));
-          const {data:{rawSbpFields}}=await axios.post("/api/sbp/doc-raw-dates", { fileText });
-          const {data:{sbpFields,dateMergeList}}=await axios.post("/api/sbp/doc-simplified-dates", { rawSbpFields });
-          dispatch(setSbpFields({sbpFields}));
-          dispatch(setSbpDateMergeList({dateMergeList}));
+        .then(async({ data: { sbpFileName, fileText:text } }) => {
+          const {data:{fileText,sbpFields,dateMergeList}}=await axios.post("https://wechaty.trustus.app/gpt/getFields", { text },
+              {headers: { "content-type": "application/json", "wckey":"hamlet"}});
+            dispatch(setSbpFileData({ fields: undefined, sbpFileName, fileText, undefined}));
+            dispatch(setSbpFields({sbpFields}));
+            dispatch(setSbpDateMergeList({dateMergeList}));
+          // dispatch(setSbpFileData({ fields: undefined, sbpFileName, fileText, undefined}));
+          // const {data:{rawSbpFields}}=await axios.post("/api/sbp/doc-raw-dates", { fileText });
+          // const {data:{sbpFields,dateMergeList}}=await axios.post("/api/sbp/doc-simplified-dates", { rawSbpFields });
+          // dispatch(setSbpFields({sbpFields}));
+          // dispatch(setSbpDateMergeList({dateMergeList}));
         })
         .then(() => dispatch(unsetLoading()));
     } catch (error) {

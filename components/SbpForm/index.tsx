@@ -18,13 +18,14 @@ export default function SbpForm() {
     try {
       dispatch(setLoading());
       await axios
-        .post("/api/sbp/doc-perplex-dates", { sbpForm: fieldsData, dateMergeList })
-        .then(async({ data: { formOptions } }) => {
+        .post("https://wechaty.trustus.app/gpt/getPayments", { fileText, sbpForm: fieldsData, dateMergeList },
+            {headers: { "content-type": "application/json", "wckey":"hamlet"}})
+        .then(async({ data: { paymentTabs } }) => {
 
             // const { data: { sbpPaymentTabs } }=await axios.post("/api/sbp/doc-form", {formOptions,fileText });
-            const sbpPaymentTabs = await getPaymentTabs(fileText||"",formOptions);
+            // const sbpPaymentTabs = await getPaymentTabs(fileText||"",paymentTabs);
 
-            dispatch(setSbpPaymentTabs({ sbpPaymentTabs: JSON.parse(sbpPaymentTabs) }));
+            dispatch(setSbpPaymentTabs({ sbpPaymentTabs: paymentTabs }));
         })
         .then(() => dispatch(unsetLoading()));
     } catch (error) {
