@@ -18,7 +18,8 @@ export default function reFormatPayments(byType:PaymentByType):PaymentByDate {
             //     if(month>0&&month<12)
             //         dateKey= `${months[month-1]} ${dateMDY[dateMDY.length-1]}`;
             // }
-            if (byType[type][date].date&&typeof byType[type][date].amount === 'number') {
+            if (typeof byType[type][date].amount === 'number'&&byType[type][date].date&&
+                (/^\d{2}-\d{2}-\d{4}$/.test(byType[type][date].date!)||/^\d{2}-\d{4}$/.test(byType[type][date].date!))) {
                 const dateMDY = byType[type][date].date!.split('-');
                 const month = parseInt(dateMDY[0]);
                 const dateKey= `${months[month-1]} ${dateMDY[dateMDY.length-1]}`;
@@ -38,13 +39,14 @@ export default function reFormatPayments(byType:PaymentByType):PaymentByDate {
             }
         }
     }
+
     byDate.certain_payments = Object.keys(byDate.certain_payments)
         .sort((a, b)=>{
             ///compare "mmm yyyy" to "mmm yyyy"
             const aSplit = a.split(' ');
             const bSplit = b.split(' ');
-            const aMonth = months.indexOf(aSplit[0]);
-            const bMonth = months.indexOf(bSplit[0]);
+            const aMonth = pad(months.indexOf(aSplit[0]));
+            const bMonth = pad(months.indexOf(bSplit[0]));
             return `${aSplit[1]} ${aMonth}`==`${bSplit[1]} ${bMonth}`?0:
                 `${aSplit[1]} ${aMonth}` > `${bSplit[1]} ${bMonth}`?1:-1;
         })
@@ -59,3 +61,10 @@ export default function reFormatPayments(byType:PaymentByType):PaymentByDate {
 }
 
 /// format "mm-dd-yyyy" to "mmm yyyy"
+
+/// 4=>"04", 12=>"12"
+function pad(num:number) {
+    let s = num + "";
+    while (s.length < 2) s = "0" + s;
+    return s;
+}

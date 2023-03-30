@@ -22,7 +22,7 @@ export default function SbpForm() {
         .post("https://wechaty.trustus.app/gpt/getPayments", { fileText, sbpForm: fieldsData, dateMergeList },
             {headers: { "content-type": "application/json", "wckey":"hamlet"}})
         .then(async({ data: { paymentTabs } }) => {
-
+            console.log(paymentTabs);
             // const { data: { sbpPaymentTabs } }=await axios.post("/api/sbp/doc-form", {formOptions,fileText });
             // const sbpPaymentTabs = await getPaymentTabs(fileText||"",paymentTabs);
 
