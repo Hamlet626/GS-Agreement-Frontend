@@ -16,6 +16,7 @@ export default function SbpUpload() {
   const dispatch = useDispatch();
 
   const handleUploadSbp = async (event: any) => {
+    console.log("handleUploadSbp");
     try {
       dispatch(setLoading());
       const sbpDocumentFile = event.target.files[0];

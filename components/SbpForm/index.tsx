@@ -8,6 +8,7 @@ import { selectSbpData, setSbpPaymentTabs } from "../../store/sbpData";
 import { setLoading, unsetLoading } from "../../store/loaderStatus";
 import axios from "axios";
 import {getPaymentTabs} from "../../utils/apis/getPaymentTabs";
+import reFormatPayments from "../../utils/reFormatPayments";
 
 export default function SbpForm() {
   const { fields,fileText, dateMergeList} = useSelector(selectSbpData);
@@ -25,7 +26,7 @@ export default function SbpForm() {
             // const { data: { sbpPaymentTabs } }=await axios.post("/api/sbp/doc-form", {formOptions,fileText });
             // const sbpPaymentTabs = await getPaymentTabs(fileText||"",paymentTabs);
 
-            dispatch(setSbpPaymentTabs({ sbpPaymentTabs: paymentTabs }));
+            dispatch(setSbpPaymentTabs({ sbpPaymentTabs: reFormatPayments(paymentTabs) }));
         })
         .then(() => dispatch(unsetLoading()));
     } catch (error) {

@@ -52,10 +52,10 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
 
   try {
 
-    // const file = readFileSync(req.file.path);
-    // const fileText = await extractOriginalText((await PdfParse(file)).text);
+    const file = readFileSync(req.file.path);
+    const fileText = await extractOriginalText((await PdfParse(file)).text);
 
-    const fileText=await extractOriginalText((await processPDF2(req.file.path)).text);
+    // const fileText=await extractOriginalText((await processPDF2(req.file.path)).text);
 
     res.status(200).json({
       sbpFileName: req.file.originalname,
