@@ -49,7 +49,7 @@ export default function Section({ title, text, index }: SectionProps) {
         .then(
           ({
             data: {
-              result: { choices },
+              result
             },
           }) => {
             let alreadyHas = false;
@@ -57,7 +57,7 @@ export default function Section({ title, text, index }: SectionProps) {
             transcriptions?.forEach(({ originalParagraph }, index) => {
               if (originalParagraph === paragraph) {
                 let newTranscriptions = [...transcriptions];
-                newTranscriptions[index].transcriptionText = choices[0].text;
+                newTranscriptions[index].transcriptionText = result;
                 setTranscriptions(newTranscriptions);
                 alreadyHas = true;
               }
@@ -67,7 +67,7 @@ export default function Section({ title, text, index }: SectionProps) {
               setTranscriptions([
                 ...transcriptions,
                 {
-                  transcriptionText: choices[0].text,
+                  transcriptionText: result,
                   originalParagraph: paragraph,
                 },
               ]);
