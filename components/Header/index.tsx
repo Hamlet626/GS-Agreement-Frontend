@@ -14,7 +14,7 @@ export default function Header() {
   ];
 
   return (
-    <Box>
+    <Box style={{  boxShadow: `0px 0px 0px 150px ${theme.colors.$primaryMain}` }}>
       <AppBar position="static">
         <Container>
           <Toolbar disableGutters>

@@ -48,7 +48,7 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
 
     let sections: any = processSections(titles,rawText);
       
-    res.status(200).json({ sections });
+    res.status(200).json({ sections, documentTitle: req.file.originalname });
 
     // Store Doc File in S3 Bucket
     if(process.env.REACT_APP_ENV === 'production'){

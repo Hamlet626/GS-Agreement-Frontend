@@ -1,9 +1,9 @@
-import { Button, Typography } from "@mui/material";
+import { Button, Paper } from "@mui/material";
 import axios from "axios";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { setSections } from "../../store/pdfDocument";
+import { setDocumentTitle, setSections } from "../../store/pdfDocument";
 import { setLoading, unsetLoading } from "../../store/loaderStatus";
 import { Wrapper } from "./styles";
 
@@ -29,8 +29,9 @@ export default function DocumentUpload() {
             headers: { "content-type": "multipart/form-data" },
           }
         )
-        .then(({ data: { sections } }) => {
+        .then(({ data: { sections, documentTitle } }) => {
           dispatch(setSections(sections));
+          dispatch(setDocumentTitle(documentTitle));
         })
         .then(() => router.push("/summarized"))
         .then(() => dispatch(unsetLoading()));
@@ -42,14 +43,11 @@ export default function DocumentUpload() {
 
   return (
     <Wrapper>
-      <Typography variant="h5" align="center">
-        Or
-      </Typography>
       <Button
         variant="contained"
         component="label"
         startIcon={<PictureAsPdfIcon />}
-        color="info"
+        color="secondary"
       >
         Upload Document
         <input

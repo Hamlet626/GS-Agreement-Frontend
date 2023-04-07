@@ -15,7 +15,7 @@ export const DocumentTextArea = styled(TextareaAutosize, {
   resize: "none",
   paddingBlock: "1rem",
   padding: "1rem",
-  borderRadius: "8px",
+  borderRadius: `${theme.border.$borderRadius}px`,
   "&:focus, &:active": {
     borderColor: theme.colors.$primaryMain,
   },
@@ -39,7 +39,7 @@ export const Transcription = styled("p", {
 export const SectionParagraphRow = styled(Grid, {
   marginBottom: "1rem",
   backgroundColor: `${theme.colors.$primaryMain}08`,
-  borderRadius: "8px",
+  borderRadius: `${theme.border.$borderRadius}px`,
   boxSizing: "border-box",
   border: `1px solid ${theme.colors.$primaryMain}`,
 });
@@ -51,6 +51,6 @@ export const Paragraph = styled("p", {
   textAlign: "justify",
   backgroundColor: `${theme.colors.$primaryMain}50`,
   margin: "0",
-  borderRadius: "8px 0 0 8px",
+  borderRadius: `${theme.border.$borderRadius}px 0 0 ${theme.border.$borderRadius}px`,
   cursor: "pointer",
 });

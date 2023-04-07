@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import DocumentSummarizer from "../components/DocumentSummarizer";
-import TextInfo from "../components/TextInfo";
+import Alert from "@mui/material/Alert";
 import DocumentTabs from "../components/DocumentTabs";
 import { useDispatch, useSelector } from "react-redux";
 import { selectSection, setSections } from "../store/pdfDocument";
@@ -34,11 +34,10 @@ export default function Summarized() {
 
   return (
     <>
-      <TextInfo
-        text="This document summary is not legal advice or legally binding in any
-        way. You should consult a lawyer."
-        type="warning"
-      />
+      <Alert severity="warning" sx={{ width: '90%', margin: '0 auto'}}>
+        This document summary is not legal advice or legally binding in any way.
+        You should consult a lawyer.
+      </Alert>
       <DocumentTabs />
       <DocumentSummarizer />
       <ButtonSaveAllSections />

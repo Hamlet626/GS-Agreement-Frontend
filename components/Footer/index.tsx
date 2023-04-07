@@ -11,6 +11,7 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { theme } from "../../config/theme";
 
 const iconStyle = {
   width: 48,
@@ -30,9 +31,9 @@ export default function AppFooter() {
   const router = useRouter();
 
   return (
-    <Typography
+    <Box
       component="footer"
-      sx={{ display: "flex", bgcolor: "primary.light" }}
+      sx={{ boxShadow: theme.shadows.$mainShadow }}
     >
       <Container sx={{ my: 8, display: "flex" }}>
         <Grid container spacing={5}>
@@ -60,7 +61,7 @@ export default function AppFooter() {
             </Grid>
           </Grid>
           <Grid item xs={12} sm={4}>
-            <Typography variant="h6" gutterBottom color="primary.main">
+            <Typography variant="h6" gutterBottom>
               Social Media
             </Typography>
             <Grid item sx={{ display: "flex", my: 3 }}>
@@ -107,7 +108,7 @@ export default function AppFooter() {
             </Grid>
           </Grid>
           <Grid item xs={12} sm={4}>
-            <Typography variant="h6" gutterBottom color="primary.main">
+            <Typography variant="h6" gutterBottom>
               Legal
             </Typography>
             <Box component="ul" sx={{ m: 0, listStyle: "none", p: 0 }}>
@@ -127,6 +128,6 @@ export default function AppFooter() {
           </Grid>
         </Grid>
       </Container>
-    </Typography>
+    </Box>
   );
 }

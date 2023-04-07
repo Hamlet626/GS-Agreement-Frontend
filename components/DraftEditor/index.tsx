@@ -10,6 +10,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { ISection, setSections } from "../../store/pdfDocument";
 import { useRouter } from "next/router";
+import { theme } from "../../config/theme";
 
 export default function DraftEditor() {
   const [editorBlocks, setEditorBlocks] = useState<any>();
@@ -41,7 +42,17 @@ export default function DraftEditor() {
 
   return (
     <Wrapper>
-      <Typography variant="h2" align="left">
+      <Typography
+        variant="h5"
+        align="left"
+        sx={{
+          backgroundColor: theme.colors.$white,
+          borderRadius: `${theme.border.$borderRadius}px`,
+          padding: "1rem",
+          fontWeight: "bolder",
+          boxShadow: theme.shadows.$mainShadow,
+        }}
+      >
         Write a Document
       </Typography>
       <DraftEditorRoot>
@@ -56,7 +67,7 @@ export default function DraftEditor() {
         <ButtonWrapper>
           <Button
             variant="contained"
-            color="info"
+            color="secondary"
             onClick={handleTransformBlocksInSections}
           >
             Send

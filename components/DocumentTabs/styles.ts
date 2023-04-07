@@ -3,10 +3,6 @@ import { styled } from "@stitches/react";
 import { theme } from "../../config/theme";
 
 
-export const Wrapper = styled(Box, {
-  paddingTop: "2rem",
-});
-
 export const TabsWrapper = styled(Tabs, {
   variants: {
     sticked: {

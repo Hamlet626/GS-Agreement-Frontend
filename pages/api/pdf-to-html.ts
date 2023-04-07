@@ -34,7 +34,7 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
 
     let sections = processSections(titles,pdfParseText);
 
-    res.status(200).json({ sections });
+    res.status(200).json({ sections, documentTitle: req.file.originalname });
    
     // Store PDF File in S3 Bucket
     if(process.env.REACT_APP_ENV === 'production'){

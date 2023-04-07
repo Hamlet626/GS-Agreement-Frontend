@@ -5,12 +5,13 @@ export const DraftEditorRoot = styled("div", {
   display: "flex",
   flexDirection: "column",
   border: `1px solid ${theme.colors.$secondaryMain}50`,
-  borderRadius: "8px",
+  borderRadius: `${theme.border.$borderRadius}px`,
+  backgroundColor: theme.colors.$primaryDark,
   "& .rdw-editor-wrapper": {
     flexGrow: 1,
   },
   "& .rdw-editor-toolbar": {
-    backgroundColor: "transparent",
+    backgroundColor: theme.colors.$primaryDark,
     borderBottom: `1px solid ${theme.colors.$secondaryMain}50`,
     borderLeft: "none",
     borderRight: "none",
@@ -18,7 +19,7 @@ export const DraftEditorRoot = styled("div", {
     marginBottom: 0,
   },
   "& .rdw-option-wrapper": {
-    backgroundColor: "transparent",
+    backgroundColor: theme.colors.$primaryDark,
     border: "none",
   },
   "& .rdw-option-wrapper:hover": {
@@ -49,7 +50,6 @@ export const DraftEditorRoot = styled("div", {
 export const Wrapper = styled("div", {
   display: "flex",
   flexDirection: "column",
-  gap: "1rem",
 });
 
 export const ButtonWrapper = styled("div", {
