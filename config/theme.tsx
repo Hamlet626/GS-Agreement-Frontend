@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material/styles";
-import { red } from "@mui/material/colors";
+
 
 export const theme = {
   colors: {
@@ -159,3 +159,53 @@ export const materialTheme = createTheme({
     },
   },
 });
+
+
+
+
+
+
+
+
+
+
+
+
+/////// =========================  Theme2  ========================= ///////
+// by seed fcae65
+export const theme2 = {
+  colors: {
+    $primaryMain: "#fcae65",
+    // $primaryDark: "#F3DDCE",
+    // $primaryLight: "#FFF7F2",
+    $secondaryMain: "#a98b72",
+    $tertiaryMain: "#8c9566",
+    $neutralMain: "#988f89",
+  },
+  manualGeneratedColors:{
+    Light: {
+        primary: "#8d4f00", primaryContainer: "#ffdcc0", onPrimaryContainer: "#2d1600", inversePrimary: "#ffb877", onPrimary: "#ffffff", //primaryVariant: "#8d4f00",
+        secondary: "#735943", onSecondary: "#ffffff", secondaryContainer: "#ffdcc0", onSecondaryContainer: "#291706", //secondaryVariant: "#735943",
+        tertiary: "#5a6238", onTertiary: "#ffffff", tertiaryContainer: "#dee8b2", onTertiaryContainer: "#181e00",
+        error: "#ba1a1a", errorContainer: "#ffdad6", onError: "#ffffff", onErrorContainer: "#410002",
+        background: "#fffbff", onBackground: "#201b17",
+      surface: "#fffbff", onSurface: "#201b17", surfaceVariant: "#f2dfd1", onSurfaceVariant: "#51443a",
+        inverseSurface: "#faefe8", onInverseSurface: "#352f2b", surfaceTint: "#8d4f00",
+      surfaceContainer:{lest:"#fffbff", ler:"#f9f2f2", md:"#f6edeb", her:"#f2e8e3", elv4:"#f1e6e0", elv5:"#eee2db", hest:"#f2dfd1"},
+      outline: "#837469", outlineVariant: "#d5c3b6",
+        shadow: "#000000", scrim: "#000000",
+    },
+    Dark: {
+        primary: "#ffb877", primaryContainer: "#6b3b00", onPrimaryContainer: "#ffdcc0", inversePrimary: "#8d4f00", onPrimary: "#4b2700", //primaryVariant: "#ffb877",
+      secondary: "#e2c0a5", onSecondary: "#412c19", secondaryContainer: "#5a422d", onSecondaryContainer: "#ffdcc0", //secondaryVariant: "#e2c0a5",
+      tertiary: "#c2cb98", onTertiary: "#2c340e", tertiaryContainer: "#434a23", onTertiaryContainer: "#dee8b2",
+      error: "#ffb4ab", errorContainer: "#93000a", onError: "#690005", onErrorContainer: "#ffdad6",
+      background: "#201b17", onBackground: "#ece0d9",
+      surface: "#201b17", onSurface: "#ece0d9", surfaceVariant: "#51443a", onSurfaceVariant: "#d5c3b6",
+      inverseSurface: "#201b17", onInverseSurface: "#ece0d9", surfaceTint: "#ffb877",
+      surfaceContainer:{lest:"#201b17", ler:"#2b231b", md:"#31271e", her:"#382c21", elv4:"#3b2e22", elv5:"#3f3124", hest:"#51443a"},
+      outline: "#9e8e82", outlineVariant: "#51443a",
+      shadow: "#000000", scrim: "#000000",
+    }
+  }
+};

@@ -16,6 +16,7 @@
     "@mui/icons-material": "^5.11.0",
     "@mui/lab": "^5.0.0-alpha.122",
     "@mui/material": "^5.11.8",
+    "@mui/material-next": "^6.0.0-alpha.80",
     "@mui/x-date-pickers": "^6.0.0",
     "@reduxjs/toolkit": "^1.9.2",
     "@stitches/react": "^1.2.8",
