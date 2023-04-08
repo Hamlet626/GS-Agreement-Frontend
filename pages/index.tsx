@@ -4,7 +4,7 @@ import DraftEditor from "../components/DraftEditor";
 
 export default function Home() {
   return (
-    <Card elevation={5}>
+    <Card elevation={3}>
       <CardContent>
         <DocumentUpload />
         <Typography

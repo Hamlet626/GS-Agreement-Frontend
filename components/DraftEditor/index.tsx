@@ -67,7 +67,6 @@ export default function DraftEditor() {
         <ButtonWrapper>
           <Button
             variant="contained"
-            color="secondary"
             onClick={handleTransformBlocksInSections}
           >
             Send

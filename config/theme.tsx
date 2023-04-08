@@ -4,15 +4,41 @@ import { red } from "@mui/material/colors";
 export const theme = {
   colors: {
     $primaryMain: "#D9986F",
-    $primaryDark: "#F3DDCE",
-    $primaryLight: "#FFF7F2",
-    $secondaryMain: "#AA7B4F",
-    $success: "#DED47A",
-    $info: "#BFECF5",
-    $error: red.A400,
-    $warning: "#664d03",
+    // $primaryDark: "#F3DDCE",
+    // $primaryLight: "#FFF7F2",
+    $secondaryMain: "#ac8a76",//"#DED47A",
+    // $success: "#DED47A",
+    // $info: "#BFECF5",
+    // $error: red.A400,
+    // $warning: "#664d03",
     $white: "#ffffff",
     $gray: "#C1C1C1"
+  },
+  manualGeneratedColors:{
+    Light: {
+        primary: "#964908", primaryContainer: "#ffdbc8", onPrimaryContainer: "#311300", inversePrimary: "#ffb689", onPrimary: "#ffffff", //primaryVariant: "#964908",
+        secondary: "#755846", onSecondary: "#ffffff", secondaryContainer: "#ffdbc8", onSecondaryContainer: "#2b1709", //secondaryVariant: "#755846",
+        tertiary: "#616133", onTertiary: "#ffffff", tertiaryContainer: "#e7e5ac", onTertiaryContainer: "#1d1d00",
+        error: "#ba1a1a", errorContainer: "#ffdad6", onError: "#FFFFFF",onErrorContainer: "#410002",
+        background: "#fffbff", onBackground: "#201a17",
+        surface: "#fffbff", onSurface: "#201a17", surfaceVariant: "#f4ded3", onSurfaceVariant: "#52443c",
+      inverseSurface: "#362f2b", onInverseSurface: "#fbeee9", surfaceTint: "#964908",
+      surfaceContainer:{lest:"#fffbff", ler:"#f9f1f2", md:"#f6edeb", her:"#f3e7e3", elv4:"#f2e5e0", elv5:"#f0e1dc", hest:"#f4ded3"},
+        outline: "#84746b", outlineVariant: "#d7c2b8",
+        shadow: "#000000", scrim: "#000000",
+    },
+    Dark: {
+        primary: "#ffb689", primaryContainer: "#733500", onPrimaryContainer: "#ffdbc8", inversePrimary: "#964908", onPrimary: "#512300", //primaryVariant: "#ffb689",
+        secondary: "#e5bfa9", onSecondary: "#432b1c", secondaryContainer: "#5c4130", onSecondaryContainer: "#ffdbc8", //secondaryVariant: "#e5bfa9",
+        tertiary: "#cbc992", onTertiary: "#323209", tertiaryContainer: "#49491e", onTertiaryContainer: "#e7e5ac",
+        error: "#ffb4ab", errorContainer: "#93000a", onError: "#690005", onErrorContainer: "#ffdad6",
+        background: "#201a17", onBackground: "#ece0da",
+        surface: "#201a17", onSurface: "#ece0da", surfaceVariant: "#52443c", onSurfaceVariant: "#d7c2b8",
+      inverseSurface: "#ece0da", onInverseSurface: "#201a17", surfaceTint: "#ffb689",
+      surfaceContainer:{lest:"#201a17", ler:"#261c16", md:"#291d15", her:"#2c1f15", elv4:"#2e1f15", elv5:"#302014", hest:"#52443c"},
+        outline: "#9f8d83", outlineVariant: "#52443c",
+        shadow: "#000000", scrim: "#000000",
+    }
   },
   shadows: {
     // This shadow style follow the Material UI evelation={5}, it's applied in some Material components
@@ -28,21 +54,21 @@ export const materialTheme = createTheme({
   palette: {
     primary: {
       main: theme.colors.$primaryMain,
-      dark: theme.colors.$primaryDark,
-      light: theme.colors.$primaryLight,
+      // dark: theme.colors.$primaryDark,
+      // light: theme.colors.$primaryLight,
     },
     secondary: {
       main: theme.colors.$secondaryMain,
     },
-    success: {
-      main: theme.colors.$success,
-    },
-    info: {
-      main: theme.colors.$info,
-    },
-    error: {
-      main: theme.colors.$error,
-    },
+    // success: {
+    //   main: theme.colors.$success,
+    // },
+    // info: {
+    //   main: theme.colors.$info,
+    // },
+    // error: {
+    //   main: theme.colors.$error,
+    // },
   },
   shape: {
     borderRadius: theme.border.$borderRadius,
@@ -107,22 +133,28 @@ export const materialTheme = createTheme({
         }),
       },
     },
-    MuiPaper: {
-      styleOverrides: {
-        root: ({ theme }) => ({
-          ...{
-            backgroundColor: theme.palette.primary.dark,
-          },
-        }),
-      },
-    },
+    // MuiPaper: {
+    //   styleOverrides: {
+    //     root: ({ theme }) => ({
+    //       ...{
+    //         backgroundColor: theme.palette.primary.dark,
+    //       },
+    //     }),
+    //   },
+    // },
     MuiCard: {
       styleOverrides: {
-        root: ({ theme }) => ({
-          ...{
-            backgroundColor: theme.palette.primary.light,
-          },
-        }),
+        root: ({ ownerState}) => {
+
+          return { backgroundColor: ownerState.elevation===0 ? theme.manualGeneratedColors.Light.surfaceContainer.lest:
+              ownerState.elevation===1 ? theme.manualGeneratedColors.Light.surfaceContainer.ler:
+                  ownerState.elevation===2 ? theme.manualGeneratedColors.Light.surfaceContainer.md:
+                      ownerState.elevation===3 ? theme.manualGeneratedColors.Light.surfaceContainer.her:
+                          ownerState.elevation===4 ? theme.manualGeneratedColors.Light.surfaceContainer.elv4:
+                              ownerState.elevation===5 ? theme.manualGeneratedColors.Light.surfaceContainer.elv5:
+                                  ownerState.elevation===6 ? theme.manualGeneratedColors.Light.surfaceContainer.hest:undefined,
+          };
+        }
       },
     },
   },

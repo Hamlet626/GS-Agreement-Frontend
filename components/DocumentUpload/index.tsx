@@ -47,7 +47,6 @@ export default function DocumentUpload() {
         variant="contained"
         component="label"
         startIcon={<PictureAsPdfIcon />}
-        color="secondary"
       >
         Upload Document
         <input
