@@ -145,14 +145,15 @@ export const materialTheme = createTheme({
     MuiCard: {
       styleOverrides: {
         root: ({ ownerState}) => {
-
-          return { backgroundColor: ownerState.elevation===0 ? theme.manualGeneratedColors.Light.surfaceContainer.lest:
-              ownerState.elevation===1 ? theme.manualGeneratedColors.Light.surfaceContainer.ler:
-                  ownerState.elevation===2 ? theme.manualGeneratedColors.Light.surfaceContainer.md:
-                      ownerState.elevation===3 ? theme.manualGeneratedColors.Light.surfaceContainer.her:
-                          ownerState.elevation===4 ? theme.manualGeneratedColors.Light.surfaceContainer.elv4:
-                              ownerState.elevation===5 ? theme.manualGeneratedColors.Light.surfaceContainer.elv5:
-                                  ownerState.elevation===6 ? theme.manualGeneratedColors.Light.surfaceContainer.hest:undefined,
+          let elevation = ownerState.elevation??1;
+          return { backgroundColor:
+                elevation==0 ? theme.manualGeneratedColors.Light.surfaceContainer.lest:
+                    elevation<2 ? theme.manualGeneratedColors.Light.surfaceContainer.ler:
+                        elevation<6 ? theme.manualGeneratedColors.Light.surfaceContainer.md:
+                            elevation<12 ? theme.manualGeneratedColors.Light.surfaceContainer.her:
+                                elevation<16 ? theme.manualGeneratedColors.Light.surfaceContainer.elv4:
+                                    elevation<24 ? theme.manualGeneratedColors.Light.surfaceContainer.elv5:
+                                        theme.manualGeneratedColors.Light.surfaceContainer.hest
           };
         }
       },
