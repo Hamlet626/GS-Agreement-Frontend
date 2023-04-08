@@ -4,6 +4,7 @@ import DraftEditor from "../components/DraftEditor";
 
 export default function Home() {
   return (
+      ///this is surface container 2, for which we could use elevation 12-15.9, see note1
     <Card elevation={12}>
       <CardContent>
         <DocumentUpload />
