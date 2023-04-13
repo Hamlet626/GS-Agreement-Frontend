@@ -64,7 +64,7 @@ export default function DocumentTabs() {
   );
 
   return (
-    <Card ref={tabRef} sx={{ marginTop: '1rem' }}>
+    <Card ref={tabRef} sx={{ marginTop: '1rem' }} elevation={2}>
       <CardContent>
       <Typography variant="h2" align="center">{documentTitle || 'Document Sections'}</Typography>
       {tabs}

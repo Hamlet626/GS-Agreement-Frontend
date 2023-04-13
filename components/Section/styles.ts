@@ -6,7 +6,8 @@ import { theme } from "../../config/theme";
 export const SectionsWrapper = styled("div", {
   display: "flex",
   flexDirection: "column",
-  gap: "2.5rem",
+  gap: "1rem",
+  marginTop: "1rem",
 });
 
 export const DocumentTextArea = styled(TextareaAutosize, {
@@ -33,15 +34,7 @@ export const SectionHeader = styled("div", {
 export const Transcription = styled("p", {
   fontSize: "14px",
   fontStyle: "italic",
-  padding: "1rem",
-});
-
-export const SectionParagraphRow = styled(Grid, {
-  marginBottom: "1rem",
-  backgroundColor: `${theme.colors.$primaryMain}08`,
-  borderRadius: `${theme.border.$borderRadius}px`,
-  boxSizing: "border-box",
-  border: `1px solid ${theme.colors.$primaryMain}`,
+  padding: "0 1rem",
 });
 
 export const Paragraph = styled("p", {
@@ -51,6 +44,6 @@ export const Paragraph = styled("p", {
   textAlign: "justify",
   backgroundColor: `${theme.colors.$primaryMain}50`,
   margin: "0",
-  borderRadius: `${theme.border.$borderRadius}px 0 0 ${theme.border.$borderRadius}px`,
+  borderRadius: `${theme.border.$borderRadius}px`,
   cursor: "pointer",
 });
