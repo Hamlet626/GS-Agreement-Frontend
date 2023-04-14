@@ -23,7 +23,7 @@ interface MyAppProps extends AppProps {
 }
 
 export default function MyApp(props: MyAppProps) {
-  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+  const { Component, router, emotionCache = clientSideEmotionCache, pageProps } = props;
   return (
     <ReduxProvider store={store}>
       <CacheProvider value={emotionCache}>
@@ -46,11 +46,16 @@ export default function MyApp(props: MyAppProps) {
                 minHeight: "100vh",
               }}
             >
-              <Header />
-              <Container sx={{ my: 6, flexGrow: 1 }}>
-                <Component {...pageProps} />
-              </Container>
-              <Footer />
+              {router.route === "/chat" ?
+                  <Component {...pageProps} /> :
+                  <>
+                    <Header/>
+                    <Container sx={{my: 6, flexGrow: 1}}>
+                      <Component {...pageProps} />
+                    </Container>
+                    <Footer/>
+                  </>
+              }
             </Box>
           </MaterialThemeProvider>
         </LocalizationProvider>
