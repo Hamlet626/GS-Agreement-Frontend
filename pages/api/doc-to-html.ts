@@ -1,7 +1,7 @@
 import nextConnect from "next-connect";
 import multer from "multer";
 import type { NextApiResponse } from "next";
-import { s3Upload } from "../../utils/s3Upload";
+import { s3UploadStoreVec } from "../../utils/s3Upload";
 import mammoth from "mammoth";
 import jsdom from "jsdom";
 import { unlinkSync } from "fs";
@@ -52,7 +52,7 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
 
     // Store Doc File in S3 Bucket
     if(process.env.REACT_APP_ENV === 'production'){
-      await s3Upload(req.file.path, req.file.originalname);
+      await s3UploadStoreVec(req.file.path, req.file.originalname);
     }
     unlinkSync(req.file.path);
   } catch (error: any) {

@@ -43,8 +43,6 @@ const ChatSendButton = styled(Button)({
     marginLeft: "1rem",
 });
 
-const messages = ["Hello", "Hi, how do you do.", "Fine, thank you."];
-
 export default function ChatBody() {
     const documentTitle = useSelector(selectDocumentTitle);
     const [loading, setLoading] = useState(false);
@@ -65,15 +63,13 @@ export default function ChatBody() {
                 { fileName:documentTitle, history:newMsgs, },
                 {headers: { "content-type": "application/json", "wckey":"hamlet"}})
                 .catch((e)=>e.response);
-            console.log(text);
             setLoading(false);
             if(error)return dispatch(mountModal({
                     status: true,
                     title: "An error happend",
-                    message: error || "Unfortunately, an error happened, please try again.",
+                    message: JSON.stringify(error)==="{}" ? "Unfortunately, an error happened, please try again." : JSON.stringify(error),
                 }));
             if(text)setMessages(newMsgs.concat([{role:"assistant",content:text}]));
-            // Send the message here
             setInputText("");
         }
     };
