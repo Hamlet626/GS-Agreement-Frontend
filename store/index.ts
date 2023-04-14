@@ -4,6 +4,7 @@ import loaderStatus from "./loaderStatus";
 import modal from "./modal";
 import saveSection from "./saveSection";
 import sbpData from "./sbpData";
+import emailSender from "./emailSender";
 
 import { setupListeners } from "@reduxjs/toolkit/query";
 import thunk from "redux-thunk";
@@ -13,7 +14,8 @@ const reducer = combineReducers({
   loaderStatus,
   modal,
   saveSection,
-  sbpData
+  sbpData,
+  emailSender
 });
 const store = configureStore({
   reducer,

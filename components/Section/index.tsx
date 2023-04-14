@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   DocumentTextArea,
   DocumentTitle,
@@ -16,6 +22,7 @@ import axios from "axios";
 import { Box, Grid, Card } from "@mui/material";
 import { mountModal } from "../../store/modal";
 import { pushCallback, removeCallbackById } from "../../store/saveSection";
+import { openEmailDrawer } from "../../store/emailSender";
 
 type ITranscription = {
   transcriptionText: string;
@@ -95,6 +102,33 @@ export default function Section({ title, text, index }: SectionProps) {
     return newSectionText.split("\n\n");
   }, [newSectionText]);
 
+  const sendToMeButton = useCallback(
+    (paragraph: string) => {
+      const transcriptionToSend = transcriptions?.find(
+        ({ originalParagraph }) => originalParagraph === paragraph
+      );
+      return transcriptionToSend?.transcriptionText ? (
+        <Button
+          variant="contained"
+          color="success"
+          size="small"
+          onClick={() =>
+            dispatch(
+              openEmailDrawer({
+                emailContent: transcriptionToSend.transcriptionText,
+              })
+            )
+          }
+        >
+          Send to me
+        </Button>
+      ) : (
+        <></>
+      );
+    },
+    [dispatch, transcriptions]
+  );
+
   //If the paragraph change, remove the transcription
   useEffect(() => {
     transcriptions.forEach(
@@ -166,14 +200,7 @@ export default function Section({ title, text, index }: SectionProps) {
                         >
                           Summarize
                         </Button>
-                        <Button
-                          variant="contained"
-                          color="success"
-                          size="small"
-                          onClick={() => handleGetTranscription(paragraph)}
-                        >
-                          Send to me
-                        </Button>
+                        {sendToMeButton(paragraph)}
                       </Box>
                     </Grid>
                     <Grid item xs={12} sm={5}>

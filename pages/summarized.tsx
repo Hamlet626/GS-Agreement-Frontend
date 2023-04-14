@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import { setLoading } from "../store/loaderStatus";
 import { unsetLoading } from "../store/loaderStatus";
 import ButtonSaveAllSections from "../components/ButtonSaveAllSections";
+import EmailDrawer from "../components/EmailDrawer";
 
 export default function Summarized() {
   const router = useRouter();
@@ -34,13 +35,14 @@ export default function Summarized() {
 
   return (
     <>
-      <Alert severity="warning" sx={{ width: '90%', margin: '0 auto'}}>
+      <Alert severity="warning" sx={{ width: "90%", margin: "0 auto" }}>
         This document summary is not legal advice or legally binding in any way.
         You should consult a lawyer.
       </Alert>
       <DocumentTabs />
       <DocumentSummarizer />
       <ButtonSaveAllSections />
+      <EmailDrawer />
     </>
   );
 }

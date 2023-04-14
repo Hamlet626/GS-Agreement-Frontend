@@ -5,14 +5,15 @@ export const theme = {
   colors: {
     $primaryMain: "#D9986F",
     // $primaryDark: "#F3DDCE",
-    // $primaryLight: "#FFF7F2",
+    $primaryLight: "#f9f2f2",
     $secondaryMain: "#ac8a76",//"#DED47A",
     // $success: "#DED47A",
     // $info: "#BFECF5",
     // $error: red.A400,
     // $warning: "#664d03",
     $white: "#ffffff",
-    $gray: "#C1C1C1"
+    $gray: "#C1C1C1",
+    $black: "#000000"
   },
   manualGeneratedColors:{
     Light: {
@@ -55,7 +56,7 @@ export const materialTheme = createTheme({
     primary: {
       main: theme.colors.$primaryMain,
       // dark: theme.colors.$primaryDark,
-      // light: theme.colors.$primaryLight,
+      light: theme.colors.$primaryLight,
     },
     secondary: {
       main: theme.colors.$secondaryMain,
@@ -106,20 +107,38 @@ export const materialTheme = createTheme({
         }),
       },
     },
-    MuiTab: {
+    MuiTabs:{
       styleOverrides: {
         root: ({ theme }) => ({
           ...{
-            color: theme.palette.secondary.main,
             backgroundColor: theme.palette.primary.light,
+          },
+        }),
+      },
+    },
+    MuiInputBase:{
+      styleOverrides: {
+        root: () => ({
+          ...{
+            backgroundColor: theme.colors.$white,
+          },
+        }),
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: ({ theme: materialTheme, ownerState }) => 
+          
+           ({
+          ...{
+            backgroundColor: ownerState.selected ?  materialTheme.palette.primary.main : theme.colors.$white,
+            border: 'none',
+            borderRadius: materialTheme.shape.borderRadius,
             fontSize: "0.75rem",
             fontWeight: 600,
             margin: "0 1px",
             textTransform: "none",
-            "&:focus, &:active": {
-              backgroundColor: theme.palette.primary.main,
-              color: theme.palette.primary.light,
-            },
+            color: `${theme.colors.$black} !important`,
           },
         }),
       },
@@ -133,15 +152,15 @@ export const materialTheme = createTheme({
         }),
       },
     },
-    // MuiPaper: {
-    //   styleOverrides: {
-    //     root: ({ theme }) => ({
-    //       ...{
-    //         backgroundColor: theme.palette.primary.dark,
-    //       },
-    //     }),
-    //   },
-    // },
+    MuiDrawer: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          ...{
+            backgroundColor: theme.palette.primary.light,
+          },
+        }),
+      },
+    },
     MuiCard: {
       styleOverrides: {
         root: ({ ownerState}) => {

@@ -1,6 +1,6 @@
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import CloseIcon from "@mui/icons-material/Close";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Card, CardContent, Typography } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   resetSbpData,
@@ -52,26 +52,26 @@ export default function SbpUpload() {
   };
 
   return (
-    <>
+    <Card elevation={2}>
+      <CardContent>
       <Typography variant="h2" align="center">
         SBP Document
       </Typography>
       <Box sx={{ display: "flex", justifyContent: "center" }}>
         {sbpFileName ? (
           <Button
-            variant="text"
-            onClick={handleRemoveSbp}
-            startIcon={<PictureAsPdfIcon />}
-            endIcon={<CloseIcon />}
+          variant="text"
+          onClick={handleRemoveSbp}
+          startIcon={<PictureAsPdfIcon />}
+          endIcon={<CloseIcon />}
           >
             {sbpFileName}
           </Button>
         ) : (
           <Button
-            variant="contained"
-            component="label"
-            startIcon={<PictureAsPdfIcon />}
-            color="info"
+          variant="contained"
+          component="label"
+          startIcon={<PictureAsPdfIcon />}
           >
             Upload SBP PDF
             <input
@@ -79,10 +79,11 @@ export default function SbpUpload() {
               accept="application/pdf"
               type="file"
               onChange={handleUploadSbp}
-            />
+              />
           </Button>
         )}
       </Box>
-    </>
+        </CardContent>
+    </Card>
   );
 }
