@@ -77,13 +77,24 @@ export default function ChatBody() {
     return (
         <>
             <ChatBox>
-                {messages.map((message, index) => (
-                    <ChatMessageContainer key={index} ismine={message.role=="user"}>
-                        <ChatMessageBubble ismine={message.role=="user"}>
-                            {message.content}
-                        </ChatMessageBubble>
-                    </ChatMessageContainer>
-                ))}
+                {[
+                    ...messages.map((message, index) => (
+                        <ChatMessageContainer key={index} ismine={message.role=="user"}>
+                            <ChatMessageBubble ismine={message.role=="user"}>
+                                {message.content}
+                            </ChatMessageBubble>
+                        </ChatMessageContainer>
+                    )),
+                    ...(loading ? [
+                        <ChatMessageContainer key="loading" ismine={false}>
+                            <ChatMessageBubble ismine={false}>
+                                <Typography variant="body2" color="text.secondary">
+                                    Processing...
+                                </Typography>
+                            </ChatMessageBubble>
+                        </ChatMessageContainer>
+                    ] : [])
+                ]}
             </ChatBox>
             <Grid container component="form" onSubmit={(e) => e.preventDefault()}>
                 <Grid item xs={9}>
