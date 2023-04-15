@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Typography } from "@mui/material";
 import { TabsWrapper } from "./styles";
 import {  useSelector } from "react-redux";
-import { selectDocumentTitle, selectSection } from "../../store/pdfDocument";
+import { selectDocumentTitle, selectSection } from "../../store/docSections";
 
 export default function DocumentTabs() {
   const [value, setValue] = React.useState(0);

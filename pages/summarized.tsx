@@ -3,7 +3,7 @@ import DocumentSummarizer from "../components/DocumentSummarizer";
 import Alert from "@mui/material/Alert";
 import DocumentTabs from "../components/DocumentTabs";
 import { useDispatch, useSelector } from "react-redux";
-import { selectSection, setSections } from "../store/pdfDocument";
+import { selectSection, setSections } from "../store/docSections";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { setLoading } from "../store/loaderStatus";
@@ -14,17 +14,17 @@ import EmailDrawer from "../components/EmailDrawer";
 export default function Summarized() {
   const router = useRouter();
 
-  const pdfSections = useSelector(selectSection);
+  const sections = useSelector(selectSection);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(setLoading());
-    Promise.resolve("pdfSections")
+    Promise.resolve("sections")
       .then((data) => localStorage.getItem(data))
-      .then((localStoragePdfSection) => {
-        if (localStoragePdfSection) {
-          dispatch(setSections(JSON.parse(localStoragePdfSection || "")));
-        } else if (!localStoragePdfSection && !pdfSections) {
+      .then((localStorageSections) => {
+        if (localStorageSections) {
+          dispatch(setSections(JSON.parse(localStorageSections || "")));
+        } else if (!localStorageSections && !sections) {
           router.push("/");
         }
       })

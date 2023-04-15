@@ -21,7 +21,6 @@ export default function ButtonSaveAllSections() {
       <Wrapper>
         <Button
           variant={"contained"}
-          color={"info"}
           onClick={handleSaveAllSections}
         >
           Save All

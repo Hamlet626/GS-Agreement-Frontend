@@ -8,7 +8,7 @@ const Editor = dynamic(
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { ISection, setSections } from "../../store/pdfDocument";
+import { ISection, setSections } from "../../store/docSections";
 import { useRouter } from "next/router";
 import { theme } from "../../config/theme";
 

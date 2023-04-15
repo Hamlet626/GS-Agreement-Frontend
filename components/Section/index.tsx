@@ -110,7 +110,7 @@ export default function Section({ title, text, index }: SectionProps) {
       return transcriptionToSend?.transcriptionText ? (
         <Button
           variant="contained"
-          color="success"
+          color="secondary"
           size="small"
           onClick={() =>
             dispatch(

@@ -2,7 +2,7 @@ import {AppBar, Card, CardContent, Container, IconButton, Toolbar, Typography} f
 import DocumentUpload from "../components/DocumentUpload";
 import DraftEditor from "../components/DraftEditor";
 import {useSelector} from "react-redux";
-import {selectDocumentTitle} from "../store/pdfDocument";
+import {selectDocumentTitle} from "../store/docSections";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import {useRouter} from "next/router";
 import ChatBody from "../components/ChatBody";

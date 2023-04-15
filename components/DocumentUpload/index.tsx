@@ -1,9 +1,9 @@
-import { Button, Paper } from "@mui/material";
+import { Button } from "@mui/material";
 import axios from "axios";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { setDocumentTitle, setSections } from "../../store/pdfDocument";
+import { setDocumentTitle, setSections } from "../../store/docSections";
 import { setLoading, unsetLoading } from "../../store/loaderStatus";
 import { Wrapper } from "./styles";
 
@@ -11,7 +11,7 @@ export default function DocumentUpload() {
   const dispatch = useDispatch();
   const router = useRouter();
 
-  const handleUploadPdf = async (event: any) => {
+  const handleUploadDocument = async (event: any) => {
     try {
       dispatch(setLoading());
       const documentFile = event.target.files[0];
@@ -53,7 +53,7 @@ export default function DocumentUpload() {
           hidden
           accept="application/pdf, .docx"
           type="file"
-          onChange={handleUploadPdf}
+          onChange={handleUploadDocument}
         />
       </Button>
     </Wrapper>

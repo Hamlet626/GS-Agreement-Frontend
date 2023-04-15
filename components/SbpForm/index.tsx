@@ -102,7 +102,6 @@ export default function SbpForm() {
         <Button
           variant="contained"
           component="label"
-          color="info"
           onClick={handleSubmitFieldsData}
         >
           Submit

@@ -13,7 +13,7 @@ import { styled } from "@mui/material/styles";
 import {ChangeEvent, useState} from "react";
 import axios from "axios";
 import {useDispatch, useSelector} from "react-redux";
-import {selectDocumentTitle} from "../../store/pdfDocument";
+import {selectDocumentTitle} from "../../store/docSections";
 import {mountModal} from "../../store/modal";
 
 const ChatBox = styled(Box)({

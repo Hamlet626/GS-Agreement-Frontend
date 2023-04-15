@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./index";
 
-interface IpdfDocument {
+interface IdocSections {
   documentTitle: string;
   sections: ISection[];
 }
@@ -11,18 +11,18 @@ export type ISection = {
   text: string;
 };
 
-const initialState: IpdfDocument = {
+const initialState: IdocSections = {
   documentTitle: "",
   sections: [],
 };
 
 export const slice = createSlice({
-  name: "pdfDocument",
+  name: "docSections",
   initialState,
   reducers: {
     setSections: (state, action) => {
       state.sections = action.payload;
-      localStorage.setItem("pdfSections", JSON.stringify(action.payload));
+      localStorage.setItem("sections", JSON.stringify(action.payload));
     },
     setDocumentTitle: (state, action) => {
       state.documentTitle = action.payload;
@@ -35,9 +35,9 @@ export const slice = createSlice({
   },
 });
 
-export const selectSection = (state: RootState) => state.pdfDocument.sections;
+export const selectSection = (state: RootState) => state.docSections.sections;
 export const selectDocumentTitle = (state: RootState) =>
-  state.pdfDocument.documentTitle;
+  state.docSections.documentTitle;
 
 export const { setSections, setDocumentTitle, resetSection } = slice.actions;
 export default slice.reducer;
