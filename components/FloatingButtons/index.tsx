@@ -1,15 +1,20 @@
 import { Wrapper } from "./styles";
 import { Button } from "@mui/material";
-import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import { openChat } from "../../store/chatOpen";
 
 export default function FloatingButtons() {
-  const router = useRouter();
+  const dispatch = useDispatch();
 
-    return (
-        <Wrapper>
-            <Button variant="contained" color="secondary" onClick={() => router.push('/chat')}>
-                Inquire Chatbot
-            </Button>
-        </Wrapper>
-    )
+  const handleOpenChat = () => {
+    dispatch(openChat());
+  };
+
+  return (
+    <Wrapper>
+      <Button variant="contained" color="secondary" onClick={handleOpenChat}>
+        Inquire Chatbot
+      </Button>
+    </Wrapper>
+  );
 }

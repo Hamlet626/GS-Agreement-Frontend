@@ -5,6 +5,7 @@ import modal from "./modal";
 import saveSection from "./saveSection";
 import sbpData from "./sbpData";
 import emailSender from "./emailSender";
+import chatOpen from "./chatOpen";
 
 import { setupListeners } from "@reduxjs/toolkit/query";
 import thunk from "redux-thunk";
@@ -15,7 +16,8 @@ const reducer = combineReducers({
   modal,
   saveSection,
   sbpData,
-  emailSender
+  emailSender,
+  chatOpen
 });
 const store = configureStore({
   reducer,
