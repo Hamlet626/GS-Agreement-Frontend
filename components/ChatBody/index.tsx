@@ -1,119 +1,123 @@
-import {
-    AppBar,
-    Box,
-    Button,
-    Container,
-    CssBaseline,
-    Grid,
-    TextField,
-    Toolbar,
-    Typography,
-} from "@mui/material";
-import { styled } from "@mui/material/styles";
-import {ChangeEvent, useState} from "react";
+import { Container, Typography } from "@mui/material";
+import { useState } from "react";
 import axios from "axios";
-import {useDispatch, useSelector} from "react-redux";
-import {selectDocumentTitle} from "../../store/docSections";
-import {mountModal} from "../../store/modal";
-
-const ChatBox = styled(Box)({
-    flexGrow: 1,
-    overflowY: "auto",
-    paddingBottom: "1rem",
-});
-
-const ChatMessageContainer = styled(Box)(({ ismine }: { ismine: boolean }) => ({
-    display: "flex",
-    justifyContent: ismine ? "flex-end" : "flex-start",
-    marginBottom: "0.5rem",
-}));
-
-const ChatMessageBubble = styled(Box)(({ ismine }: { ismine: boolean }) => ({
-    backgroundColor: ismine ? "#DCF8C6" : "#F1F0F0",
-    padding: "0.5rem",
-    borderRadius: "0.5rem",
-}));
-
-const ChatTextField = styled(TextField)({
-    flexGrow: 1,
-    marginRight: "1rem",
-});
-
-const ChatSendButton = styled(Button)({
-    marginLeft: "1rem",
-});
+import { useDispatch, useSelector } from "react-redux";
+import { selectDocumentTitle } from "../../store/docSections";
+import { mountModal } from "../../store/modal";
+import {
+  ChatBox,
+  ChatFieldContainer,
+  ChatMessageBubble,
+  ChatMessageContainer,
+  ChatSendButton,
+  ChatTextField,
+  ChatWrapper,
+} from "./styles";
+import { useForm } from "react-hook-form";
 
 export default function ChatBody() {
-    const documentTitle = useSelector(selectDocumentTitle);
-    const [loading, setLoading] = useState(false);
-    const [messages, setMessages] = useState<{role:string,content:string}[]>([] as {role:string,content:string}[]);
-    const [inputText, setInputText] = useState("");
-    const dispatch = useDispatch();
+  const documentTitle = useSelector(selectDocumentTitle);
+  const [loading, setLoading] = useState(false);
+  const [messages, setMessages] = useState<{ role: string; content: string }[]>(
+    [] as { role: string; content: string }[]
+  );
+  const dispatch = useDispatch();
+  const {
+    register,
+    handleSubmit,
+    getFieldState,
+    reset,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      message: "",
+    },
+  });
 
-    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setInputText(event.target.value);
-    };
+  const onSubmit = async ({ message }: { message: string }) => {
+    reset();
 
-    const handleSendClick = async () => {
-        if (inputText.trim()) {
-            let newMsgs=messages.concat([{role:"user",content:inputText.trim()}]);
-            setMessages(newMsgs);
-            setLoading(true);
-            const {data:{text,error}}=await axios.post("https://wechaty.trustus.app/gpt/contractChat",
-                { fileName:documentTitle, history:newMsgs, },
-                {headers: { "content-type": "application/json", "wckey":"hamlet"}})
-                .catch((e)=>e.response);
-            setLoading(false);
-            if(error)return dispatch(mountModal({
-                    status: true,
-                    title: "An error happend",
-                    message: JSON.stringify(error)==="{}" ? "Unfortunately, an error happened, please try again." : JSON.stringify(error),
-                }));
-            if(text)setMessages(newMsgs.concat([{role:"assistant",content:text}]));
-            setInputText("");
-        }
-    };
+    if (message.trim()) {
+      let newMsgs = messages.concat([
+        { role: "user", content: message.trim() },
+      ]);
+      setMessages(newMsgs);
+      setLoading(true);
+      const {
+        data: { text, error },
+      } = await axios
+        .post(
+          "https://wechaty.trustus.app/gpt/contractChat",
+          { fileName: documentTitle, history: newMsgs },
+          { headers: { "content-type": "application/json", wckey: "hamlet" } }
+        )
+        .catch((e) => e.response);
+      setLoading(false);
+      if (error)
+        return dispatch(
+          mountModal({
+            status: true,
+            title: "An error happend",
+            message:
+              JSON.stringify(error) === "{}"
+                ? "Unfortunately, an error happened, please try again."
+                : JSON.stringify(error),
+          })
+        );
+      if (text)
+        setMessages(newMsgs.concat([{ role: "assistant", content: text }]));
+    }
+  };
 
-    return (
-        <>
-            <ChatBox>
-                {[
-                    ...messages.map((message, index) => (
-                        <ChatMessageContainer key={index} ismine={message.role=="user"}>
-                            <ChatMessageBubble ismine={message.role=="user"}>
-                                {message.content}
-                            </ChatMessageBubble>
-                        </ChatMessageContainer>
-                    )),
-                    ...(loading ? [
-                        <ChatMessageContainer key="loading" ismine={false}>
-                            <ChatMessageBubble ismine={false}>
-                                <Typography variant="body2" color="text.secondary">
-                                    Processing...
-                                </Typography>
-                            </ChatMessageBubble>
-                        </ChatMessageContainer>
-                    ] : [])
-                ]}
-            </ChatBox>
-            <Grid container component="form" onSubmit={(e) => e.preventDefault()}>
-                <Grid item xs={9}>
-                    <ChatTextField
-                        label="Type your message here"
-                        value={inputText}
-                        onChange={handleInputChange}
-                    />
-                </Grid>
-                <Grid item xs={3}>
-                    <ChatSendButton
-                        variant="contained"
-                        onClick={handleSendClick}
-                        disabled={loading||!inputText.trim()}
-                    >
-                        Send
-                    </ChatSendButton>
-                </Grid>
-            </Grid>
-        </>
-    );
+  return (
+    <>
+      <ChatWrapper>
+        <ChatBox>
+          <Container>
+            {[
+              ...messages.map((message, index) => (
+                <ChatMessageContainer
+                  key={index}
+                  ismine={message.role == "user"}
+                >
+                  <ChatMessageBubble ismine={message.role == "user"}>
+                    {message.content}
+                  </ChatMessageBubble>
+                </ChatMessageContainer>
+              )),
+              ...(loading
+                ? [
+                    <ChatMessageContainer key="loading" ismine={false}>
+                      <ChatMessageBubble ismine={false}>
+                        <Typography variant="body2" color="text.secondary">
+                          Processing...
+                        </Typography>
+                      </ChatMessageBubble>
+                    </ChatMessageContainer>,
+                  ]
+                : []),
+            ]}
+          </Container>
+        </ChatBox>
+        <Container>
+              <ChatFieldContainer onSubmit={handleSubmit(onSubmit)}>
+                <ChatTextField
+                  label="Type your message here"
+                  type="text"
+                  {...register("message", { required: true })}
+                  error={Boolean(errors.message)}
+                />
+                <ChatSendButton
+                  variant="contained"
+                  type="submit"
+                  size="large"
+                  disabled={loading || !getFieldState("message")}
+                >
+                  Send
+                </ChatSendButton>
+              </ChatFieldContainer>
+        </Container>
+      </ChatWrapper>
+    </>
+  );
 }

@@ -10,6 +10,7 @@ import { setLoading } from "../store/loaderStatus";
 import { unsetLoading } from "../store/loaderStatus";
 import ButtonSaveAllSections from "../components/ButtonSaveAllSections";
 import EmailDrawer from "../components/EmailDrawer";
+import FloatingButtons from "../components/FloatingButtons";
 
 export default function Summarized() {
   const router = useRouter();
@@ -42,6 +43,7 @@ export default function Summarized() {
       <DocumentTabs />
       <DocumentSummarizer />
       <ButtonSaveAllSections />
+      <FloatingButtons />
       <EmailDrawer />
     </>
   );
