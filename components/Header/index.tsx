@@ -9,8 +9,8 @@ import { theme } from "../../config/theme";
 export default function Header() {
   const router = useRouter();
   const navItems = [
-    { text: "Contract", href: "/" },
-    { text: "SBP", href: "/sbp" },
+    { text: "Contract Explanation", href: "/" },
+    { text: "Benefit Package Parser", href: "/sbp" },
   ];
 
   return (

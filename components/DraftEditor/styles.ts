@@ -56,4 +56,7 @@ export const ButtonWrapper = styled("div", {
   display: "flex",
   justifyContent: "flex-end",
   padding: "1rem",
+  backgroundColor: 'white',
+  borderBottomLeftRadius: `${theme.border.$borderRadius}px`,
+  borderBottomRightRadius: `${theme.border.$borderRadius}px`//color: 'black'
 });

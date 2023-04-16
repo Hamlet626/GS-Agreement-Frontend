@@ -53,11 +53,14 @@ export default function DraftEditor() {
           boxShadow: theme.shadows.$mainShadow,
         }}
       >
-        Write a Document
+        Paste a Document Content Text
       </Typography>
       <DraftEditorRoot>
         <Editor
           onContentStateChange={({ blocks }) => setEditorBlocks(blocks)}
+          editorStyle={{backgroundColor: 'white', color: 'black'}}
+          toolbarStyle={{borderTopLeftRadius: `${theme.border.$borderRadius}px`,
+              borderTopRightRadius: `${theme.border.$borderRadius}px`}}
           toolbar={{
             inline: {
               options: ["bold"],
@@ -69,7 +72,7 @@ export default function DraftEditor() {
             variant="contained"
             onClick={handleTransformBlocksInSections}
           >
-            Send
+            Upload Text
           </Button>
         </ButtonWrapper>
       </DraftEditorRoot>
