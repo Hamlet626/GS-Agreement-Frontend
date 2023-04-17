@@ -1,4 +1,4 @@
-import { AppBar, IconButton, Toolbar, Typography, Drawer } from "@mui/material";
+import { AppBar, IconButton, Toolbar, Typography, Drawer, useMediaQuery, Theme } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { selectDocumentTitle } from "../../store/docSections";
@@ -13,6 +13,8 @@ export default function Chat() {
   const handleCloseChat = () => {
     dispatch(closeChat());
   };
+
+  const isDesktop = useMediaQuery((theme:Theme) => theme.breakpoints.up('sm'));
 
   return (
     <Drawer
@@ -34,8 +36,8 @@ export default function Chat() {
             >
               <ArrowBackIcon />
             </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Inquire about {documentTitle}
+            <Typography variant="h6" component="div" sx={{ flexGrow: 1 ,maxLines:1, overflowX: "clip"}}>
+              {isDesktop?`Inquire about ${documentTitle}`:"Inquiry"}
             </Typography>
           </Toolbar>
         </AppBar>
