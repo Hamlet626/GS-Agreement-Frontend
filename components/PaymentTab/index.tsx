@@ -97,7 +97,7 @@ export default function PaymentTab() {
                 sx={{
                   p: 3,
                   width: "100%",
-                  borderRadius: "8px",
+                  borderRadius: `${theme.border.$borderRadius}px`,
                   border: `1px solid ${theme.colors.$primaryMain}`,
                 }}
               >

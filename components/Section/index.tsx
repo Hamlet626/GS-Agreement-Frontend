@@ -1,10 +1,15 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   DocumentTextArea,
   DocumentTitle,
   Paragraph,
   SectionHeader,
-  SectionParagraphRow,
   SectionsWrapper,
   Transcription,
 } from "./styles";
@@ -14,10 +19,10 @@ import ModeEditIcon from "@mui/icons-material/ModeEdit";
 import { useDispatch } from "react-redux";
 import { setLoading, unsetLoading } from "../../store/loaderStatus";
 import axios from "axios";
-import { Box, Grid } from "@mui/material";
+import { Box, Grid, Card } from "@mui/material";
 import { mountModal } from "../../store/modal";
-import TextSnippetIcon from "@mui/icons-material/TextSnippet";
-import {pushCallback, removeCallbackById} from "../../store/saveSection";
+import { pushCallback, removeCallbackById } from "../../store/saveSection";
+import { openEmailDrawer } from "../../store/emailSender";
 
 type ITranscription = {
   transcriptionText: string;
@@ -36,7 +41,7 @@ export default function Section({ title, text, index }: SectionProps) {
   const [newSectionText, setNewSectionText] = useState(text);
   const [transcriptions, setTranscriptions] = useState<ITranscription[]>([]);
 
-  const textEditorRef = useRef(null)
+  const textEditorRef = useRef(null);
 
   const dispatch = useDispatch();
 
@@ -46,34 +51,28 @@ export default function Section({ title, text, index }: SectionProps) {
 
       await axios
         .post("/api/generate-transcription", { text: paragraph })
-        .then(
-          ({
-            data: {
-              result: { choices },
-            },
-          }) => {
-            let alreadyHas = false;
+        .then(({ data: { result } }) => {
+          let alreadyHas = false;
 
-            transcriptions?.forEach(({ originalParagraph }, index) => {
-              if (originalParagraph === paragraph) {
-                let newTranscriptions = [...transcriptions];
-                newTranscriptions[index].transcriptionText = choices[0].text;
-                setTranscriptions(newTranscriptions);
-                alreadyHas = true;
-              }
-            });
-
-            if (!alreadyHas) {
-              setTranscriptions([
-                ...transcriptions,
-                {
-                  transcriptionText: choices[0].text,
-                  originalParagraph: paragraph,
-                },
-              ]);
+          transcriptions?.forEach(({ originalParagraph }, index) => {
+            if (originalParagraph === paragraph) {
+              let newTranscriptions = [...transcriptions];
+              newTranscriptions[index].transcriptionText = result;
+              setTranscriptions(newTranscriptions);
+              alreadyHas = true;
             }
+          });
+
+          if (!alreadyHas) {
+            setTranscriptions([
+              ...transcriptions,
+              {
+                transcriptionText: result,
+                originalParagraph: paragraph,
+              },
+            ]);
           }
-        )
+        })
         .then(() => dispatch(unsetLoading()));
     } catch (error: any) {
       console.error(error);
@@ -96,12 +95,39 @@ export default function Section({ title, text, index }: SectionProps) {
   };
   const handleEdit = () => {
     setEditModeOn(true);
-    dispatch(pushCallback({ callback: ()=>setEditModeOn(false), id: index }));
+    dispatch(pushCallback({ callback: () => setEditModeOn(false), id: index }));
   };
 
   const sectionParagraph = useMemo(() => {
     return newSectionText.split("\n\n");
   }, [newSectionText]);
+
+  const sendToMeButton = useCallback(
+    (paragraph: string) => {
+      const transcriptionToSend = transcriptions?.find(
+        ({ originalParagraph }) => originalParagraph === paragraph
+      );
+      return transcriptionToSend?.transcriptionText ? (
+        <Button
+          variant="contained"
+          color="secondary"
+          size="small"
+          onClick={() =>
+            dispatch(
+              openEmailDrawer({
+                emailContent: transcriptionToSend.transcriptionText,
+              })
+            )
+          }
+        >
+          Send to me
+        </Button>
+      ) : (
+        <></>
+      );
+    },
+    [dispatch, transcriptions]
+  );
 
   //If the paragraph change, remove the transcription
   useEffect(() => {
@@ -118,11 +144,9 @@ export default function Section({ title, text, index }: SectionProps) {
         <DocumentTitle id={index.toString()}>{title}</DocumentTitle>
         <Button
           variant={editModeOn ? "outlined" : "text"}
-          color="secondary"//{editModeOn ? "secondary" : "primary"}
-          startIcon={!editModeOn&&<ModeEditIcon />}
-          onClick={
-            editModeOn ? handleSaveChanges : handleEdit
-          }
+          color="secondary" //{editModeOn ? "secondary" : "primary"}
+          startIcon={!editModeOn && <ModeEditIcon />}
+          onClick={editModeOn ? handleSaveChanges : handleEdit}
         >
           {editModeOn ? "Save" : "Edit"}
         </Button>
@@ -146,74 +170,53 @@ export default function Section({ title, text, index }: SectionProps) {
         </Grid>
       ) : (
         <>
-          {sectionParagraph?.map((paragraph, index) => (
-              /[a-z]/i.test(paragraph)&&
-            <SectionParagraphRow
-              container
-              rowSpacing={3}
-              alignItems="center"
-              key={index}
-            >
-              <Grid
-                item
-                xs={12}
-                sm={5}
-                style={{
-                  paddingTop: 0,
-                }}
-                onClick={handleEdit}
-              >
-                <Paragraph>{paragraph}</Paragraph>
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sm={2}
-                style={{
-                  paddingTop: 0,
-                }}
-              >
-                <Box
-                  sx={(theme) => ({
-                    display: "flex",
-                    justifyContent: "center",
-                    [theme.breakpoints.down("sm")]: {
-                      marginBottom: "1rem",
-                    },
-                  })}
+          {sectionParagraph?.map(
+            (paragraph, index) =>
+              /[a-z]/i.test(paragraph) && (
+                <Card
+                  elevation={6}
+                  key={index}
+                  sx={{ marginTop: index > 0 ? "1rem" : "" }}
                 >
-                  <Button
-                    variant="contained"
-                    color="success"
-                    startIcon={<TextSnippetIcon />}
-                    style={{
-                      fontSize: "12px",
-                    }}
-                    onClick={() => handleGetTranscription(paragraph)}
-                  >
-                    Summarize
-                  </Button>
-                </Box>
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sm={5}
-                style={{
-                  paddingTop: 0,
-                }}
-              >
-                {transcriptions?.map(
-                  ({ originalParagraph, transcriptionText }, index) =>
-                    originalParagraph === paragraph && (
-                      <Transcription key={index}>
-                        {transcriptionText}
-                      </Transcription>
-                    )
-                )}
-              </Grid>
-            </SectionParagraphRow>
-          ))}
+                  <Grid container rowSpacing={3} alignItems="center">
+                    <Grid item xs={12} sm={5} onClick={handleEdit}>
+                      <Paragraph>{paragraph}</Paragraph>
+                    </Grid>
+                    <Grid item xs={12} sm={2}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: "1rem",
+                          padding: "1rem",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          size="small"
+                          onClick={() => handleGetTranscription(paragraph)}
+                        >
+                          Summarize
+                        </Button>
+                        {sendToMeButton(paragraph)}
+                      </Box>
+                    </Grid>
+                    <Grid item xs={12} sm={5}>
+                      {transcriptions?.map(
+                        ({ originalParagraph, transcriptionText }, index) =>
+                          originalParagraph === paragraph && (
+                            <Transcription key={index}>
+                              {transcriptionText}
+                            </Transcription>
+                          )
+                      )}
+                    </Grid>
+                  </Grid>
+                </Card>
+              )
+          )}
         </>
       )}
     </SectionsWrapper>

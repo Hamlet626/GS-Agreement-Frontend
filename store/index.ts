@@ -1,19 +1,23 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import pdfDocument from "./pdfDocument";
+import docSections from "./docSections";
 import loaderStatus from "./loaderStatus";
 import modal from "./modal";
 import saveSection from "./saveSection";
 import sbpData from "./sbpData";
+import emailSender from "./emailSender";
+import chatOpen from "./chatOpen";
 
 import { setupListeners } from "@reduxjs/toolkit/query";
 import thunk from "redux-thunk";
 
 const reducer = combineReducers({
-  pdfDocument,
+  docSections,
   loaderStatus,
   modal,
   saveSection,
-  sbpData
+  sbpData,
+  emailSender,
+  chatOpen
 });
 const store = configureStore({
   reducer,

@@ -1,16 +1,18 @@
 // @ts-nocheck
-import { Button, Grid, Tooltip } from "@mui/material";
+import { Card, CardContent, Tooltip } from "@mui/material";
 import Tab from "@mui/material/Tab";
 import React, { useEffect, useRef, useState } from "react";
 import { Typography } from "@mui/material";
-import { TabsWrapper, Wrapper } from "./styles";
+import { TabsWrapper } from "./styles";
 import {  useSelector } from "react-redux";
-import { selectSection } from "../../store/pdfDocument";
+import { selectDocumentTitle, selectSection } from "../../store/docSections";
 
 export default function DocumentTabs() {
   const [value, setValue] = React.useState(0);
   const [stickyOnHeader, setStickyOnHeader] = useState(false);
   const documentSections = useSelector(selectSection);
+
+  const documentTitle = useSelector(selectDocumentTitle);
 
   const tabRef = useRef(null);
 
@@ -62,9 +64,11 @@ export default function DocumentTabs() {
   );
 
   return (
-    <Wrapper ref={tabRef}>
-      <Typography variant="h2" align="center">Select a Section</Typography>
+    <Card ref={tabRef} sx={{ marginTop: '1rem' }} elevation={2}>
+      <CardContent>
+      <Typography variant="h2" align="center">{documentTitle || 'Document Sections'}</Typography>
       {tabs}
-    </Wrapper>
+      </CardContent>
+    </Card>
   );
 }

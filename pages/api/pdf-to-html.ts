@@ -3,7 +3,7 @@ import multer from "multer";
 import type { NextApiResponse } from "next";
 import { processPDF2 } from "../../utils/processPdf";
 import PdfParse from "pdf-parse";
-import { s3Upload } from "../../utils/s3Upload";
+import {s3UploadStoreVec} from "../../utils/s3Upload";
 import { unlinkSync } from "fs";
 import {processSections} from "../../utils/processSections";
 
@@ -34,11 +34,12 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
 
     let sections = processSections(titles,pdfParseText);
 
-    res.status(200).json({ sections });
+    res.status(200).json({ sections, documentTitle: req.file.originalname });
    
     // Store PDF File in S3 Bucket
     if(process.env.REACT_APP_ENV === 'production'){
-      await s3Upload(req.file.path, req.file.originalname);
+      // await
+          s3UploadStoreVec(req.file.path, req.file.originalname);
     }
     unlinkSync(req.file.path);
 

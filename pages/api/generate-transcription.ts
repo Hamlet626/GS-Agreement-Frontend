@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
 import { openai, openaiConfig } from "../../utils/openAiConfiguration";
+import openAiChat from "../../utils/openAiChat";
 
 const apiRoute = nextConnect({
   onError(error, req, res: any) {
@@ -25,16 +26,23 @@ apiRoute.post(async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    const completion = await openai.createCompletion({
-      model: "text-davinci-003",
-      prompt: `Explain this cited paragraph form a legal contract agreement to a philistine by simple words.
-               Citation: ${req.body.text}
-               Explanation in short:`,
-      temperature: 0.1,
-      max_tokens: 1000,
-      top_p:1,
-    });
-    res.status(200).json({ result: completion.data });
+    const completion = await openAiChat([
+      {role:"system",content:"You are a helpful lawyer who stipulated surrogacy documents. Given a cited paragraph from a contract:\n" +
+            req.body.text  },
+      {role:"user",content:"I'm a philistine with this contract. Explain this paragraph to me by simple words.\n" +
+            "Explanation only on this part in short:"},
+    ],1000);
+    // const completion = await openai.createCompletion({
+    //   model: "text-davinci-003",
+    //   prompt: `Explain this cited paragraph form a legal contract agreement to a philistine by simple words.
+    //            Citation: ${req.body.text}
+    //            Explanation in short:`,
+    //   temperature: 0.1,
+    //   max_tokens: 1000,
+    //   top_p:1,
+    // });
+
+    res.status(200).json({ result: completion.lastChoice?.content });
   } catch (error: any) {
     if (error.response) {
       console.error(error.response.status, error.response.data);

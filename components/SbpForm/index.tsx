@@ -7,9 +7,11 @@ import { DatePicker } from "@mui/x-date-pickers";
 import { selectSbpData, setSbpPaymentTabs } from "../../store/sbpData";
 import { setLoading, unsetLoading } from "../../store/loaderStatus";
 import axios from "axios";
+import {getPaymentTabs} from "../../utils/apis/getPaymentTabs";
+import reFormatPayments from "../../utils/reFormatPayments";
 
 export default function SbpForm() {
-  const { fields, embeddings,fileText, dateMergeList} = useSelector(selectSbpData);
+  const { fields,fileText, dateMergeList} = useSelector(selectSbpData);
   const [fieldsData, setFieldsData] = useState<any>({});
   const dispatch = useDispatch();
 
@@ -17,9 +19,14 @@ export default function SbpForm() {
     try {
       dispatch(setLoading());
       await axios
-        .post("/api/sbp/doc-form", { sbpForm: fieldsData, embeddings,fileText, dateMergeList })
-        .then(({ data: { sbpPaymentTabs } }) => {
-          dispatch(setSbpPaymentTabs({ sbpPaymentTabs: JSON.parse(sbpPaymentTabs) }));
+        .post("https://wechaty.trustus.app/gpt/getPayments", { fileText, sbpForm: fieldsData, dateMergeList },
+            {headers: { "content-type": "application/json", "wckey":"hamlet"}})
+        .then(async({ data: { paymentTabs } }) => {
+            console.log(paymentTabs);
+            // const { data: { sbpPaymentTabs } }=await axios.post("/api/sbp/doc-form", {formOptions,fileText });
+            // const sbpPaymentTabs = await getPaymentTabs(fileText||"",paymentTabs);
+
+            dispatch(setSbpPaymentTabs({ sbpPaymentTabs: reFormatPayments(paymentTabs) }));
         })
         .then(() => dispatch(unsetLoading()));
     } catch (error) {
@@ -95,7 +102,6 @@ export default function SbpForm() {
         <Button
           variant="contained"
           component="label"
-          color="info"
           onClick={handleSubmitFieldsData}
         >
           Submit

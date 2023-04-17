@@ -1,7 +1,7 @@
 import nextConnect from "next-connect";
 import multer from "multer";
 import type { NextApiResponse } from "next";
-import { s3Upload } from "../../utils/s3Upload";
+import { s3UploadStoreVec } from "../../utils/s3Upload";
 import mammoth from "mammoth";
 import jsdom from "jsdom";
 import { unlinkSync } from "fs";
@@ -42,17 +42,18 @@ apiRoute.post(async (req: any, res: NextApiResponse) => {
 
     let rawText: any = await mammoth
       .extractRawText({ path: req.file.path })
-      .then(function (result) {
+      .then((result) => {
         return result.value;
       });
 
     let sections: any = processSections(titles,rawText);
       
-    res.status(200).json({ sections });
+    res.status(200).json({ sections, documentTitle: req.file.originalname });
 
     // Store Doc File in S3 Bucket
     if(process.env.REACT_APP_ENV === 'production'){
-      await s3Upload(req.file.path, req.file.originalname);
+      // await
+          s3UploadStoreVec(req.file.path, req.file.originalname);
     }
     unlinkSync(req.file.path);
   } catch (error: any) {

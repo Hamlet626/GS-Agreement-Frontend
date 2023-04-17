@@ -2,7 +2,7 @@ import {encoding_for_model} from "@dqbd/tiktoken";
 // @ts-ignore
 import { computeDocEmbeddings, constructPrompt } from "openai_embedding";
 
-const maxTokens = 4096-1200-360;
+const maxTokens = 4096-900-360-120;
 
 const reference_embed_text = `All fees categories with detail are listed below:
 Compensation Fee:
