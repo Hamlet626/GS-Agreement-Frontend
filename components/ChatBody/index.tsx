@@ -2,7 +2,7 @@ import { Container, Typography } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { selectDocumentTitle } from "../../store/docSections";
+import {selectDocumentStorageTitle, selectDocumentTitle} from "../../store/docSections";
 import { mountModal } from "../../store/modal";
 import {
   ChatBox,
@@ -16,7 +16,7 @@ import {
 import { useForm } from "react-hook-form";
 
 export default function ChatBody() {
-  const documentTitle = useSelector(selectDocumentTitle);
+  const documentTitle = useSelector(selectDocumentStorageTitle);
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState<{ role: string; content: string }[]>(
     [] as { role: string; content: string }[]
