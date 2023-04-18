@@ -3,6 +3,7 @@ import { RootState } from "./index";
 
 interface IdocSections {
   documentTitle: string;
+  documentStorageTitle: string;
   sections: ISection[];
 }
 
@@ -13,6 +14,7 @@ export type ISection = {
 
 const initialState: IdocSections = {
   documentTitle: "",
+  documentStorageTitle: "",
   sections: [],
 };
 
@@ -28,9 +30,14 @@ export const slice = createSlice({
       state.documentTitle = action.payload;
       localStorage.setItem("documentTitle", JSON.stringify(action.payload));
     },
+    setDocumentStorageTitle: (state, action) => {
+      state.documentStorageTitle = action.payload;
+      localStorage.setItem("documentStorageTitle", JSON.stringify(action.payload));
+    },
     resetSection: (state) => {
       state.sections = [];
       state.documentTitle = "";
+      state.documentStorageTitle = "";
     },
   },
 });
@@ -38,6 +45,8 @@ export const slice = createSlice({
 export const selectSection = (state: RootState) => state.docSections.sections;
 export const selectDocumentTitle = (state: RootState) =>
   state.docSections.documentTitle;
+export const selectDocumentStorageTitle = (state: RootState) =>
+    state.docSections.documentStorageTitle;
 
-export const { setSections, setDocumentTitle, resetSection } = slice.actions;
+export const { setSections, setDocumentTitle, setDocumentStorageTitle, resetSection } = slice.actions;
 export default slice.reducer;

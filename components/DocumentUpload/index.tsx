@@ -3,7 +3,7 @@ import axios from "axios";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { setDocumentTitle, setSections } from "../../store/docSections";
+import {setDocumentStorageTitle, setDocumentTitle, setSections} from "../../store/docSections";
 import { setLoading, unsetLoading } from "../../store/loaderStatus";
 import { Wrapper } from "./styles";
 
@@ -17,21 +17,22 @@ export default function DocumentUpload() {
       const documentFile = event.target.files[0];
 
       const formData = new FormData();
-      formData.append("documentFile", documentFile);
+      formData.append("file", documentFile);
 
       await axios
         .post(
-          documentFile.type === "application/pdf"
-            ? "/api/pdf-to-html"
-            : "/api/doc-to-html",
+          "https://wechaty.trustus.app/gpt/storeVect",
           formData,
           {
-            headers: { "content-type": "multipart/form-data" },
+            headers: { "content-type": "multipart/form-data", "wckey":"hamlet"},
           }
         )
-        .then(({ data: { sections, documentTitle } }) => {
+        .then(({ data: { sections, newFileName, originalname } }) => {
+          console.log(newFileName);
+          console.log(originalname);
           dispatch(setSections(sections));
-          dispatch(setDocumentTitle(documentTitle));
+          dispatch(setDocumentTitle(originalname));
+          dispatch(setDocumentStorageTitle(newFileName));
         })
         .then(() => router.push("/summarized"))
         .then(() => dispatch(unsetLoading()));
