@@ -14,3 +14,7 @@ Project developed using NextJS
 - [Redux](https://redux.js.org/)
 - [Openai](https://npmjs.com/package/openai/)
 - [Vercel](https://nextjs.org/).
+
+
+SetUp Credentials:
+1. Create an .env file or somehow add environment variable [OPENAI_API_KEY]:'sk-...'
